@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\nucleus\context.hpp" />
     <ClInclude Include="..\..\include\nucleus\device.hpp" />
+    <ClInclude Include="..\..\include\nucleus\event.hpp" />
     <ClInclude Include="..\..\include\nucleus\fwd.hpp" />
     <ClInclude Include="..\..\include\nucleus\logger.hpp" />
     <ClInclude Include="..\..\include\nucleus\macros.hpp" />
@@ -29,6 +30,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\source\context.cpp" />
     <ClCompile Include="..\..\source\device.cpp" />
+    <ClCompile Include="..\..\source\event.cpp" />
     <ClCompile Include="..\..\source\logger.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

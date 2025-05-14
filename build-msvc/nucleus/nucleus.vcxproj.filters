@@ -10,6 +10,9 @@
     <Filter Include="2. Device">
       <UniqueIdentifier>{41a6b56c-1874-491f-a01c-ce258ee38e88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3. Event">
+      <UniqueIdentifier>{09b92ecc-4d96-43a0-abd7-fc87f9acc8ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\nucleus\context.hpp">
@@ -23,6 +26,10 @@
     <ClInclude Include="..\..\include\nucleus\logger.hpp">
       <Filter>0. Logger</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\nucleus\version.hpp" />
+    <ClInclude Include="..\..\include\nucleus\event.hpp">
+      <Filter>3. Event</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\device.cpp">
@@ -33,6 +40,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\logger.cpp">
       <Filter>0. Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\event.cpp">
+      <Filter>3. Event</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
