@@ -19,6 +19,8 @@
 #include <cstdio>
 #include <assert.h>
 
+#pragma warning(disable: 4201)		//!	Nonstandard extension used: nameless struct/union.
+
 /*************************************************************************
 ***********************    CUDA Compatibilities    ***********************
 *************************************************************************/

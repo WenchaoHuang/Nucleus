@@ -18,10 +18,26 @@
 #pragma once
 
 #include "macros.hpp"
+#include <memory>
 
 /*************************************************************************
 ***********************    Forward Declarations    ***********************
 *************************************************************************/
+
+#ifndef __CUDACC__
+	struct dim3;
+	struct cudaDeviceProp;
+	typedef enum cudaError : int				cudaError_t;
+	typedef struct cudaArray *					cudaArray_t;
+	typedef struct CUevent_st *					cudaEvent_t;
+	typedef struct CUgraph_st *					cudaGraph_t;
+	typedef struct CUstream_st *				cudaStream_t;
+	typedef struct CUgraphNode_st *				cudaGraphNode_t;
+	typedef struct CUgraphExec_st *				cudaGraphExec_t;
+	typedef struct cudaMipmappedArray *			cudaMipmappedArray_t;
+	typedef unsigned long long					cudaTextureObject_t;
+	typedef unsigned long long					cudaSurfaceObject_t;
+#endif
 
 namespace NS_NAMESPACE
 {
@@ -37,6 +53,7 @@ namespace NS_NAMESPACE
 	class MemoryResource;
 	class DeviceAllocator;
 
+	struct Version;
 	enum class Format;
 	enum class Result;
 	enum class FilterMode;
@@ -99,14 +116,15 @@ using NsGraph											= NS_NAMESPACE::Graph;
 using NsBuffer											= NS_NAMESPACE::Buffer;
 using NsStream											= NS_NAMESPACE::Stream;
 using NsDevice											= NS_NAMESPACE::Device;
-using NsContext											= NS_NAMESPACE::Context;
 using NsFormat											= NS_NAMESPACE::Format;
+using NsContext											= NS_NAMESPACE::Context;
+using NsVersion											= NS_NAMESPACE::Version;
 using NsFilterMode										= NS_NAMESPACE::FilterMode;
 using NsAddressMode										= NS_NAMESPACE::AddressMode;
-using NsAlloc											= NS_NAMESPACE::Allocator;
-using NsDevAlloc										= NS_NAMESPACE::DeviceAllocator;
 using NsHostAlloc										= NS_NAMESPACE::HostAllocator;
+using NsDevAlloc										= NS_NAMESPACE::DeviceAllocator;
 using NsMemRes											= NS_NAMESPACE::MemoryResource;
+using NsAlloc											= NS_NAMESPACE::Allocator;
 
 template<typename Type> using NsArray1D					= NS_NAMESPACE::Array1D<Type>;
 template<typename Type> using NsArray2D					= NS_NAMESPACE::Array2D<Type>;

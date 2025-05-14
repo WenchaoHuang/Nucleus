@@ -33,18 +33,57 @@ namespace NS_NAMESPACE
 
 	private:
 
-		explicit Device(int deviceID);
+		//!	@brief		Create device object.
+		Device(int, const cudaDeviceProp&);
 
-		~Device();
+		//!	@brief		Destroy device object.
+		~Device() noexcept;
 
 	public:
 
-		void setCurrent();
+
+		/**
+		 *	@brief		Trigger initialization of the CUDA context.
+		 *	@retval		cudaSuccess - If device's context was initialized successfully.
+		 */
+		cudaError_t init() noexcept;
 
 
+		/**
+		 *	@brief		Wait for compute device to finish.
+		 *	@note		Block until the device has completed all preceding requested tasks.
+		 */
+		void sync() const;
+
+
+		/**
+		 *	@brief		Set device to be used for GPU executions.
+		 *	@note		Mainly for internal call of Stream::Handle().
+		 *	@note		Set device as the current device for the calling host thread.
+		 *	@note		This call may be made from any host thread, to any device, and at
+		 *				any time.  This function will do no synchronization with the previous
+		 *				or new device, and should be considered a very low overhead call.
+		 *	@warning	Callling ::cudaSetDevice() in other place is not allowed!
+		 */
+		void setCurrent() const;
+
+
+		/**
+		 *	@brief		Query the size of free device memory.
+		 *	@return		The free amount of memory available for allocation by the device in bytes.
+		 */
+		size_t getFreeMemorySize() const;
+
+
+		/**
+		 *	@brief		Return the device properties.
+		 *	@note		Requires CUDA Toolkit.
+		 */
+		const cudaDeviceProp * getDeviceProperties() const { return m_devProp.get(); }
 
 	private:
 
-		const int		m_deviceID;
+		const int									m_deviceID;
+		const std::unique_ptr<cudaDeviceProp>		m_devProp;
 	};
 }
