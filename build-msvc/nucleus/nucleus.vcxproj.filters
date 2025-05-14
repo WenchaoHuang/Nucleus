@@ -1,30 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="0. Context">
+    <Filter Include="0. Logger">
+      <UniqueIdentifier>{bc230d8a-9ca8-4212-ac6d-17484552e6b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1. Context">
       <UniqueIdentifier>{6cc137e5-497d-497e-a3ce-82123daf81f2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="1. Device">
+    <Filter Include="2. Device">
       <UniqueIdentifier>{41a6b56c-1874-491f-a01c-ce258ee38e88}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\nucleus\context.hpp">
-      <Filter>0. Context</Filter>
+      <Filter>1. Context</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\nucleus\device.hpp">
-      <Filter>1. Device</Filter>
+      <Filter>2. Device</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\nucleus\fwd.hpp" />
-    <ClInclude Include="..\..\include\nucleus\logger.hpp" />
     <ClInclude Include="..\..\include\nucleus\macros.hpp" />
+    <ClInclude Include="..\..\include\nucleus\logger.hpp">
+      <Filter>0. Logger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\device.cpp">
-      <Filter>1. Device</Filter>
+      <Filter>2. Device</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\context.cpp">
-      <Filter>0. Context</Filter>
+      <Filter>1. Context</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\logger.cpp">
+      <Filter>0. Logger</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
