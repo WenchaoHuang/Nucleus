@@ -15,47 +15,95 @@
  *	GNU General Public License for more details.
  */
 
+#include "logger.hpp"
 #include "device.hpp"
 #include "context.hpp"
 #include <cuda_runtime_api.h>
 
 NS_USING_NAMESPACE
 
-static thread_local int sgl_deviceID = 0;
-
 /*************************************************************************
 *****************************    Context    ******************************
 *************************************************************************/
 Context::Context()
 {
+	cudaGetLastError();
 
+	//////////////////////////////////////////////////////////////////////
 
-}
+	int driverVersion = 0;
 
+	cudaDriverGetVersion(&driverVersion);
 
-void Context::setCurrentDevice(Device * device)
-{
-	if (device->m_deviceID != sgl_deviceID)
+	m_driverVersion.Major = driverVersion / 1000;
+	m_driverVersion.Minor = (driverVersion % 1000) / 10;
+
+	NS_INFO_LOG("CUDA driver version: %d.%d", m_driverVersion.Major, m_driverVersion.Minor);
+
+	//////////////////////////////////////////////////////////////////////
+
+	int runtimeVersion = 0;
+
+	cudaRuntimeGetVersion(&runtimeVersion);
+
+	m_runtimeVersion.Major = runtimeVersion / 1000;
+	m_runtimeVersion.Minor = (runtimeVersion % 1000) / 10;
+
+	NS_INFO_LOG("CUDA runtime version: %d.%d", m_runtimeVersion.Major, m_runtimeVersion.Minor);
+
+	//////////////////////////////////////////////////////////////////////
+
+	cudaGetLastError();
+
+	int deviceCount = 0;
+
+	auto err = cudaGetDeviceCount(&deviceCount);
+
+	m_pNvidiaDevices.resize(deviceCount, nullptr);
+
+	NS_INFO_LOG_IF(err == cudaErrorNoDevice, "No CUDA-capable devices were detected.");
+
+	//////////////////////////////////////////////////////////////////////
+
+	for (int i = 0; i < deviceCount; i++)
 	{
-		cudaSetDevice(device->m_deviceID);
+		cudaDeviceProp devProp = {};
 
-		sgl_deviceID = device->m_deviceID;
+		cudaGetDeviceProperties(reinterpret_cast<cudaDeviceProp*>(&devProp), i);
+
+		NS_INFO_LOG("CUDA device(%d): %s, compute capability: %d.%d", i, devProp.name, devProp.major, devProp.minor);
+
+		m_pNvidiaDevices[i] = new Device(i, devProp);
 	}
+
+	cudaGetLastError();
 }
 
 
-Device * Context::getCurrentDevice()
+const char * Context::getErrorString(cudaError_t eValue) noexcept
 {
-	return m_devices[sgl_deviceID];
+	return cudaGetErrorString(eValue);
+}
+
+
+const char * Context::getErrorName(cudaError_t eValue) noexcept
+{
+	return cudaGetErrorName(eValue);
+}
+
+
+cudaError_t Context::getLastError() noexcept
+{
+	return cudaGetLastError();
 }
 
 
 Context::~Context()
 {
-	for (size_t i = 0; i < m_devices.size(); i++)
+	for (size_t i = 0; i < m_pNvidiaDevices.size(); i++)
 	{
-		delete m_devices[i];
+		delete m_pNvidiaDevices[i];
 	}
 
-	m_devices.clear();
+	m_pNvidiaDevices.clear();
 }

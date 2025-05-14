@@ -24,6 +24,7 @@
     <ClInclude Include="..\..\include\nucleus\fwd.hpp" />
     <ClInclude Include="..\..\include\nucleus\logger.hpp" />
     <ClInclude Include="..\..\include\nucleus\macros.hpp" />
+    <ClInclude Include="..\..\include\nucleus\version.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\context.cpp" />
