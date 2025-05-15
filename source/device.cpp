@@ -22,6 +22,7 @@
 
 #include "device.hpp"
 #include "logger.hpp"
+#include "allocator.hpp"
 #include <cuda_runtime_api.h>
 
 NS_USING_NAMESPACE
@@ -29,7 +30,8 @@ NS_USING_NAMESPACE
 /*************************************************************************
 ******************************    Device    ******************************
 *************************************************************************/
-Device::Device(int deviceID, const cudaDeviceProp & devProp) : m_deviceID(deviceID), m_devProp(std::make_unique<cudaDeviceProp>(devProp))
+Device::Device(int deviceID, const cudaDeviceProp & devProp) : m_deviceID(deviceID), m_devProp(std::make_unique<cudaDeviceProp>(devProp)),
+	m_defaultAlloc(std::make_shared<DeviceAllocator>(this))
 {
 
 }

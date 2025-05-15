@@ -19,24 +19,47 @@
  *	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *	SOFTWARE.
  */
+#pragma once
 
- /*************************************************************************
- *******************************    main    *******************************
- *************************************************************************/
+#include "fwd.hpp"
 
-extern void event_test();
-extern void logger_test();
-extern void device_test();
-extern void context_test();
-extern void allocator_test();
-
-int main()
+namespace NS_NAMESPACE
 {
-	context_test();
-	device_test();
-	event_test();
-	allocator_test();
-	logger_test();
+	/*********************************************************************
+	****************************    Format    ****************************
+	*********************************************************************/
 
-	return 0;
+	/**
+	 *	@brief		Available texel formats for CUDA texture object.
+	 */
+	enum class Format
+	{
+		eChar,
+		eChar2,
+		eChar4,
+
+		eUchar,
+		eUchar2,
+		eUchar4,
+
+		eShort,
+		eShort2,
+		eShort4,
+
+		eUshort,
+		eUshort2,
+		eUshort4,
+
+		eInt,
+		eInt2,
+		eInt4,
+
+		eUint,
+		eUint2,
+		eUint4,
+
+		eFloat,
+		eFloat2,
+		eFloat4,
+	};
 }

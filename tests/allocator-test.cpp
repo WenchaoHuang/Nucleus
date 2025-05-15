@@ -1,0 +1,68 @@
+﻿/**
+ *	Copyright (c) 2025 Wenchao Huang <physhuangwenchao@gmail.com>
+ *
+ *	Permission is hereby granted, free of charge, to any person obtaining a copy
+ *	of this software and associated documentation files (the "Software"), to deal
+ *	in the Software without restriction, including without limitation the rights
+ *	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *	copies of the Software, and to permit persons to whom the Software is
+ *	furnished to do so, subject to the following conditions:
+ *
+ *	The above copyright notice and this permission notice shall be included in all
+ *	copies or substantial portions of the Software.
+ *
+ *	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *	SOFTWARE.
+ */
+
+#include <nucleus/logger.hpp>
+#include <nucleus/format.hpp>
+#include <nucleus/device.hpp>
+#include <nucleus/context.hpp>
+#include <nucleus/allocator.hpp>
+
+/*************************************************************************
+**************************    allocator_test    **************************
+*************************************************************************/
+
+class MyHostAllocator : public ns::HostAllocator
+{
+	virtual void * doAllocateMemory(size_t bytes) override
+	{
+		NS_INFO_LOG("Allocate host memory: %lld.", bytes);
+
+		return ns::HostAllocator::doAllocateMemory(bytes);
+	}
+	virtual void doDeallocateMemory(void * ptr) override
+	{
+		ns::HostAllocator::doDeallocateMemory(ptr);
+
+		NS_INFO_LOG("Deallocate host memory.");
+	}
+};
+
+
+void allocator_test()
+{
+	auto device = ns::Context::getInstance()->getDevice(0);
+
+	MyHostAllocator hostAlloc;
+	auto hostPtr = hostAlloc.allocateMemory(110);
+	hostAlloc.deallocateMemory(hostPtr);
+
+	ns::DeviceAllocator devAlloc(device);
+	auto devPtr = devAlloc.allocateMemory(128);
+	devAlloc.deallocateMemory(devPtr);
+
+	auto pAlloc = device->getDefaultAllocator();
+	auto texMem = pAlloc->allocateTextureMemory(ns::Format::eFloat, 100, 100, 100);
+	devAlloc.deallocateTextureMemory(texMem);
+
+	auto mipTexMem = pAlloc->allocateMipmapTextureMemory(ns::Format::eInt, 100, 100, 100, 5);
+	devAlloc.deallocateMipmapTextureMemory(mipTexMem);
+}

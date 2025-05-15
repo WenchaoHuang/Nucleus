@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\tests\allocator-test.cpp" />
     <ClCompile Include="..\..\tests\context-test.cpp" />
     <ClCompile Include="..\..\tests\device-test.cpp" />
     <ClCompile Include="..\..\tests\event-test.cpp" />
