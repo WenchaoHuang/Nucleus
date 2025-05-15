@@ -19,15 +19,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\nucleus\allocator.hpp" />
     <ClInclude Include="..\..\include\nucleus\context.hpp" />
     <ClInclude Include="..\..\include\nucleus\device.hpp" />
     <ClInclude Include="..\..\include\nucleus\event.hpp" />
+    <ClInclude Include="..\..\include\nucleus\format.hpp" />
     <ClInclude Include="..\..\include\nucleus\fwd.hpp" />
     <ClInclude Include="..\..\include\nucleus\logger.hpp" />
     <ClInclude Include="..\..\include\nucleus\macros.hpp" />
     <ClInclude Include="..\..\include\nucleus\version.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\allocator.cpp" />
     <ClCompile Include="..\..\source\context.cpp" />
     <ClCompile Include="..\..\source\device.cpp" />
     <ClCompile Include="..\..\source\event.cpp" />

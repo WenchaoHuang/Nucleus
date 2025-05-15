@@ -86,9 +86,16 @@ namespace NS_NAMESPACE
 		 */
 		const cudaDeviceProp * getDeviceProperties() const { return m_devProp.get(); }
 
+
+		/**
+		 *	@brief		Return the default allocator.
+		 */
+		std::shared_ptr<DeviceAllocator> getDefaultAllocator() { return m_defaultAlloc; }
+
 	private:
 
 		const int									m_deviceID;
 		const std::unique_ptr<cudaDeviceProp>		m_devProp;
+		std::shared_ptr<DeviceAllocator>			m_defaultAlloc;
 	};
 }
