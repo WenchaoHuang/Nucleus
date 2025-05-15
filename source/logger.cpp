@@ -69,7 +69,7 @@ void Logger::log(const char * fileName, int line, const char * funcName, Level e
 	}
 	else if (eLevel == Level::eDebug)
 	{
-	#if defined(DEBUG) || defined(_DEBUG)
+	#ifdef NS_DEBUG
 		std::cout << " [" << std::this_thread::get_id() << "] Debug: " << funcName << "() => " << logString << std::endl;
 	#endif
 	}

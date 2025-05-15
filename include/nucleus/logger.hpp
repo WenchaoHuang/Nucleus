@@ -102,14 +102,15 @@ namespace NS_NAMESPACE
 #define NS_INFO_LOG(...)		NS_NAMESPACE::Logger::getInstance()->log(__FILE__, __LINE__, __FUNCTION__, NS_NAMESPACE::Logger::eInfo, __VA_ARGS__)
 #define NS_DEBUG_LOG(...)		NS_NAMESPACE::Logger::getInstance()->log(__FILE__, __LINE__, __FUNCTION__, NS_NAMESPACE::Logger::eDebug, __VA_ARGS__)
 #define NS_ERROR_LOG(...)		NS_NAMESPACE::Logger::getInstance()->log(__FILE__, __LINE__, __FUNCTION__, NS_NAMESPACE::Logger::eError, __VA_ARGS__)
+#define NS_ASSERT_LOG(...)		NS_NAMESPACE::Logger::getInstance()->log(__FILE__, __LINE__, __FUNCTION__, NS_NAMESPACE::Logger::eAssert, __VA_ARGS__);		NS_ASSERT(false)
 #define NS_WARNING_LOG(...)		NS_NAMESPACE::Logger::getInstance()->log(__FILE__, __LINE__, __FUNCTION__, NS_NAMESPACE::Logger::eWarning, __VA_ARGS__)
 
 #define NS_INFO_LOG_IF(condition, ...)			if (condition)	NS_INFO_LOG(__VA_ARGS__)
 #define NS_ERROR_LOG_IF(condition, ...)			if (condition)	NS_ERROR_LOG(__VA_ARGS__)
+#define NS_ASSERT_LOG_IF(condition, ...)		if (condition)	NS_ASSERT_LOG(__VA_ARGS__)
 #define NS_WARNING_LOG_IF(condition, ...)		if (condition)	NS_WARNING_LOG(__VA_ARGS__)
-#define NS_ASSERT_LOG_IF(condition, ...)		if (condition)	NS_NAMESPACE::Logger::getInstance()->log(__FILE__, __LINE__, __FUNCTION__, NS_NAMESPACE::Logger::eAssert, __VA_ARGS__);	NS_ASSERT(!(condition))
 
-#if defined(DEBUG) || defined(_DEBUG)
+#ifdef NS_DEBUG
 	#define NS_DEBUG_LOG_IF(condition, ...)		if (condition)	NS_DEBUG_LOG(__VA_ARGS__)
 #else
 	#define NS_DEBUG_LOG_IF(condition, ...)
