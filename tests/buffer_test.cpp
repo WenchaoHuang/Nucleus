@@ -20,28 +20,29 @@
  *	SOFTWARE.
  */
 
-#include <nucleus/logger.hpp>
+#include <nucleus/buffer.hpp>
+#include <nucleus/device.hpp>
+#include <nucleus/context.hpp>
 
 /*************************************************************************
-***************************    logger_test    ****************************
+***************************    test_buffer    ****************************
 *************************************************************************/
 
-void logger_test()
+void test_buffer()
 {
-	NS_INFO_LOG("This is info log.");
-	NS_DEBUG_LOG("This is debug log.");
-	NS_ERROR_LOG("This is error log.");
-//	NS_ASSERT_LOG("This is assert log");
-	NS_WARNING_LOG("This is warning log.");
+	auto device = ns::Context::getInstance()->getDevice(0);
+	auto allocator = device->getDefaultAllocator();
 
-	ns::Logger::getInstance()->registerCallback([](const char * fileName, int line, const char * funcName, ns::Logger::Level eLevel, const char * logMsg)
-	{
-		int a = 0;
-	});
+	ns::Buffer buffer0;
+	ns::Buffer buffer1(allocator, 1024);
+	std::unique_ptr<ns::Buffer> uniqueBuffer = std::make_unique<ns::Buffer>(allocator, 1024);
+	std::shared_ptr<ns::Buffer> sharedBuffer = std::make_shared<ns::Buffer>(allocator, 1024);
 
-	NS_INFO_LOG_IF(true, "This is info log.");
-	NS_DEBUG_LOG_IF(true, "This is debug log.");
-	NS_ERROR_LOG_IF(true, "This is error log.");
-//	NS_ASSERT_LOG_IF(true, "This is assert log");
-	NS_WARNING_LOG_IF(true, "This is warning log.");
+	uniqueBuffer = nullptr;
+	sharedBuffer = nullptr;
+
+	buffer1.getAllocator();
+	buffer1.capacity();
+	buffer1.empty();
+	buffer1.data();
 }

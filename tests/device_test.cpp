@@ -20,49 +20,19 @@
  *	SOFTWARE.
  */
 
-#include <nucleus/logger.hpp>
-#include <nucleus/format.hpp>
 #include <nucleus/device.hpp>
 #include <nucleus/context.hpp>
-#include <nucleus/allocator.hpp>
 
 /*************************************************************************
-**************************    allocator_test    **************************
+***************************    test_device    ****************************
 *************************************************************************/
 
-class MyHostAllocator : public ns::HostAllocator
-{
-	virtual void * doAllocateMemory(size_t bytes) override
-	{
-		NS_INFO_LOG("Allocate host memory: %lld.", bytes);
-
-		return ns::HostAllocator::doAllocateMemory(bytes);
-	}
-	virtual void doDeallocateMemory(void * ptr) override
-	{
-		ns::HostAllocator::doDeallocateMemory(ptr);
-
-		NS_INFO_LOG("Deallocate host memory.");
-	}
-};
-
-
-void allocator_test()
+void test_device()
 {
 	auto device = ns::Context::getInstance()->getDevice(0);
 
-	MyHostAllocator hostAlloc;
-	auto hostPtr = hostAlloc.allocateMemory(110);
-	hostAlloc.deallocateMemory(hostPtr);
-
-	ns::DeviceAllocator devAlloc(device);
-	auto devPtr = devAlloc.allocateMemory(128);
-	devAlloc.deallocateMemory(devPtr);
-
-	auto pAlloc = device->getDefaultAllocator();
-	auto texMem = pAlloc->allocateTextureMemory(ns::Format::eFloat, 100, 100, 100);
-	devAlloc.deallocateTextureMemory(texMem);
-
-	auto mipTexMem = pAlloc->allocateMipmapTextureMemory(ns::Format::eInt, 100, 100, 100, 5);
-	devAlloc.deallocateMipmapTextureMemory(mipTexMem);
+	device->init();
+	device->getDeviceProperties();
+	device->getFreeMemorySize();
+	device->sync();
 }
