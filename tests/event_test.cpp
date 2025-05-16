@@ -20,19 +20,25 @@
  *	SOFTWARE.
  */
 
+#include <nucleus/event.hpp>
 #include <nucleus/device.hpp>
 #include <nucleus/context.hpp>
 
 /*************************************************************************
-***************************    device_test    ****************************
+****************************    test_event    ****************************
 *************************************************************************/
 
-void device_test()
+void test_event()
 {
 	auto device = ns::Context::getInstance()->getDevice(0);
 
-	device->init();
-	device->getDeviceProperties();
-	device->getFreeMemorySize();
-	device->sync();
+	NsEvent event(device);
+
+	event.getDevice();
+	event.sync();
+
+	if (event.query())
+	{
+
+	}
 }

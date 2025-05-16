@@ -24,21 +24,21 @@
  *******************************    main    *******************************
  *************************************************************************/
 
-extern void event_test();
-extern void logger_test();
-extern void device_test();
-extern void buffer_test();
-extern void context_test();
-extern void allocator_test();
+extern void test_event();
+extern void test_logger();
+extern void test_device();
+extern void test_buffer();
+extern void test_context();
+extern void test_allocator();
 
 int main()
 {
-	context_test();
-	device_test();
-	event_test();
-	allocator_test();
-	buffer_test();
-	logger_test();
+	test_context();
+	test_device();
+	test_event();
+	test_allocator();
+	test_buffer();
+	test_logger();
 
 	return 0;
 }
