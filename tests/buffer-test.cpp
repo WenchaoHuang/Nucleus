@@ -20,25 +20,29 @@
  *	SOFTWARE.
  */
 
- /*************************************************************************
- *******************************    main    *******************************
- *************************************************************************/
+#include <nucleus/buffer.hpp>
+#include <nucleus/device.hpp>
+#include <nucleus/context.hpp>
 
-extern void event_test();
-extern void logger_test();
-extern void device_test();
-extern void buffer_test();
-extern void context_test();
-extern void allocator_test();
+/*************************************************************************
+***************************    buffer_test    ****************************
+*************************************************************************/
 
-int main()
+void buffer_test()
 {
-	context_test();
-	device_test();
-	event_test();
-	allocator_test();
-	buffer_test();
-	logger_test();
+	auto device = ns::Context::getInstance()->getDevice(0);
+	auto allocator = device->getDefaultAllocator();
 
-	return 0;
+	ns::Buffer buffer0;
+	ns::Buffer buffer1(allocator, 1024);
+	std::unique_ptr<ns::Buffer> uniqueBuffer = std::make_unique<ns::Buffer>(allocator, 1024);
+	std::shared_ptr<ns::Buffer> sharedBuffer = std::make_shared<ns::Buffer>(allocator, 1024);
+
+	uniqueBuffer = nullptr;
+	sharedBuffer = nullptr;
+
+	buffer1.getAllocator();
+	buffer1.capacity();
+	buffer1.empty();
+	buffer1.data();
 }
