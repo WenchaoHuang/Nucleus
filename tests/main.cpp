@@ -25,6 +25,7 @@
  *************************************************************************/
 
 extern void test_event();
+extern void test_array();
 extern void test_logger();
 extern void test_device();
 extern void test_buffer();
@@ -40,6 +41,7 @@ int main()
 	test_allocator();
 	test_buffer();
 	test_dev_ptr();
+	test_array();
 	test_logger();
 
 	return 0;

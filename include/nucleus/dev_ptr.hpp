@@ -72,7 +72,7 @@ namespace NS_NAMESPACE
 		NS_CUDA_CALLABLE Type * rawPtr() const { return m_data; }
 
 		//	Get address to the first element at [i]-th row.
-		NS_CUDA_CALLABLE Type & operator[](int i) const
+		NS_CUDA_CALLABLE Type & operator[](size_t i) const
 		{
 			NS_ASSERT((m_data != nullptr) && (i < m_width));
 
@@ -163,7 +163,7 @@ namespace NS_NAMESPACE
 		NS_CUDA_CALLABLE Type * rawPtr() const { return m_data; }
 
 		//	Get address to the first element at [i]-th row.
-		NS_CUDA_CALLABLE DevPtr<Type> operator[](int i) const
+		NS_CUDA_CALLABLE DevPtr<Type> operator[](size_t i) const
 		{
 			NS_ASSERT((m_data != nullptr) && (i < m_height));
 
@@ -250,7 +250,7 @@ namespace NS_NAMESPACE
 		NS_CUDA_CALLABLE Type * rawPtr() const { return m_data; }
 
 		//	Get address to the first element at [i]-th row.
-		NS_CUDA_CALLABLE DevPtr2<Type> operator[](int i) const
+		NS_CUDA_CALLABLE DevPtr2<Type> operator[](size_t i) const
 		{
 			NS_ASSERT((m_data != nullptr) && (i < m_depth));
 
