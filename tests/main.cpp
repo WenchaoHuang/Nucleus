@@ -29,6 +29,7 @@ extern void test_logger();
 extern void test_device();
 extern void test_buffer();
 extern void test_context();
+extern void test_dev_ptr();
 extern void test_allocator();
 
 int main()
@@ -38,6 +39,7 @@ int main()
 	test_event();
 	test_allocator();
 	test_buffer();
+	test_dev_ptr();
 	test_logger();
 
 	return 0;
