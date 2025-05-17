@@ -1,4 +1,4 @@
-# Copyright (c) 2025 Wenchao Huang <physhuangwenchao@gmail.com>
+﻿# Copyright (c) 2025 Wenchao Huang <physhuangwenchao@gmail.com>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,18 +20,9 @@
 
 cmake_minimum_required(VERSION 3.12)
 
-# Project name: Nucleus
-project(Nucleus LANGUAGES CXX CUDA)
-
-# Organize targets into folders
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
-# Library options
-option(NUCLEUS_BUILD_TESTS "Build tests for nucleus library" OFF)
-option(NUCLEUS_BUILD_SAMPLES "Build samples for nucleus library" OFF)
-
 # Target name
-set(TARGET_NAME nucleus)
+set(TARGET_NAME julia_set)
+project(${TARGET_NAME} LANGUAGES CXX CUDA)
 
 # Set C++ standard (adjust as needed)
 set(CMAKE_CXX_STANDARD 17)
@@ -39,33 +30,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CUDA_STANDARD 17)
 set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 
-# Source files
-file(GLOB_RECURSE NUCLEUS_SOURCES 
-    "${PROJECT_SOURCE_DIR}/include/nucleus/*.h"
-    "${PROJECT_SOURCE_DIR}/include/nucleus/*.cuh"
-    "${PROJECT_SOURCE_DIR}/include/nucleus/*.hpp"
-    "${PROJECT_SOURCE_DIR}/source/*.cpp"
-    "${PROJECT_SOURCE_DIR}/source/*.cu"
+# Create the executable target
+add_executable(${TARGET_NAME} julia_set.cu)
+
+# 设置CUDA编译属性
+set_target_properties(${TARGET_NAME} PROPERTIES
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_ARCHITECTURES "75"
 )
 
-# Create the static library
-add_library(${TARGET_NAME} STATIC ${NUCLEUS_SOURCES})
-
-# Include directories
-target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus)
-
-# MSVC settings
-if(MSVC)
-    target_compile_options(${TARGET_NAME} PRIVATE /W4 /WX)
-    target_compile_options(${TARGET_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:/MP>)      # nvcc does not support '/MP' flag 
-endif()
-
-# Optional: Add tests if enabled
-if(NUCLEUS_BUILD_TESTS)
-    add_subdirectory(tests)
-endif()
-
-# Optional: Add samples if enabled
-if(NUCLEUS_BUILD_SAMPLES)
-    add_subdirectory(samples)
-endif()
+set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "Samples")
