@@ -63,6 +63,10 @@ namespace NS_NAMESPACE
 	enum class FilterMode;
 	enum class AddressMode;
 
+	template<typename Type> struct DevPtr;
+	template<typename Type> struct DevPtr2;
+	template<typename Type> struct DevPtr3;
+
 	template<typename Type> class Array1D;
 	template<typename Type> class Array2D;
 	template<typename Type> class Array3D;
@@ -129,6 +133,10 @@ using NsHostAlloc										= NS_NAMESPACE::HostAllocator;
 using NsDevAlloc										= NS_NAMESPACE::DeviceAllocator;
 using NsMemRes											= NS_NAMESPACE::MemoryResource;
 using NsAlloc											= NS_NAMESPACE::Allocator;
+
+template<typename Type> using NsDevPtr					= NS_NAMESPACE::DevPtr<Type>;
+template<typename Type> using NsDevPtr2					= NS_NAMESPACE::DevPtr2<Type>;
+template<typename Type> using NsDevPtr3					= NS_NAMESPACE::DevPtr3<Type>;
 
 template<typename Type> using NsArray1D					= NS_NAMESPACE::Array1D<Type>;
 template<typename Type> using NsArray2D					= NS_NAMESPACE::Array2D<Type>;

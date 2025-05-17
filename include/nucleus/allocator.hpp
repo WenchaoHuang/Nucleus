@@ -129,9 +129,9 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Allocate texture memory on the device.
 		 *	@param[in]	eFormat - Texel format of the buffer.
-		 *	@param[in]	width - Width of the buffer.
-		 *	@param[in]	height - Height of the buffer.
-		 *	@param[in]	depth - Depth of the buffer.
+		 *	@param[in]	width - width of the buffer.
+		 *	@param[in]	height - height of the buffer.
+		 *	@param[in]	depth - depth of the buffer.
 		 *	@param[in]	flags - Flags for buffer creation (interanl use).
 		 *	@throw		cudaError_t - In case of failure.
 		 */
@@ -150,9 +150,9 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Allocate mipmapped texture memory on the device.
 		 *	@param[in]	eFormat - Texel format of the buffer.
-		 *	@param[in]	width - Width of the buffer.
-		 *	@param[in]	height - Height of the buffer.
-		 *	@param[in]	depth - Depth of the buffer.
+		 *	@param[in]	width - width of the buffer.
+		 *	@param[in]	height - height of the buffer.
+		 *	@param[in]	depth - depth of the buffer.
 		 *	@param[in]	numLevels - Number of mipmap levels to allocated.
 		 *	@param[in]	flags - Flags for buffer creation (interanl use).
 		 *	@throw		cudaError_t - In case of failure.
