@@ -1,4 +1,4 @@
-﻿/**
+/**
  *	Copyright (c) 2025 Wenchao Huang <physhuangwenchao@gmail.com>
  *
  *	Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,33 +20,28 @@
  *	SOFTWARE.
  */
 
+#include <nucleus/device.hpp>
+#include <nucleus/context.hpp>
+#include <nucleus/buffer_view.hpp>
+
  /*************************************************************************
- *******************************    main    *******************************
+ *************************    test_buffer_view    *************************
  *************************************************************************/
 
-extern void test_event();
-extern void test_array();
-extern void test_logger();
-extern void test_device();
-extern void test_buffer();
-extern void test_stream();
-extern void test_context();
-extern void test_dev_ptr();
-extern void test_allocator();
-extern void test_buffer_view();
-
-int main()
+void test_buffer_view()
 {
-	test_context();
-	test_device();
-	test_event();
-	test_allocator();
-	test_buffer();
-	test_dev_ptr();
-	test_array();
-	test_stream();
-	test_buffer_view();
-	test_logger();
+	auto device = ns::Context::getInstance()->getDevice(0);
+	auto allocator = device->getDefaultAllocator();
+	auto buffer = std::make_shared<ns::Buffer>(allocator, sizeof(int) * 1024);
 
-	return 0;
+	ns::BufferView1D<int> bufferView0;
+	ns::BufferView1D<int> bufferView1 = nullptr;
+	ns::BufferView1D<int> bufferView2(buffer);
+	ns::BufferView1D<int> bufferView3(buffer, 0, sizeof(int) * 10);
+
+	ns::BufferView2D<int> bufferView4;
+	ns::BufferView2D<int> bufferView5 = nullptr;
+
+	ns::BufferView3D<int> bufferView6;
+	ns::BufferView3D<int> bufferView7 = nullptr;
 }

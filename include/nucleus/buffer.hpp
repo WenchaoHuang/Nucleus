@@ -105,6 +105,11 @@ namespace NS_NAMESPACE
 
 
 		/**
+		 *	@brief		Retrun logical address of the memory.
+		 */
+		std::uintptr_t address() const { return reinterpret_cast<std::uintptr_t>(m_data); }
+
+		/**
 		 *	@brief		Gets constant pointer to the underlying data.
 		 *	@return		Const pointer to the buffer data
 		 *	@note		The returned pointer remains valid until the Buffer object is destroyed.
