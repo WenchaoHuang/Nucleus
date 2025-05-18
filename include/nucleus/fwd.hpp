@@ -113,6 +113,8 @@ namespace NS_NAMESPACE
 	template<typename Type> class Texture1DLayeredLod;
 	template<typename Type> class Texture2DLayeredLod;
 	template<typename Type> class TextureCubeLayeredLod;
+
+	template<typename... Args> using KernelFunc = void(*)(Args...);
 }
 
 /*************************************************************************

@@ -1,4 +1,4 @@
-﻿/**
+/**
  *	Copyright (c) 2025 Wenchao Huang <physhuangwenchao@gmail.com>
  *
  *	Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,31 +20,27 @@
  *	SOFTWARE.
  */
 
- /*************************************************************************
- *******************************    main    *******************************
- *************************************************************************/
+#include <functional>
+#include <nucleus/stream.hpp>
+#include <nucleus/device.hpp>
+#include <nucleus/context.hpp>
 
-extern void test_event();
-extern void test_array();
-extern void test_logger();
-extern void test_device();
-extern void test_buffer();
-extern void test_stream();
-extern void test_context();
-extern void test_dev_ptr();
-extern void test_allocator();
+/*************************************************************************
+***************************    stream_event    ***************************
+*************************************************************************/
 
-int main()
+void test_stream()
 {
-	test_context();
-	test_device();
-	test_event();
-	test_allocator();
-	test_buffer();
-	test_dev_ptr();
-	test_array();
-	test_stream();
-	test_logger();
+	auto device = ns::Context::getInstance()->getDevice(0);
 
-	return 0;
+	auto stream = device->getDefaultStream();
+
+	stream->sync();
+	stream->query();
+	stream->getHandle();
+	stream->getDevice();
+	
+	int a;
+	auto pfnTask = [](int*) { printf("Happy!\n"); };
+	stream->launchHostFunc<int>(pfnTask, &a);
 }

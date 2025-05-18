@@ -44,8 +44,8 @@ namespace NS_NAMESPACE
 		 *	@param[in]	pDevice - Pointer to the device associated with.
 		 *	@param[in]	isBlockingSync - Specify that event should use blocking synchronization.
 		 *	@param[in]	isDisableTiming - Specify that the created event does not need to record timing data.
-		 *	@note		If isBlockingSync is set, thread calling Event::Synchronize() will give up CPU time until event happened (default method).
-		 *	@note		If isBlockingSync is not set, thread calling Event::Synchronize() will enter a check-event loop until event happened, results in the minimum latency.
+		 *	@note		If isBlockingSync is set, thread calling Event::sync() will give up CPU time until event happened (default method).
+		 *	@note		If isBlockingSync is not set, thread calling Event::sync() will enter a check-event loop until event happened, results in the minimum latency.
 		 *	@throw		cudaError_t - In case of failure.
 		 */
 		explicit Event(Device * pDevice, bool isBlockingSync = false, bool isDisableTiming = false);
@@ -89,7 +89,7 @@ namespace NS_NAMESPACE
 
 
 		/**
-		 *	@brief		Query an event's status.
+		 *	@brief		query an event's status.
 		 *	@retval		True - If all captured work has been completed.
 		 */
 		bool query() const;

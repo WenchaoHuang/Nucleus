@@ -79,7 +79,7 @@ void test_dev_ptr()
 		devPtr4.rawPtr();
 		devPtr4 = nullptr;
 
-		ns::DevPtr<int> devPtr = devPtr4;
+	//	ns::DevPtr<int> devPtr = devPtr4;
 	}
 
 	if (devPtr8)

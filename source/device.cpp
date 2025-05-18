@@ -20,8 +20,9 @@
  *	SOFTWARE.
  */
 
-#include "device.hpp"
 #include "logger.hpp"
+#include "device.hpp"
+#include "stream.hpp"
 #include "allocator.hpp"
 #include <cuda_runtime_api.h>
 
@@ -31,7 +32,7 @@ NS_USING_NAMESPACE
 ******************************    Device    ******************************
 *************************************************************************/
 Device::Device(int deviceID, const cudaDeviceProp & devProp) : m_deviceID(deviceID), m_devProp(std::make_unique<cudaDeviceProp>(devProp)),
-	m_defaultAlloc(std::make_shared<DeviceAllocator>(this))
+	m_defaultAlloc(std::make_shared<DeviceAllocator>(this)), m_defaultStream(new Stream(this, nullptr))
 {
 
 }

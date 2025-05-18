@@ -74,7 +74,7 @@ namespace NS_NAMESPACE
 
 
 		/**
-		 *	@brief		Query the size of free device memory.
+		 *	@brief		query the size of free device memory.
 		 *	@return		The free amount of memory available for allocation by the device in bytes.
 		 */
 		size_t getFreeMemorySize() const;
@@ -92,10 +92,14 @@ namespace NS_NAMESPACE
 		 */
 		std::shared_ptr<DeviceAllocator> getDefaultAllocator() { return m_defaultAlloc; }
 
+
+		std::shared_ptr<Stream> getDefaultStream() { return m_defaultStream; }
+
 	private:
 
 		const int									m_deviceID;
 		const std::unique_ptr<cudaDeviceProp>		m_devProp;
-		std::shared_ptr<DeviceAllocator>			m_defaultAlloc;
+		const std::shared_ptr<DeviceAllocator>		m_defaultAlloc;
+		const std::shared_ptr<Stream>				m_defaultStream;
 	};
 }
