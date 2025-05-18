@@ -69,3 +69,27 @@ endif()
 if(NUCLEUS_BUILD_SAMPLES)
     add_subdirectory(samples)
 endif()
+
+# Filters
+source_group("0. Logger" FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/logger.cpp)
+source_group("0. Logger" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/logger.hpp)
+
+source_group("1. Context" FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/context.cpp)
+source_group("1. Context" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/context.hpp)
+
+source_group("2. Device" FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/device.cpp)
+source_group("2. Device" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/device.hpp)
+
+source_group("3. Event" FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/event.cpp)
+source_group("3. Event" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/event.hpp)
+
+source_group("4. Stream" FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/stream.cpp)
+source_group("4. Stream" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/stream.hpp)
+source_group("4. Stream" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/stream.cuh)
+
+source_group("5. Allocator" FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/allocator.cpp)
+source_group("5. Allocator" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/allocator.hpp)
+
+source_group("6. Array" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/array_1d.hpp)
+source_group("6. Array" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/array_2d.hpp)
+source_group("6. Array" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/array_3d.hpp)
