@@ -36,7 +36,7 @@ __global__ void test(ns::DevPtr<float> out, ns::DevPtr<const float> in, unsigned
 	out.bytes();
 	out.width();
 	out.pitch();
-	out.rawPtr();
+	out.data();
 
 	out[i] = in[i];
 }
@@ -63,7 +63,7 @@ void test_dev_ptr()
 		devPtr0.bytes();
 		devPtr0.width();
 		devPtr0.pitch();
-		devPtr0.rawPtr();
+		devPtr0.data();
 		devPtr0 = nullptr;
 	}
 
@@ -76,7 +76,7 @@ void test_dev_ptr()
 		devPtr4.height();
 		devPtr4.pitch();
 		devPtr4.pitch();
-		devPtr4.rawPtr();
+		devPtr4.data();
 		devPtr4 = nullptr;
 
 	//	ns::DevPtr<int> devPtr = devPtr4;
@@ -92,7 +92,7 @@ void test_dev_ptr()
 		devPtr8.pitch();
 		devPtr8.pitch();
 		devPtr8.pitch();
-		devPtr8.rawPtr();
+		devPtr8.data();
 		devPtr8 = nullptr;
 	}
 }

@@ -34,55 +34,45 @@ namespace NS_NAMESPACE
 	/**
 	 *	@brief		Template for 1D array, which accessible to the device.
 	 */
-	template<typename Type> class Array1D
+	template<typename Type> class Array1D : public DevPtr<Type>
 	{
 		NS_NONCOPYABLE(Array1D)
 
 	public:
 
 		//!	@brief		Construct an empty array.
-		Array1D() : m_alloctor(nullptr), m_data(nullptr), m_width(0) {}
+		Array1D() noexcept : m_allocator(nullptr), m_data(nullptr), m_width(0) {}
 
 		//!	@brief		Allocates array with \p width elements.
-		explicit Array1D(std::shared_ptr<Allocator> alloctor, size_t width) : Array1D() { this->reshape(alloctor, width); }
+		explicit Array1D(std::shared_ptr<Allocator> alloctor, size_t width) : Array1D()
+		{
+			this->reshape(alloctor, width);
+		}
 
 		//!	@brief		Move constructor.
-		Array1D(Array1D && rhs) : m_alloctor(std::move(rhs.m_alloctor)), m_data(rhs.m_data), m_width(rhs.m_width) { rhs.m_data = nullptr; rhs.m_width = 0; }
+		Array1D(Array1D && rhs) noexcept : m_allocator(std::exchange(rhs.m_allocator, nullptr)), m_data(std::exchange(rhs.m_data, nullptr)), m_width(std::exchange(rhs.m_width, 0))
+		{}
+
+		//!	@brief		Move assignment.
+		void operator=(Array1D && rhs) noexcept
+		{
+			m_allocator = std::exchange(rhs.m_allocator, nullptr);
+
+			m_data = std::exchange(rhs.m_data, nullptr);
+
+			m_width = std::exchange(rhs.m_width, 0);
+		}
 
 		//!	@brief		Destroy array.
 		~Array1D() { this->clear(); }
 
 	public:
 
-		//!	@brief		Return count of elements allocated on device.
-		size_t size() const { return m_width; }
+		/**
+		 *	@brief		Returns the allocator associated with.
+		 */
+		const std::shared_ptr<Allocator> & getAllocator() const { return m_allocator; }
 
-		//!	@brief		Return bytes of memory allocated. 
-		size_t bytes() const { return m_width * sizeof(Type); }
-
-		//!	@brief		Test if array is empty.
-		bool empty() const noexcept { return m_data == nullptr; }
-
-		//!	@brief		Returns the allocator associated with.
-		std::shared_ptr<Allocator> getAllocator() const { return m_alloctor; }
-
-		//!	@brief		Access the element at the specified position.
-		Type & operator[](size_t i) { NS_ASSERT(m_data != nullptr);	return m_data[i]; }
-
-		//!	@brief		Access the element at the specified position (const version).
-		const Type & operator[](size_t i) const { NS_ASSERT(m_data != nullptr);	return m_data[i]; }
-
-		//!	@brief		Returns device pointer to the underlying array (const version).
-		DevPtr<const Type> ptr() const { return DevPtr<const Type>(m_data); }
-
-		//!	@brief		Returns device pointer to the underlying array.
-		DevPtr<Type> ptr() { return DevPtr<Type>(m_data); }
-
-		//!	@brief		Returns raw pointer to the data (const version).
-		const Type * rawPtr() const { return m_data; }
-
-		//!	@brief		Returns raw pointer to the data.
-		Type * rawPtr() { return m_data; }
 
 		/**
 		 *	@brief		Changes the number of elements stored.
@@ -91,7 +81,7 @@ namespace NS_NAMESPACE
 		{
 			NS_ASSERT(alloctor != nullptr);
 
-			if ((m_alloctor != alloctor) || (m_width != width))
+			if ((m_allocator != alloctor) || (m_width != width))
 			{
 				this->clear();
 
@@ -99,7 +89,7 @@ namespace NS_NAMESPACE
 				{
 					m_data = static_cast<Type*>(alloctor->allocateMemory(sizeof(Type) * width));
 
-					m_alloctor = alloctor;
+					m_allocator = alloctor;
 
 					m_width = width;
 				}
@@ -112,7 +102,7 @@ namespace NS_NAMESPACE
 		 */
 		void swap(Array1D & rhs) noexcept
 		{
-			std::swap(m_alloctor, rhs.m_alloctor);
+			std::swap(m_allocator, rhs.m_allocator);
 
 			std::swap(m_width, rhs.m_width);
 
@@ -127,9 +117,9 @@ namespace NS_NAMESPACE
 		{
 			if (m_data != nullptr)
 			{
-				m_alloctor->deallocateMemory(m_data);
+				m_allocator->deallocateMemory(m_data);
 
-				m_alloctor = nullptr;
+				m_allocator = nullptr;
 
 				m_data = nullptr;
 
@@ -141,6 +131,6 @@ namespace NS_NAMESPACE
 
 		Type *							m_data;
 		size_t							m_width;
-		std::shared_ptr<Allocator>		m_alloctor;
+		std::shared_ptr<Allocator>		m_allocator;
 	};
 }

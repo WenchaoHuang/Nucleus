@@ -34,22 +34,34 @@ namespace NS_NAMESPACE
 	/**
 	 *	@brief		Template for 3D array, which accessible to the device.
 	 */
-	template<typename Type> class Array3D
+	template<typename Type> class Array3D : public DevPtr3<Type>
 	{
 		NS_NONCOPYABLE(Array3D)
 
 	public:
 
 		//!	@brief		Construct an empty array.
-		Array3D() : m_allocator(nullptr), m_data(nullptr), m_width(0), m_height(0), m_depth(0) {}
+		Array3D() noexcept : m_allocator(nullptr), m_data(nullptr), m_width(0), m_height(0), m_depth(0) {}
 
 		//!	@brief		Allocates 3d array with \p width * \p height * \p depth elements.
 		explicit Array3D(std::shared_ptr<Allocator> pAlloc, size_t width, size_t height, size_t depth) : Array3D() { this->reshape(pAlloc, width, height, depth); }
 
 		//!	@brief		Move constructor.
-		Array3D(Array3D && rhs) : m_allocator(std::move(rhs.m_allocator)), m_data(rhs.m_data), m_width(rhs.m_width), m_height(rhs.m_height), m_depth(rhs.m_depth)
+		Array3D(Array3D && rhs) noexcept : m_allocator(std::exchange(rhs.m_allocator, nullptr)), m_data(std::exchange(rhs.m_data, nullptr)), m_width(std::exchange(rhs.m_width, 0)), m_height(std::exchange(rhs.m_height, 0)), m_depth(std::exchange(rhs.m_depth, 0))
+		{}
+
+		//!	@brief		Move assignment.
+		void operator=(Array3D && rhs) noexcept
 		{
-			rhs.m_data = nullptr;	rhs.m_width = rhs.m_height = rhs.m_depth = 0;
+			m_allocator = std::exchange(rhs.m_allocator, nullptr);
+
+			m_data = std::exchange(rhs.m_data, nullptr);
+
+			m_height = std::exchange(rhs.m_height, 0);
+
+			m_width = std::exchange(rhs.m_width, 0);
+
+			m_depth = std::exchange(rhs.m_depth, 0);
 		}
 
 		//!	@brief		Destroy array.
@@ -57,47 +69,11 @@ namespace NS_NAMESPACE
 
 	public:
 
-		//!	@brief		Returns width of 3D array.
-		uint32_t width() const { return m_width; }
+		/**
+		 *	@brief		Returns the allocator associated with.
+		 */
+		const std::shared_ptr<Allocator> & getAllocator() const { return m_allocator; }
 
-		//!	@brief		Returns depth of 3D array.
-		uint32_t depth() const { return m_depth; }
-
-		//!	@brief		Returns height of 3D array.
-		uint32_t height() const { return m_height; }
-
-		//!	@brief		Tests if the array is empty.
-		bool empty() const { return m_data == nullptr; }
-
-		//!	@brief		Returns pitch of 3D array in bytes.
-		size_t pitch() const { return m_width * sizeof(Type); }
-
-		//!	@brief		Returns count of elements allocated on device.
-		uint32_t size() const { return m_width * m_height * m_depth; }
-
-		//!	@brief		Returns the allocator associated with.
-		std::shared_ptr<Allocator> getAllocator() const { return m_allocator; }
-
-		//!	@brief		Returns bytes of memory allocated. 
-		size_t bytes() const { return m_width * m_height * m_depth * sizeof(Type); }
-
-		//!	@brief		Returns device pointer to the specified layer of the 3D array (const version).
-		DevPtr2<const Type> operator[](size_t layer) const { NS_ASSERT(layer < m_depth);	return DevPtr2<const Type>(m_data + layer * (m_width * m_height), m_width, m_height); }
-
-		//!	@brief		Returns device pointer to the specified layer of the 3D array.
-		DevPtr2<Type> operator[](size_t layer) { NS_ASSERT(layer < m_depth);	return DevPtr2<Type>(m_data + layer * (m_width * m_height), m_width, m_height); }
-
-		//!	@brief		Returns device pointer to the underlying 3D array (const version).
-		DevPtr3<const Type> ptr() const { return DevPtr3<const Type>(m_data, m_width, m_height, m_depth); }
-
-		//!	@brief		Returns device pointer to the underlying 3D array.
-		DevPtr3<Type> ptr() { return DevPtr3<Type>(m_data, m_width, m_height, m_depth); }
-
-		//!	@brief		Returns raw pointer to the data (const version).
-		const Type * rawPtr() const { return m_data; }
-
-		//!	@brief		Returns raw pointer to the data.
-		Type * rawPtr() { return m_data; }
 
 		/**
 		 *	@brief		Changes the number of elements stored.

@@ -37,6 +37,7 @@ void test_array()
 
 	ns::Array1D<int>	array0;
 	ns::Array1D<int>	array1(allocator, 100);
+	ns::Array1D<int>	array22 = std::move(array1);
 
 	ns::Array2D<float>	array2;
 	ns::Array2D<float>	array3(allocator, 100, 100);
@@ -52,9 +53,8 @@ void test_array()
 		array1.bytes();
 		array1.getAllocator();
 		array1.reshape(allocator, 200);
-		array1.rawPtr();
 		array1.clear();
-		array1.ptr();
+		array1.data();
 	}
 
 	if (array3.empty())
@@ -68,9 +68,8 @@ void test_array()
 		array3.height();
 		array3.getAllocator();
 		array3.reshape(allocator, 200, 400);
-		array3.rawPtr();
 		array3.clear();
-		array3.ptr();
+		array3.data();
 	}
 
 	if (array5.empty())
@@ -85,8 +84,7 @@ void test_array()
 		array5.height();
 		array5.getAllocator();
 		array5.reshape(allocator, 200, 400, 500);
-		array5.rawPtr();
 		array5.clear();
-		array5.ptr();
+		array5.data();
 	}
 }

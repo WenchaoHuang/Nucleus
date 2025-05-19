@@ -42,13 +42,13 @@ namespace NS_NAMESPACE
 		NS_CUDA_CALLABLE DevPtr(Type * ptr, size_t width = SIZE_MAX) : m_data(ptr), m_width(width) {}
 
 		//	Copy constructor.
-		NS_CUDA_CALLABLE DevPtr(const DevPtr<std::remove_cv_t<Type>> &rhs) : m_data(rhs.rawPtr()), m_width(rhs.width()) {}
+		NS_CUDA_CALLABLE DevPtr(const DevPtr<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.width()) {}
 
 		//	Copy constructor, construct with a given 2D device pointer.
-		NS_CUDA_CALLABLE explicit DevPtr(const DevPtr2<std::remove_cv_t<Type>> &rhs) : m_data(rhs.rawPtr()), m_width(rhs.size()) {}
+		NS_CUDA_CALLABLE explicit DevPtr(const DevPtr2<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.size()) {}
 
 		//	Copy constructor, construct with a given 3D device pointer.
-		NS_CUDA_CALLABLE explicit DevPtr(const DevPtr3<std::remove_cv_t<Type>> &rhs) : m_data(rhs.rawPtr()), m_width(rhs.size()) {}
+		NS_CUDA_CALLABLE explicit DevPtr(const DevPtr3<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.size()) {}
 
 		//	Returns size of the array in bytes.
 		NS_CUDA_CALLABLE size_t bytes() const { return sizeof(Type) * m_width; }
@@ -69,7 +69,7 @@ namespace NS_NAMESPACE
 		NS_CUDA_CALLABLE size_t size() const { return m_width; }
 
 		//	Returns the raw pointer explicitly.
-		NS_CUDA_CALLABLE Type * rawPtr() const { return m_data; }
+		NS_CUDA_CALLABLE Type * data() const { return m_data; }
 
 		//	Get address to the first element at [i]-th row.
 		NS_CUDA_CALLABLE Type & operator[](size_t i) const
@@ -130,13 +130,13 @@ namespace NS_NAMESPACE
 		NS_CUDA_CALLABLE DevPtr2(Type * ptr, uint32_t width, uint32_t height) : m_data(ptr), m_width(width), m_height(height) {}
 
 		//	Copy constructor.
-		NS_CUDA_CALLABLE DevPtr2(const DevPtr2<std::remove_cv_t<Type>> &rhs) : m_data(rhs.rawPtr()), m_width(rhs.width()), m_height(rhs.height()) {}
+		NS_CUDA_CALLABLE DevPtr2(const DevPtr2<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(rhs.height()) {}
 
 		//	Copy constructor, construct with a given 3D device pointer.
-		NS_CUDA_CALLABLE explicit DevPtr2(const DevPtr3<std::remove_cv_t<Type>> &rhs) : m_data(rhs.rawPtr()), m_width(rhs.width()), m_height(rhs.height() * rhs.depth()) {}
+		NS_CUDA_CALLABLE explicit DevPtr2(const DevPtr3<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(rhs.height() * rhs.depth()) {}
 
 		//	Copy constructor, construct with a given 1D device pointer.
-		NS_CUDA_CALLABLE explicit DevPtr2(const DevPtr<std::remove_cv_t<Type>> &rhs) : m_data(rhs.rawPtr()), m_width(rhs.width()), m_height(1) {}
+		NS_CUDA_CALLABLE explicit DevPtr2(const DevPtr<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(1) {}
 
 		//	Returns size of the array in bytes.
 		NS_CUDA_CALLABLE size_t bytes() const { return sizeof(Type) * m_width * m_height; }
@@ -160,7 +160,7 @@ namespace NS_NAMESPACE
 		NS_CUDA_CALLABLE operator Type*() const { return m_data; }
 
 		//	Returns the raw pointer explicitly.
-		NS_CUDA_CALLABLE Type * rawPtr() const { return m_data; }
+		NS_CUDA_CALLABLE Type * data() const { return m_data; }
 
 		//	Get address to the first element at [i]-th row.
 		NS_CUDA_CALLABLE DevPtr<Type> operator[](size_t i) const
@@ -214,13 +214,13 @@ namespace NS_NAMESPACE
 		NS_CUDA_CALLABLE DevPtr3(Type * ptr, uint32_t width, uint32_t height, uint32_t depth) : m_data(ptr), m_width(width), m_height(height), m_depth(depth) {}
 
 		//	Copy constructor.
-		NS_CUDA_CALLABLE DevPtr3(const DevPtr3<std::remove_cv_t<Type>> & rhs) : m_data(rhs.rawPtr()), m_width(rhs.width()), m_height(rhs.height()), m_depth(rhs.depth()) {}
+		NS_CUDA_CALLABLE DevPtr3(const DevPtr3<std::remove_cv_t<Type>> & rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(rhs.height()), m_depth(rhs.depth()) {}
 
 		//	Copy constructor, construct with a given 2D device pointer.
-		NS_CUDA_CALLABLE explicit DevPtr3(const DevPtr2<std::remove_cv_t<Type>> & rhs) : m_data(rhs.rawPtr()), m_width(rhs.width()), m_height(rhs.height()), m_depth(1) {}
+		NS_CUDA_CALLABLE explicit DevPtr3(const DevPtr2<std::remove_cv_t<Type>> & rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(rhs.height()), m_depth(1) {}
 
 		//	Copy constructor, construct with a given 1D device pointer.
-		NS_CUDA_CALLABLE explicit DevPtr3(const DevPtr<std::remove_cv_t<Type>> & rhs) : m_data(rhs.rawPtr()), m_width(rhs.width()), m_height(1), m_depth(1) {}
+		NS_CUDA_CALLABLE explicit DevPtr3(const DevPtr<std::remove_cv_t<Type>> & rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(1), m_depth(1) {}
 
 		//	Returns size of the array in bytes.
 		NS_CUDA_CALLABLE size_t bytes() const { return sizeof(Type) * m_width * m_height * m_depth; }
@@ -247,7 +247,7 @@ namespace NS_NAMESPACE
 		NS_CUDA_CALLABLE operator Type*() const { return m_data; }
 
 		//	Returns the raw pointer explicitly.
-		NS_CUDA_CALLABLE Type * rawPtr() const { return m_data; }
+		NS_CUDA_CALLABLE Type * data() const { return m_data; }
 
 		//	Get address to the first element at [i]-th row.
 		NS_CUDA_CALLABLE DevPtr2<Type> operator[](size_t i) const
