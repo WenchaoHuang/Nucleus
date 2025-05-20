@@ -48,7 +48,7 @@ if(MSVC)
     target_compile_options(${TARGET_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:/MP>)      # nvcc does not support '/MP' flag 
 endif()
 
-# ÉèÖÃCUDA±àÒëÊôÐÔ
+# è®¾ç½®CUDAç¼–è¯‘å±žæ€§
 set_target_properties(${TARGET_NAME} PROPERTIES
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
     CUDA_SEPARABLE_COMPILATION ON
