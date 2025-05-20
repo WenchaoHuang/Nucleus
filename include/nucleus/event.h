@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "fwd.hpp"
+#include "fwd.h"
 #include <chrono>
 
 namespace NS_NAMESPACE

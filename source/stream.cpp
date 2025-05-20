@@ -20,9 +20,9 @@
  *	SOFTWARE.
  */
 
-#include "logger.hpp"
-#include "device.hpp"
-#include "stream.hpp"
+#include "logger.h"
+#include "device.h"
+#include "stream.h"
 #include <cuda_runtime.h>
 
 NS_USING_NAMESPACE

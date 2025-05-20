@@ -21,9 +21,9 @@
  */
 #pragma once
 
-#include "fwd.hpp"
-#include "buffer.hpp"
-#include "dev_ptr.hpp"
+#include "fwd.h"
+#include "buffer.h"
+#include "dev_ptr.h"
 
 namespace NS_NAMESPACE
 {

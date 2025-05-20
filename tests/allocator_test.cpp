@@ -20,11 +20,11 @@
  *	SOFTWARE.
  */
 
-#include <nucleus/logger.hpp>
-#include <nucleus/format.hpp>
-#include <nucleus/device.hpp>
-#include <nucleus/context.hpp>
-#include <nucleus/allocator.hpp>
+#include <nucleus/logger.h>
+#include <nucleus/format.h>
+#include <nucleus/device.h>
+#include <nucleus/context.h>
+#include <nucleus/allocator.h>
 
 /*************************************************************************
 **************************    test_allocator    **************************

@@ -21,9 +21,9 @@
  */
 #pragma once
 
-#include "fwd.hpp"
-#include "dev_ptr.hpp"
-#include "allocator.hpp"
+#include "fwd.h"
+#include "dev_ptr.h"
+#include "allocator.h"
 
 namespace NS_NAMESPACE
 {

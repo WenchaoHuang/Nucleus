@@ -21,35 +21,45 @@
  */
 #pragma once
 
-#include "macros.hpp"
+#include "fwd.h"
 
 namespace NS_NAMESPACE
 {
 	/*********************************************************************
-	***************************    Version    ****************************
+	****************************    Format    ****************************
 	*********************************************************************/
 
 	/**
-	 *	@brief		CUDA version number.
+	 *	@brief		Available texel formats for CUDA texture object.
 	 */
-	struct Version
+	enum class Format
 	{
-		union
-		{
-			struct { int Minor, Major; };
-			struct { long long Encoded; };
-		};
+		eChar,
+		eChar2,
+		eChar4,
 
-		//	Constructors
-		constexpr Version() : Major(0), Minor(0) {}
-		constexpr Version(int major, int minor) : Major(major), Minor(minor) {}
+		eUchar,
+		eUchar2,
+		eUchar4,
 
-		//	Compare operators
-		constexpr bool operator==(Version rhs) const { return Encoded == rhs.Encoded; }
-		constexpr bool operator!=(Version rhs) const { return Encoded != rhs.Encoded; }
-		constexpr bool operator<=(Version rhs) const { return Encoded <= rhs.Encoded; }
-		constexpr bool operator>=(Version rhs) const { return Encoded >= rhs.Encoded; }
-		constexpr bool operator<(Version rhs) const { return Encoded < rhs.Encoded; }
-		constexpr bool operator>(Version rhs) const { return Encoded > rhs.Encoded; }
+		eShort,
+		eShort2,
+		eShort4,
+
+		eUshort,
+		eUshort2,
+		eUshort4,
+
+		eInt,
+		eInt2,
+		eInt4,
+
+		eUint,
+		eUint2,
+		eUint4,
+
+		eFloat,
+		eFloat2,
+		eFloat4,
 	};
 }

@@ -20,11 +20,11 @@
  *	SOFTWARE.
  */
 
-#include <nucleus/device.hpp>
-#include <nucleus/context.hpp>
-#include <nucleus/array_1d.hpp>
-#include <nucleus/array_2d.hpp>
-#include <nucleus/array_3d.hpp>
+#include <nucleus/device.h>
+#include <nucleus/context.h>
+#include <nucleus/array_1d.h>
+#include <nucleus/array_2d.h>
+#include <nucleus/array_3d.h>
 
 /*************************************************************************
 ****************************    test_array    ****************************

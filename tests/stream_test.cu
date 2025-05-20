@@ -21,9 +21,9 @@
  */
 
 #include <functional>
-#include <nucleus/stream.hpp>
-#include <nucleus/device.hpp>
-#include <nucleus/context.hpp>
+#include <nucleus/stream.h>
+#include <nucleus/device.h>
+#include <nucleus/context.h>
 
 /*************************************************************************
 ***************************    stream_event    ***************************

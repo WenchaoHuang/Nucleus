@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "stream.hpp"
+#include "stream.h"
 #include <device_launch_parameters.h>
 
 #ifndef __CUDACC__

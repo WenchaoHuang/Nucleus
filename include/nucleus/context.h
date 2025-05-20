@@ -21,8 +21,8 @@
  */
 #pragma once
 
-#include "fwd.hpp"
-#include "version.hpp"
+#include "fwd.h"
+#include "version.h"
 
 #include <vector>
 

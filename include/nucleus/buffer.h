@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "allocator.hpp"
+#include "allocator.h"
 
 namespace NS_NAMESPACE
 {

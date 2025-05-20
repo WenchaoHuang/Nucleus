@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "macros.hpp"
+#include "macros.h"
 #include <functional>
 
 namespace NS_NAMESPACE

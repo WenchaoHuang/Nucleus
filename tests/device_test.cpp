@@ -20,8 +20,8 @@
  *	SOFTWARE.
  */
 
-#include <nucleus/device.hpp>
-#include <nucleus/context.hpp>
+#include <nucleus/device.h>
+#include <nucleus/context.h>
 
 /*************************************************************************
 ***************************    test_device    ****************************

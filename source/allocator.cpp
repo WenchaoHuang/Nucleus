@@ -20,10 +20,10 @@
  *	SOFTWARE.
  */
 
-#include "format.hpp"
-#include "logger.hpp"
-#include "device.hpp"
-#include "allocator.hpp"
+#include "format.h"
+#include "logger.h"
+#include "device.h"
+#include "allocator.h"
 #include <cuda_runtime.h>
 
 NS_USING_NAMESPACE

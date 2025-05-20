@@ -20,9 +20,9 @@
  *	SOFTWARE.
  */
 
-#include <nucleus/device.hpp>
-#include <nucleus/context.hpp>
-#include <nucleus/buffer_view.hpp>
+#include <nucleus/device.h>
+#include <nucleus/context.h>
+#include <nucleus/buffer_view.h>
 
  /*************************************************************************
  *************************    test_buffer_view    *************************

@@ -21,45 +21,35 @@
  */
 #pragma once
 
-#include "fwd.hpp"
+#include "macros.h"
 
 namespace NS_NAMESPACE
 {
 	/*********************************************************************
-	****************************    Format    ****************************
+	***************************    Version    ****************************
 	*********************************************************************/
 
 	/**
-	 *	@brief		Available texel formats for CUDA texture object.
+	 *	@brief		CUDA version number.
 	 */
-	enum class Format
+	struct Version
 	{
-		eChar,
-		eChar2,
-		eChar4,
+		union
+		{
+			struct { int Minor, Major; };
+			struct { long long Encoded; };
+		};
 
-		eUchar,
-		eUchar2,
-		eUchar4,
+		//	Constructors
+		constexpr Version() : Major(0), Minor(0) {}
+		constexpr Version(int major, int minor) : Major(major), Minor(minor) {}
 
-		eShort,
-		eShort2,
-		eShort4,
-
-		eUshort,
-		eUshort2,
-		eUshort4,
-
-		eInt,
-		eInt2,
-		eInt4,
-
-		eUint,
-		eUint2,
-		eUint4,
-
-		eFloat,
-		eFloat2,
-		eFloat4,
+		//	Compare operators
+		constexpr bool operator==(Version rhs) const { return Encoded == rhs.Encoded; }
+		constexpr bool operator!=(Version rhs) const { return Encoded != rhs.Encoded; }
+		constexpr bool operator<=(Version rhs) const { return Encoded <= rhs.Encoded; }
+		constexpr bool operator>=(Version rhs) const { return Encoded >= rhs.Encoded; }
+		constexpr bool operator<(Version rhs) const { return Encoded < rhs.Encoded; }
+		constexpr bool operator>(Version rhs) const { return Encoded > rhs.Encoded; }
 	};
 }

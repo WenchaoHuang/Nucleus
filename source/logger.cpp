@@ -20,7 +20,7 @@
  *	SOFTWARE.
  */
 
-#include "logger.hpp"
+#include "logger.h"
 
 #include <stdarg.h>
 #include <iostream>
