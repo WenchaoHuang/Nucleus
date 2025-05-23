@@ -50,13 +50,13 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Log levels.
 		 */
-		enum Level { eAssert, eError, eWarning, eInfo, eDebug };
+		enum Level { Assert, Error, Warning, Info, Debug };
 
 
 		/**
 		 *	@brief		Type of message callback function.
 		 */
-		using LogCallback = std::function<void(const char * fileName, int line, const char * funcName, Level eLevel, const char * logMsg)>;
+		using LogCallback = std::function<void(const char * fileName, int line, const char * funcName, Level level, const char * logMsg)>;
 
 	public:
 
@@ -85,9 +85,9 @@ namespace NS_NAMESPACE
 		 *	@param[in]	fileName - Which file sends this message.
 		 *	@param[in]	line - Which line in the file invokes this function.
 		 *	@param[in]	funcName - Which function invokes this functin.
-		 *	@param[in]	eLevel - Log level of this message.
+		 *	@param[in]	level - Log level of this message.
 		 */
-		void log(const char * fileName, int line, const char * funcName, Level eLevel, const char * format, ...);
+		void log(const char * fileName, int line, const char * funcName, Level level, const char * format, ...);
 
 	private:
 
@@ -99,11 +99,11 @@ namespace NS_NAMESPACE
 ****************************    Log Macros    ****************************
 *************************************************************************/
 
-#define NS_INFO_LOG(...)		NS_NAMESPACE::Logger::getInstance()->log(__FILE__, __LINE__, __FUNCTION__, NS_NAMESPACE::Logger::eInfo, __VA_ARGS__)
-#define NS_DEBUG_LOG(...)		NS_NAMESPACE::Logger::getInstance()->log(__FILE__, __LINE__, __FUNCTION__, NS_NAMESPACE::Logger::eDebug, __VA_ARGS__)
-#define NS_ERROR_LOG(...)		NS_NAMESPACE::Logger::getInstance()->log(__FILE__, __LINE__, __FUNCTION__, NS_NAMESPACE::Logger::eError, __VA_ARGS__)
-#define NS_ASSERT_LOG(...)		NS_NAMESPACE::Logger::getInstance()->log(__FILE__, __LINE__, __FUNCTION__, NS_NAMESPACE::Logger::eAssert, __VA_ARGS__);		NS_ASSERT(false)
-#define NS_WARNING_LOG(...)		NS_NAMESPACE::Logger::getInstance()->log(__FILE__, __LINE__, __FUNCTION__, NS_NAMESPACE::Logger::eWarning, __VA_ARGS__)
+#define NS_INFO_LOG(...)		NS_NAMESPACE::Logger::getInstance()->log(__FILE__, __LINE__, __FUNCTION__, NS_NAMESPACE::Logger::Info, __VA_ARGS__)
+#define NS_DEBUG_LOG(...)		NS_NAMESPACE::Logger::getInstance()->log(__FILE__, __LINE__, __FUNCTION__, NS_NAMESPACE::Logger::Debug, __VA_ARGS__)
+#define NS_ERROR_LOG(...)		NS_NAMESPACE::Logger::getInstance()->log(__FILE__, __LINE__, __FUNCTION__, NS_NAMESPACE::Logger::Error, __VA_ARGS__)
+#define NS_ASSERT_LOG(...)		NS_NAMESPACE::Logger::getInstance()->log(__FILE__, __LINE__, __FUNCTION__, NS_NAMESPACE::Logger::Assert, __VA_ARGS__);		NS_ASSERT(false)
+#define NS_WARNING_LOG(...)		NS_NAMESPACE::Logger::getInstance()->log(__FILE__, __LINE__, __FUNCTION__, NS_NAMESPACE::Logger::Warning, __VA_ARGS__)
 
 #define NS_INFO_LOG_IF(condition, ...)			if (condition)	NS_INFO_LOG(__VA_ARGS__)
 #define NS_ERROR_LOG_IF(condition, ...)			if (condition)	NS_ERROR_LOG(__VA_ARGS__)

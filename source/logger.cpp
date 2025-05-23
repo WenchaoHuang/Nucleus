@@ -33,7 +33,7 @@ NS_USING_NAMESPACE
 ******************************    Logger    ******************************
 *************************************************************************/
 
-void Logger::log(const char * fileName, int line, const char * funcName, Level eLevel, const char * format, ...)
+void Logger::log(const char * fileName, int line, const char * funcName, Level level, const char * format, ...)
 {
 	va_list argPtr;
 
@@ -49,25 +49,25 @@ void Logger::log(const char * fileName, int line, const char * funcName, Level e
 
 	if (m_pfnCallback != nullptr)
 	{
-		m_pfnCallback(fileName, line, funcName, eLevel, logString.c_str());
+		m_pfnCallback(fileName, line, funcName, level, logString.c_str());
 	}
-	else if (eLevel == Level::eAssert)
+	else if (level == Level::Assert)
 	{
 		std::cout << " [" << std::this_thread::get_id() << "] Assert: " << funcName << "() => " << logString << std::endl;
 	}
-	else if (eLevel == Level::eError)
+	else if (level == Level::Error)
 	{
 		std::cout << " [" << std::this_thread::get_id() << "] Error: " << funcName << "() => " << logString << std::endl;
 	}
-	else if (eLevel == Level::eWarning)
+	else if (level == Level::Warning)
 	{
 		std::cout << " [" << std::this_thread::get_id() << "] Warning: " << funcName << "() => " << logString << std::endl;
 	}
-	else if (eLevel == Level::eInfo)
+	else if (level == Level::Info)
 	{
 		std::cout << " [" << std::this_thread::get_id() << "] Info: " << funcName << "() => " << logString << std::endl;
 	}
-	else if (eLevel == Level::eDebug)
+	else if (level == Level::Debug)
 	{
 	#ifdef NS_DEBUG
 		std::cout << " [" << std::this_thread::get_id() << "] Debug: " << funcName << "() => " << logString << std::endl;
