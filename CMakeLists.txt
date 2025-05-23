@@ -92,3 +92,11 @@ source_group("5. Allocator" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/al
 source_group("6. Array" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/array_1d.h)
 source_group("6. Array" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/array_2d.h)
 source_group("6. Array" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/array_3d.h)
+
+source_group("7. Image" FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/image.cpp)
+source_group("7. Image" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/image.h)
+source_group("7. Image" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/image_1d.h)
+source_group("7. Image" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/image_2d.h)
+source_group("7. Image" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/image_3d.h)
+source_group("7. Image" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/image_cube.h)
+

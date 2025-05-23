@@ -60,9 +60,9 @@ void test_allocator()
 	devAlloc.deallocateMemory(devPtr);
 
 	auto pAlloc = device->getDefaultAllocator();
-	auto texMem = pAlloc->allocateTextureMemory(ns::Format::eFloat, 100, 100, 100);
+	auto texMem = pAlloc->allocateTextureMemory(ns::Format::Float, 100, 100, 100);
 	devAlloc.deallocateTextureMemory(texMem);
 
-	auto mipTexMem = pAlloc->allocateMipmapTextureMemory(ns::Format::eInt, 100, 100, 100, 5);
+	auto mipTexMem = pAlloc->allocateMipmapTextureMemory(ns::Format::Int, 100, 100, 100, 5);
 	devAlloc.deallocateMipmapTextureMemory(mipTexMem);
 }

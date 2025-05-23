@@ -26,6 +26,7 @@
 
 extern void test_event();
 extern void test_array();
+extern void test_image();
 extern void test_logger();
 extern void test_device();
 extern void test_buffer();
@@ -44,6 +45,7 @@ int main()
 	test_buffer();
 	test_dev_ptr();
 	test_array();
+	test_image();
 	test_stream();
 	test_buffer_view();
 	test_logger();

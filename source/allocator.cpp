@@ -83,28 +83,28 @@ static cudaChannelFormatDesc CreateChannelDesc(Format eFormat)
 
 	switch (eFormat)
 	{
-		case Format::eChar:		{ channelDesc = cudaCreateChannelDesc<char1>();		break; }
-		case Format::eChar2:	{ channelDesc = cudaCreateChannelDesc<char2>();		break; }
-		case Format::eChar4:	{ channelDesc = cudaCreateChannelDesc<char4>();		break; }
-		case Format::eUchar:	{ channelDesc = cudaCreateChannelDesc<uchar1>();	break; }
-		case Format::eUchar2:	{ channelDesc = cudaCreateChannelDesc<uchar2>();	break; }
-		case Format::eUchar4:	{ channelDesc = cudaCreateChannelDesc<uchar4>();	break; }
-		case Format::eShort:	{ channelDesc = cudaCreateChannelDesc<short1>();	break; }
-		case Format::eShort2:	{ channelDesc = cudaCreateChannelDesc<short2>();	break; }
-		case Format::eShort4:	{ channelDesc = cudaCreateChannelDesc<short4>();	break; }
-		case Format::eUshort:	{ channelDesc = cudaCreateChannelDesc<ushort1>();	break; }
-		case Format::eUshort2:	{ channelDesc = cudaCreateChannelDesc<ushort2>();	break; }
-		case Format::eUshort4:	{ channelDesc = cudaCreateChannelDesc<ushort4>();	break; }
-		case Format::eInt:		{ channelDesc = cudaCreateChannelDesc<int1>();		break; }
-		case Format::eInt2:		{ channelDesc = cudaCreateChannelDesc<int2>();		break; }
-		case Format::eInt4:		{ channelDesc = cudaCreateChannelDesc<int4>();		break; }
-		case Format::eUint:		{ channelDesc = cudaCreateChannelDesc<uint1>();		break; }
-		case Format::eUint2:	{ channelDesc = cudaCreateChannelDesc<uint2>();		break; }
-		case Format::eUint4:	{ channelDesc = cudaCreateChannelDesc<uint4>();		break; }
-		case Format::eFloat:	{ channelDesc = cudaCreateChannelDesc<float1>();	break; }
-		case Format::eFloat2:	{ channelDesc = cudaCreateChannelDesc<float2>();	break; }
-		case Format::eFloat4:	{ channelDesc = cudaCreateChannelDesc<float4>();	break; }
-		default:				{ NS_ERROR_LOG("Invalid format!");					break; }
+		case Format::Int:		{ channelDesc = cudaCreateChannelDesc<::int1>();		break; }
+		case Format::Int2:		{ channelDesc = cudaCreateChannelDesc<::int2>();		break; }
+		case Format::Int4:		{ channelDesc = cudaCreateChannelDesc<::int4>();		break; }
+		case Format::Uint:		{ channelDesc = cudaCreateChannelDesc<::uint1>();		break; }
+		case Format::Uint2:		{ channelDesc = cudaCreateChannelDesc<::uint2>();		break; }
+		case Format::Uint4:		{ channelDesc = cudaCreateChannelDesc<::uint4>();		break; }
+		case Format::Char:		{ channelDesc = cudaCreateChannelDesc<::char1>();		break; }
+		case Format::Char2:		{ channelDesc = cudaCreateChannelDesc<::char2>();		break; }
+		case Format::Char4:		{ channelDesc = cudaCreateChannelDesc<::char4>();		break; }
+		case Format::Uchar:		{ channelDesc = cudaCreateChannelDesc<::uchar1>();		break; }
+		case Format::Uchar2:	{ channelDesc = cudaCreateChannelDesc<::uchar2>();		break; }
+		case Format::Uchar4:	{ channelDesc = cudaCreateChannelDesc<::uchar4>();		break; }
+		case Format::Short:		{ channelDesc = cudaCreateChannelDesc<::short1>();		break; }
+		case Format::Short2:	{ channelDesc = cudaCreateChannelDesc<::short2>();		break; }
+		case Format::Short4:	{ channelDesc = cudaCreateChannelDesc<::short4>();		break; }
+		case Format::Ushort:	{ channelDesc = cudaCreateChannelDesc<::ushort1>();		break; }
+		case Format::Ushort2:	{ channelDesc = cudaCreateChannelDesc<::ushort2>();		break; }
+		case Format::Ushort4:	{ channelDesc = cudaCreateChannelDesc<::ushort4>();		break; }
+		case Format::Float:		{ channelDesc = cudaCreateChannelDesc<::float1>();		break; }
+		case Format::Float2:	{ channelDesc = cudaCreateChannelDesc<::float2>();		break; }
+		case Format::Float4:	{ channelDesc = cudaCreateChannelDesc<::float4>();		break; }
+		default:				{ NS_ERROR_LOG("Invalid format!");						break; }
 	}
 
 	return channelDesc;
