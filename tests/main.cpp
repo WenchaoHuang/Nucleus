@@ -33,6 +33,7 @@ extern void test_buffer();
 extern void test_stream();
 extern void test_context();
 extern void test_dev_ptr();
+extern void test_surface();
 extern void test_allocator();
 extern void test_buffer_view();
 
@@ -47,6 +48,7 @@ int main()
 	test_array();
 	test_image();
 	test_stream();
+	test_surface();
 	test_buffer_view();
 	test_logger();
 

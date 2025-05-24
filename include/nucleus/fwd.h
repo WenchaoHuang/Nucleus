@@ -67,6 +67,14 @@ namespace NS_NAMESPACE
 	template<typename Type> struct DevPtr2;
 	template<typename Type> struct DevPtr3;
 
+	template<typename Type> struct devSurf1D;
+	template<typename Type> struct devSurf2D;
+	template<typename Type> struct devSurf3D;
+	template<typename Type> struct devSurfCube;
+	template<typename Type> struct devSurf1DLayered;
+	template<typename Type> struct devSurf2DLayered;
+	template<typename Type> struct devSurfCubeLayered;
+
 	template<typename Type> class Array1D;
 	template<typename Type> class Array2D;
 	template<typename Type> class Array3D;

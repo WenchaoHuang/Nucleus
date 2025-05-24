@@ -57,7 +57,7 @@ namespace NS_NAMESPACE
 		template<Format format> struct TypeMapping;
 		template<typename Type> struct FormatMapping;
 
-		//	Maps Format enum values to corresponding C++ types.
+		//	Maps Format enum values to CUDA internal types.
 		template<> struct TypeMapping<Format::Int>  { using type = int; };
 		template<> struct TypeMapping<Format::Int2> { using type = int2; };
 		template<> struct TypeMapping<Format::Int4> { using type = int4; };
