@@ -22,8 +22,8 @@
 #pragma once
 
 #include "fwd.h"
-#include "dev_ptr.h"
 #include "allocator.h"
+#include "device_pointer.h"
 
 namespace NS_NAMESPACE
 {

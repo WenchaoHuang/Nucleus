@@ -23,7 +23,7 @@
 
 #include "fwd.h"
 #include "buffer.h"
-#include "dev_ptr.h"
+#include "device_pointer.h"
 
 namespace NS_NAMESPACE
 {

@@ -20,7 +20,7 @@
  *	SOFTWARE.
  */
 
-#include <nucleus/dev_ptr.h>
+#include <nucleus/device_pointer.h>
 #include <device_launch_parameters.h>
 
 /*************************************************************************

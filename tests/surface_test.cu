@@ -22,7 +22,7 @@
 
 #include <nucleus/device.h>
 #include <nucleus/context.h>
-#include <nucleus/dev_surf.h>
+#include <nucleus/device_surface.h>
 #include <device_launch_parameters.h>
 
 /*************************************************************************
