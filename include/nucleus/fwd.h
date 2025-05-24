@@ -63,10 +63,10 @@ namespace NS_NAMESPACE
 	enum class FilterMode;
 	enum class AddressMode;
 
-	template<typename Type> struct DevPtr;
-	template<typename Type> struct DevPtr2;
-	template<typename Type> struct DevPtr3;
-
+	//	'dev' prefix  is for device objects.
+	template<typename Type> struct devPtr;
+	template<typename Type> struct devPtr2;
+	template<typename Type> struct devPtr3;
 	template<typename Type> struct devSurf1D;
 	template<typename Type> struct devSurf2D;
 	template<typename Type> struct devSurf3D;
@@ -144,9 +144,9 @@ using NsDevAlloc										= NS_NAMESPACE::DeviceAllocator;
 using NsMemRes											= NS_NAMESPACE::MemoryResource;
 using NsAlloc											= NS_NAMESPACE::Allocator;
 
-template<typename Type> using NsDevPtr					= NS_NAMESPACE::DevPtr<Type>;
-template<typename Type> using NsDevPtr2					= NS_NAMESPACE::DevPtr2<Type>;
-template<typename Type> using NsDevPtr3					= NS_NAMESPACE::DevPtr3<Type>;
+template<typename Type> using NsDevPtr					= NS_NAMESPACE::devPtr<Type>;
+template<typename Type> using NsDevPtr2					= NS_NAMESPACE::devPtr2<Type>;
+template<typename Type> using NsDevPtr3					= NS_NAMESPACE::devPtr3<Type>;
 
 template<typename Type> using NsArray1D					= NS_NAMESPACE::Array1D<Type>;
 template<typename Type> using NsArray2D					= NS_NAMESPACE::Array2D<Type>;

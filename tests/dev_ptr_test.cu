@@ -27,7 +27,7 @@
 ***************************    dev_ptr_test    ***************************
 *************************************************************************/
 
-__global__ void test(ns::DevPtr<float> out, ns::DevPtr<const float> in, unsigned int num)
+__global__ void test(ns::devPtr<float> out, ns::devPtr<const float> in, unsigned int num)
 {
 	auto i = blockDim.x * blockIdx.x + threadIdx.x;
 
@@ -44,17 +44,17 @@ __global__ void test(ns::DevPtr<float> out, ns::DevPtr<const float> in, unsigned
 
 void test_dev_ptr()
 {
-	ns::DevPtr<float> devPtr0;
-	ns::DevPtr<float> devPtr1 = nullptr;
-	ns::DevPtr<float> devPtr2(nullptr, 1024);
+	ns::devPtr<float> devPtr0;
+	ns::devPtr<float> devPtr1 = nullptr;
+	ns::devPtr<float> devPtr2(nullptr, 1024);
 
-	ns::DevPtr2<int> devPtr3;
-	ns::DevPtr2<int> devPtr4 = nullptr;
-	ns::DevPtr2<int> devPtr5(nullptr, 100, 200);
+	ns::devPtr2<int> devPtr3;
+	ns::devPtr2<int> devPtr4 = nullptr;
+	ns::devPtr2<int> devPtr5(nullptr, 100, 200);
 
-	ns::DevPtr3<bool> devPtr6;
-	ns::DevPtr3<bool> devPtr7 = nullptr;
-	ns::DevPtr3<bool> devPtr8(nullptr, 100, 200, 300);
+	ns::devPtr3<bool> devPtr6;
+	ns::devPtr3<bool> devPtr7 = nullptr;
+	ns::devPtr3<bool> devPtr8(nullptr, 100, 200, 300);
 
 	if (devPtr0)
 	{
@@ -79,7 +79,7 @@ void test_dev_ptr()
 		devPtr4.data();
 		devPtr4 = nullptr;
 
-	//	ns::DevPtr<int> devPtr = devPtr4;
+	//	ns::devPtr<int> devPtr = devPtr4;
 	}
 
 	if (devPtr8)
