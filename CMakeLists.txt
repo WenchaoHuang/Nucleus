@@ -100,3 +100,5 @@ source_group("7. Image" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/image_
 source_group("7. Image" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/image_3d.h)
 source_group("7. Image" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/image_cube.h)
 
+source_group("8. Surface" FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/surface.cpp)
+source_group("8. Surface" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/surface.h)

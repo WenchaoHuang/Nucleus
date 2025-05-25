@@ -45,6 +45,7 @@
 
 namespace NS_NAMESPACE
 {
+	class Image;
 	class Event;
 	class Graph;
 	class Buffer;
@@ -67,6 +68,7 @@ namespace NS_NAMESPACE
 	template<typename Type> struct devPtr;
 	template<typename Type> struct devPtr2;
 	template<typename Type> struct devPtr3;
+
 	template<typename Type> struct devSurf1D;
 	template<typename Type> struct devSurf2D;
 	template<typename Type> struct devSurf3D;
