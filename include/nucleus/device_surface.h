@@ -29,13 +29,13 @@
 	#include <surface_indirect_functions.h>
 #endif
 
-namespace NS_NAMESPACE
+namespace NS_NAMESPACE::dev
 {
 	//	Defines the internal CUDA-compatible value type for a given C++ type.
 	template<typename Type> using internal_value_type = typename details::TypeMapping<FormatMapping<std::remove_const_t<Type>>::value>::type;
 
 	/*********************************************************************
-	**************************    devSurface    **************************
+	***************************    Surface    ****************************
 	*********************************************************************/
 
 	/**
@@ -46,16 +46,16 @@ namespace NS_NAMESPACE
 	 *				the underlying CUDA surface handle, checking if the surface is valid or empty,
 	 *				and supports implicit boolean conversion for validity checks.
 	 */
-	struct devSurface
+	struct Surface
 	{
 		//	Default constructor.
-		NS_CUDA_CALLABLE devSurface() {}
+		NS_CUDA_CALLABLE Surface() {}
 
 		//	Constructor with nullptr.
-		NS_CUDA_CALLABLE devSurface(std::nullptr_t) : m_hSurface(0) {}
+		NS_CUDA_CALLABLE Surface(std::nullptr_t) : m_hSurface(0) {}
 
 		//	Constructor with cudaSurfaceObject_t.
-		NS_CUDA_CALLABLE explicit devSurface(cudaSurfaceObject_t hSurface) : m_hSurface(hSurface) {}
+		NS_CUDA_CALLABLE explicit Surface(cudaSurfaceObject_t hSurface) : m_hSurface(hSurface) {}
 
 		//	Return CUDA type of this object for compatibility.
 		NS_CUDA_CALLABLE cudaSurfaceObject_t getHandle() const { return m_hSurface; }
@@ -72,7 +72,7 @@ namespace NS_NAMESPACE
 	};
 
 	/*********************************************************************
-	********************    devSurf1D<const Type>    *********************
+	**********************    Surf1D<const Type>    **********************
 	*********************************************************************/
 
 	/**
@@ -81,16 +81,16 @@ namespace NS_NAMESPACE
 	 *	@details	This struct provides an interface for 1D CUDA surface objects,
 	 *				enabling device-side read and write operations (read-only for const Type).
 	 */
-	template<typename Type> struct devSurf1D<const Type> : public devSurface
+	template<typename Type> struct Surf1D<const Type> : public Surface
 	{
 		//	Default constructor.
-		NS_CUDA_CALLABLE devSurf1D() {}
+		NS_CUDA_CALLABLE Surf1D() {}
 
 		//	Constructor with nullptr.
-		NS_CUDA_CALLABLE devSurf1D(std::nullptr_t) : devSurface(nullptr), m_width(0) {}
+		NS_CUDA_CALLABLE Surf1D(std::nullptr_t) : Surface(nullptr), m_width(0) {}
 
 		//	Constructor with cudaSurfaceObject_t.
-		NS_CUDA_CALLABLE explicit devSurf1D(cudaSurfaceObject_t hSurface, uint32_t width) : devSurface(hSurface), m_width(width) {}
+		NS_CUDA_CALLABLE explicit Surf1D(cudaSurfaceObject_t hSurface, uint32_t width) : Surface(hSurface), m_width(width) {}
 
 		//	Return width of the buffer.
 		NS_CUDA_CALLABLE uint32_t width() const { return m_width; }
@@ -115,7 +115,7 @@ namespace NS_NAMESPACE
 	};
 
 	/*********************************************************************
-	***********************    devSurf1D<Type>    ************************
+	*************************    Surf1D<Type>    *************************
 	*********************************************************************/
 
 	/**
@@ -124,16 +124,16 @@ namespace NS_NAMESPACE
 	 *	@details	This struct provides an interface for 1D CUDA surface objects,
 	 *				enabling device-side read and write operations (read-only for const Type).
 	 */
-	template<typename Type> struct devSurf1D : public devSurf1D<const Type>
+	template<typename Type> struct Surf1D : public Surf1D<const Type>
 	{
 		//	Default constructor.
-		NS_CUDA_CALLABLE devSurf1D() {}
+		NS_CUDA_CALLABLE Surf1D() {}
 
 		//	Constructor with nullptr.
-		NS_CUDA_CALLABLE devSurf1D(std::nullptr_t) : devSurf1D<const Type>(nullptr) {}
+		NS_CUDA_CALLABLE Surf1D(std::nullptr_t) : Surf1D<const Type>(nullptr) {}
 
 		//	Constructor with cudaSurfaceObject_t.
-		NS_CUDA_CALLABLE explicit devSurf1D(cudaSurfaceObject_t hSurface, uint32_t width) : devSurf1D<const Type>(hSurface, width) {}
+		NS_CUDA_CALLABLE explicit Surf1D(cudaSurfaceObject_t hSurface, uint32_t width) : Surf1D<const Type>(hSurface, width) {}
 		
 		//	Write method for CUDA surface object.
 	#ifndef __CUDACC__
@@ -147,7 +147,7 @@ namespace NS_NAMESPACE
 	};
 
 	/*********************************************************************
-	********************    devSurf2D<const Type>    *********************
+	**********************    Surf2D<const Type>    **********************
 	*********************************************************************/
 
 	/**
@@ -156,16 +156,16 @@ namespace NS_NAMESPACE
 	 *	@details	This struct provides an interface for 2D CUDA surface objects,
 	 *				enabling device-side read and write operations (read-only for const Type).
 	 */
-	template<typename Type> struct devSurf2D<const Type> : public devSurface
+	template<typename Type> struct Surf2D<const Type> : public Surface
 	{
 		//	Default constructor.
-		NS_CUDA_CALLABLE devSurf2D() {}
+		NS_CUDA_CALLABLE Surf2D() {}
 
 		//	Constructor with nullptr.
-		NS_CUDA_CALLABLE devSurf2D(std::nullptr_t) : devSurface(nullptr), m_width(0), m_height(0) {}
+		NS_CUDA_CALLABLE Surf2D(std::nullptr_t) : Surface(nullptr), m_width(0), m_height(0) {}
 
 		//	Constructor with cudaSurfaceObject_t.
-		NS_CUDA_CALLABLE explicit devSurf2D(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t height) : devSurface(hSurface), m_width(width), m_height(height) {}
+		NS_CUDA_CALLABLE explicit Surf2D(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t height) : Surface(hSurface), m_width(width), m_height(height) {}
 
 		//	Return height of the buffer.
 		NS_CUDA_CALLABLE uint32_t height() const { return m_height; }
@@ -194,7 +194,7 @@ namespace NS_NAMESPACE
 	};
 
 	/*********************************************************************
-	***********************    devSurf2D<Type>    ************************
+	*************************    Surf2D<Type>    *************************
 	*********************************************************************/
 
 	/**
@@ -203,16 +203,16 @@ namespace NS_NAMESPACE
 	 *	@details	This struct provides an interface for 2D CUDA surface objects,
 	 *				enabling device-side read and write operations (read-only for const Type).
 	 */
-	template<typename Type> struct devSurf2D : public devSurf2D<const Type>
+	template<typename Type> struct Surf2D : public Surf2D<const Type>
 	{
 		//	Default constructor.
-		NS_CUDA_CALLABLE devSurf2D() {}
+		NS_CUDA_CALLABLE Surf2D() {}
 
 		//	Constructor with nullptr.
-		NS_CUDA_CALLABLE devSurf2D(std::nullptr_t) : devSurf2D<const Type>(nullptr) {}
+		NS_CUDA_CALLABLE Surf2D(std::nullptr_t) : Surf2D<const Type>(nullptr) {}
 
 		//	Constructor with cudaSurfaceObject_t.
-		NS_CUDA_CALLABLE explicit devSurf2D(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t height) : devSurf2D<const Type>(hSurface, width, height) {}
+		NS_CUDA_CALLABLE explicit Surf2D(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t height) : Surf2D<const Type>(hSurface, width, height) {}
 
 		//	Write method for CUDA surface object.
 	#ifndef __CUDACC__
@@ -226,7 +226,7 @@ namespace NS_NAMESPACE
 	};
 
 	/*********************************************************************
-	********************    devSurf3D<const Type>    *********************
+	**********************    Surf3D<const Type>    **********************
 	*********************************************************************/
 
 	/**
@@ -235,16 +235,16 @@ namespace NS_NAMESPACE
 	 *	@details	This struct provides an interface for 3D CUDA surface objects,
 	 *				enabling device-side read and write operations (read-only for const Type).
 	 */
-	template<typename Type> struct devSurf3D<const Type> : public devSurface
+	template<typename Type> struct Surf3D<const Type> : public Surface
 	{
 		//	Default constructor.
-		NS_CUDA_CALLABLE devSurf3D() {}
+		NS_CUDA_CALLABLE Surf3D() {}
 
 		//	Constructor with nullptr.
-		NS_CUDA_CALLABLE devSurf3D(std::nullptr_t) : devSurface(nullptr), m_width(0), m_height(0), m_depth(0) {}
+		NS_CUDA_CALLABLE Surf3D(std::nullptr_t) : Surface(nullptr), m_width(0), m_height(0), m_depth(0) {}
 
 		//	Constructor with cudaSurfaceObject_t.
-		NS_CUDA_CALLABLE explicit devSurf3D(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t height, uint32_t depth) : devSurface(hSurface), m_width(width), m_height(height), m_depth(depth) {}
+		NS_CUDA_CALLABLE explicit Surf3D(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t height, uint32_t depth) : Surface(hSurface), m_width(width), m_height(height), m_depth(depth) {}
 
 		//	Return height of the buffer.
 		NS_CUDA_CALLABLE uint32_t height() const { return m_height; }
@@ -277,7 +277,7 @@ namespace NS_NAMESPACE
 	};
 
 	/*********************************************************************
-	***********************    devSurf3D<Type>    ************************
+	*************************    Surf3D<Type>    *************************
 	*********************************************************************/
 
 	/**
@@ -286,16 +286,16 @@ namespace NS_NAMESPACE
 	 *	@details	This struct provides an interface for 3D CUDA surface objects,
 	 *				enabling device-side read and write operations (read-only for const Type).
 	 */
-	template<typename Type> struct devSurf3D : public devSurf3D<const Type>
+	template<typename Type> struct Surf3D : public Surf3D<const Type>
 	{
 		//	Default constructor.
-		NS_CUDA_CALLABLE devSurf3D() {}
+		NS_CUDA_CALLABLE Surf3D() {}
 
 		//	Constructor with nullptr.
-		NS_CUDA_CALLABLE devSurf3D(std::nullptr_t) : devSurf3D<const Type>(nullptr) {}
+		NS_CUDA_CALLABLE Surf3D(std::nullptr_t) : Surf3D<const Type>(nullptr) {}
 
 		//	Constructor with cudaSurfaceObject_t.
-		NS_CUDA_CALLABLE explicit devSurf3D(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t height, uint32_t depth) : devSurf3D<const Type>(hSurface, width, height, depth) {}
+		NS_CUDA_CALLABLE explicit Surf3D(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t height, uint32_t depth) : Surf3D<const Type>(hSurface, width, height, depth) {}
 
 		//	Write method for CUDA surface object.
 	#ifndef __CUDACC__
@@ -309,7 +309,7 @@ namespace NS_NAMESPACE
 	};
 
 	/*********************************************************************
-	*****************    devSurf1DLayered<const Type>    *****************
+	******************    Surf1DLayered<const Type>    *******************
 	*********************************************************************/
 
 	/**
@@ -318,16 +318,16 @@ namespace NS_NAMESPACE
 	 *	@details	This struct provides an interface for 1D layered CUDA surface objects,
 	 *				enabling device-side read and write operations (read-only for const Type).
 	 */
-	template<typename Type> struct devSurf1DLayered<const Type> : public devSurface
+	template<typename Type> struct Surf1DLayered<const Type> : public Surface
 	{
 		//	Default constructor.
-		NS_CUDA_CALLABLE devSurf1DLayered() {}
+		NS_CUDA_CALLABLE Surf1DLayered() {}
 
 		//	Constructor with nullptr.
-		NS_CUDA_CALLABLE devSurf1DLayered(std::nullptr_t) : devSurface(nullptr), m_width(0), m_numLayers(0) {}
+		NS_CUDA_CALLABLE Surf1DLayered(std::nullptr_t) : Surface(nullptr), m_width(0), m_numLayers(0) {}
 
 		//	Constructor with cudaSurfaceObject_t.
-		NS_CUDA_CALLABLE explicit devSurf1DLayered(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t numLayers) : devSurface(hSurface), m_width(width), m_numLayers(numLayers) {}
+		NS_CUDA_CALLABLE explicit Surf1DLayered(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t numLayers) : Surface(hSurface), m_width(width), m_numLayers(numLayers) {}
 
 		//	Return the number of layers.
 		NS_CUDA_CALLABLE uint32_t numLayers() const { return m_numLayers; }
@@ -356,7 +356,7 @@ namespace NS_NAMESPACE
 	};
 
 	/*********************************************************************
-	********************    devSurf1DLayered<Type>    ********************
+	*********************    Surf1DLayered<Type>    **********************
 	*********************************************************************/
 
 	/**
@@ -365,16 +365,16 @@ namespace NS_NAMESPACE
 	 *	@details	This struct provides an interface for 1D layered CUDA surface objects,
 	 *				enabling device-side read and write operations (read-only for const Type).
 	 */
-	template<typename Type> struct devSurf1DLayered : public devSurf1DLayered<const Type>
+	template<typename Type> struct Surf1DLayered : public Surf1DLayered<const Type>
 	{
 		//	Default constructor.
-		NS_CUDA_CALLABLE devSurf1DLayered() {}
+		NS_CUDA_CALLABLE Surf1DLayered() {}
 
 		//	Constructor with nullptr.
-		NS_CUDA_CALLABLE devSurf1DLayered(std::nullptr_t) : devSurf1DLayered<const Type>(nullptr) {}
+		NS_CUDA_CALLABLE Surf1DLayered(std::nullptr_t) : Surf1DLayered<const Type>(nullptr) {}
 
 		//	Constructor with cudaSurfaceObject_t.
-		NS_CUDA_CALLABLE explicit devSurf1DLayered(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t numLayers) : devSurf1DLayered<const Type>(hSurface, width, numLayers) {}
+		NS_CUDA_CALLABLE explicit Surf1DLayered(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t numLayers) : Surf1DLayered<const Type>(hSurface, width, numLayers) {}
 
 		//	Write method for CUDA surface object.
 	#ifndef __CUDACC__
@@ -388,7 +388,7 @@ namespace NS_NAMESPACE
 	};
 
 	/*********************************************************************
-	*****************    devSurf2DLayered<const Type>    *****************
+	******************    Surf2DLayered<const Type>    *******************
 	*********************************************************************/
 
 	/**
@@ -397,16 +397,16 @@ namespace NS_NAMESPACE
 	 *	@details	This struct provides an interface for 2D layered CUDA surface objects,
 	 *				enabling device-side read and write operations (read-only for const Type).
 	 */
-	template<typename Type> struct devSurf2DLayered<const Type> : public devSurface
+	template<typename Type> struct Surf2DLayered<const Type> : public Surface
 	{
 		//	Default constructor.
-		NS_CUDA_CALLABLE devSurf2DLayered() {}
+		NS_CUDA_CALLABLE Surf2DLayered() {}
 
 		//	Constructor with nullptr.
-		NS_CUDA_CALLABLE devSurf2DLayered(std::nullptr_t) : devSurface(nullptr), m_width(0), m_height(0), m_numLayers(0) {}
+		NS_CUDA_CALLABLE Surf2DLayered(std::nullptr_t) : Surface(nullptr), m_width(0), m_height(0), m_numLayers(0) {}
 
 		//	Constructor with cudaSurfaceObject_t.
-		NS_CUDA_CALLABLE explicit devSurf2DLayered(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t height, uint32_t numLayers) : devSurface(hSurface), m_width(width), m_height(height), m_numLayers(numLayers) {}
+		NS_CUDA_CALLABLE explicit Surf2DLayered(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t height, uint32_t numLayers) : Surface(hSurface), m_width(width), m_height(height), m_numLayers(numLayers) {}
 
 		//	Return the number of layers.
 		NS_CUDA_CALLABLE uint32_t numLayers() const { return m_numLayers; }
@@ -439,7 +439,7 @@ namespace NS_NAMESPACE
 	};
 
 	/*********************************************************************
-	********************    devSurf2DLayered<Type>    ********************
+	*********************    Surf2DLayered<Type>    **********************
 	*********************************************************************/
 
 	/**
@@ -448,16 +448,16 @@ namespace NS_NAMESPACE
 	 *	@details	This struct provides an interface for 2D layered CUDA surface objects,
 	 *				enabling device-side read and write operations (read-only for const Type).
 	 */
-	template<typename Type> struct devSurf2DLayered : public devSurf2DLayered<const Type>
+	template<typename Type> struct Surf2DLayered : public Surf2DLayered<const Type>
 	{
 		//	Default constructor.
-		NS_CUDA_CALLABLE devSurf2DLayered() {}
+		NS_CUDA_CALLABLE Surf2DLayered() {}
 
 		//	Constructor with nullptr.
-		NS_CUDA_CALLABLE devSurf2DLayered(std::nullptr_t) : devSurf2DLayered<const Type>(nullptr) {}
+		NS_CUDA_CALLABLE Surf2DLayered(std::nullptr_t) : Surf2DLayered<const Type>(nullptr) {}
 
 		//	Constructor with cudaSurfaceObject_t.
-		NS_CUDA_CALLABLE explicit devSurf2DLayered(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t height, uint32_t numLayers) : devSurf2DLayered<const Type>(hSurface, width, height, numLayers) {}
+		NS_CUDA_CALLABLE explicit Surf2DLayered(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t height, uint32_t numLayers) : Surf2DLayered<const Type>(hSurface, width, height, numLayers) {}
 
 		//	Write method for CUDA surface object.
 	#ifndef __CUDACC__
@@ -471,7 +471,7 @@ namespace NS_NAMESPACE
 	};
 
 	/*********************************************************************
-	*******************    devSurfCube<const Type>    ********************
+	*********************    SurfCube<const Type>    *********************
 	*********************************************************************/
 	
 	/**
@@ -480,16 +480,16 @@ namespace NS_NAMESPACE
 	 *	@details	This struct provides an interface for cube-type CUDA surface objects,
 	 *				enabling device-side read and write operations (read-only for const Type).
 	 */
-	template<typename Type> struct devSurfCube<const Type> : public devSurface
+	template<typename Type> struct SurfCube<const Type> : public Surface
 	{
 		//	Default constructor.
-		NS_CUDA_CALLABLE devSurfCube() {}
+		NS_CUDA_CALLABLE SurfCube() {}
 
 		//	Constructor with nullptr.
-		NS_CUDA_CALLABLE devSurfCube(std::nullptr_t) : devSurface(nullptr), m_width(0) {}
+		NS_CUDA_CALLABLE SurfCube(std::nullptr_t) : Surface(nullptr), m_width(0) {}
 
 		//	Constructor with cudaSurfaceObject_t.
-		NS_CUDA_CALLABLE explicit devSurfCube(cudaSurfaceObject_t hSurface, uint32_t width) : devSurface(hSurface), m_width(width) {}
+		NS_CUDA_CALLABLE explicit SurfCube(cudaSurfaceObject_t hSurface, uint32_t width) : Surface(hSurface), m_width(width) {}
 
 		//	Return width of the buffer.
 		NS_CUDA_CALLABLE uint32_t width() const { return m_width; }
@@ -514,7 +514,7 @@ namespace NS_NAMESPACE
 	};
 
 	/*********************************************************************
-	**********************    devSurfCube<Type>    ***********************
+	************************    SurfCube<Type>    ************************
 	*********************************************************************/
 
 	/**
@@ -523,16 +523,16 @@ namespace NS_NAMESPACE
 	 *	@details	This struct provides an interface for cube-type CUDA surface objects,
 	 *				enabling device-side read and write operations (read-only for const Type).
 	 */
-	template<typename Type> struct devSurfCube : public devSurfCube<const Type>
+	template<typename Type> struct SurfCube : public SurfCube<const Type>
 	{
 		//	Default constructor.
-		NS_CUDA_CALLABLE devSurfCube() {}
+		NS_CUDA_CALLABLE SurfCube() {}
 
 		//	Constructor with nullptr.
-		NS_CUDA_CALLABLE devSurfCube(std::nullptr_t) : devSurfCube<const Type>(nullptr) {}
+		NS_CUDA_CALLABLE SurfCube(std::nullptr_t) : SurfCube<const Type>(nullptr) {}
 
 		//	Constructor with cudaSurfaceObject_t.
-		NS_CUDA_CALLABLE explicit devSurfCube(cudaSurfaceObject_t hSurface, uint32_t width) : devSurfCube<const Type>(hSurface, width) {}
+		NS_CUDA_CALLABLE explicit SurfCube(cudaSurfaceObject_t hSurface, uint32_t width) : SurfCube<const Type>(hSurface, width) {}
 
 		//	Write method for CUDA surface object.
 	#ifndef __CUDACC__
@@ -546,7 +546,7 @@ namespace NS_NAMESPACE
 	};
 
 	/*********************************************************************
-	****************    devSurfCubeLayered<const Type>    ****************
+	*****************    SurfCubeLayered<const Type>    ******************
 	*********************************************************************/
 
 	/**
@@ -555,16 +555,16 @@ namespace NS_NAMESPACE
 	 *	@details	This struct provides an interface for cube-type layered CUDA surface objects,
 	 *				enabling device-side read and write operations (read-only for const Type).
 	 */
-	template<typename Type> struct devSurfCubeLayered<const Type> : public devSurface
+	template<typename Type> struct SurfCubeLayered<const Type> : public Surface
 	{
 		//	Default constructor.
-		NS_CUDA_CALLABLE devSurfCubeLayered() {}
+		NS_CUDA_CALLABLE SurfCubeLayered() {}
 
 		//	Constructor with nullptr.
-		NS_CUDA_CALLABLE devSurfCubeLayered(std::nullptr_t) : devSurface(nullptr), m_width(0), m_numLayers(0) {}
+		NS_CUDA_CALLABLE SurfCubeLayered(std::nullptr_t) : Surface(nullptr), m_width(0), m_numLayers(0) {}
 
 		//	Constructor with cudaSurfaceObject_t.
-		NS_CUDA_CALLABLE explicit devSurfCubeLayered(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t numLayers) : devSurface(hSurface), m_width(width), m_numLayers(numLayers) {}
+		NS_CUDA_CALLABLE explicit SurfCubeLayered(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t numLayers) : Surface(hSurface), m_width(width), m_numLayers(numLayers) {}
 
 		//	Return the number of layers.
 		NS_CUDA_CALLABLE uint32_t numLayers() const { return m_numLayers; }
@@ -593,7 +593,7 @@ namespace NS_NAMESPACE
 	};
 
 	/*********************************************************************
-	*******************    devSurfCubeLayered<Type>    *******************
+	********************    SurfCubeLayered<Type>    *********************
 	*********************************************************************/
 
 	/**
@@ -602,16 +602,16 @@ namespace NS_NAMESPACE
 	 *	@details	This struct provides an interface for cube-type layered CUDA surface objects,
 	 *				enabling device-side read and write operations (read-only for const Type).
 	 */
-	template<typename Type> struct devSurfCubeLayered : public devSurfCubeLayered<const Type>
+	template<typename Type> struct SurfCubeLayered : public SurfCubeLayered<const Type>
 	{
 		//	Default constructor.
-		NS_CUDA_CALLABLE devSurfCubeLayered() {}
+		NS_CUDA_CALLABLE SurfCubeLayered() {}
 
 		//	Constructor with nullptr.
-		NS_CUDA_CALLABLE devSurfCubeLayered(std::nullptr_t) : devSurfCubeLayered<const Type>(nullptr) {}
+		NS_CUDA_CALLABLE SurfCubeLayered(std::nullptr_t) : SurfCubeLayered<const Type>(nullptr) {}
 
 		//	Constructor with cudaSurfaceObject_t.
-		NS_CUDA_CALLABLE explicit devSurfCubeLayered(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t numLayers) : devSurfCubeLayered<const Type>(hSurface, width, numLayers) {}
+		NS_CUDA_CALLABLE explicit SurfCubeLayered(cudaSurfaceObject_t hSurface, uint32_t width, uint32_t numLayers) : SurfCubeLayered<const Type>(hSurface, width, numLayers) {}
 
 		//	Write method for CUDA surface object.
 	#ifndef __CUDACC__

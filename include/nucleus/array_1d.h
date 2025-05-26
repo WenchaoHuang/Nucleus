@@ -34,7 +34,7 @@ namespace NS_NAMESPACE
 	/**
 	 *	@brief		Template for 1D array, which accessible to the device.
 	 */
-	template<typename Type> class Array1D : public devPtr<Type>
+	template<typename Type> class Array1D : public dev::Ptr<Type>
 	{
 		NS_NONCOPYABLE(Array1D)
 

@@ -56,8 +56,8 @@ void test_allocator()
 	hostAlloc.deallocateMemory(hostPtr);
 
 	ns::DeviceAllocator devAlloc(device);
-	auto devPtr = devAlloc.allocateMemory(128);
-	devAlloc.deallocateMemory(devPtr);
+	auto Ptr = devAlloc.allocateMemory(128);
+	devAlloc.deallocateMemory(Ptr);
 
 	auto pAlloc = device->getDefaultAllocator();
 	auto texMem = pAlloc->allocateTextureMemory(ns::Format::Float, 100, 100, 100);

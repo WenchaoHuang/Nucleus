@@ -64,18 +64,21 @@ namespace NS_NAMESPACE
 	enum class FilterMode;
 	enum class AddressMode;
 
-	//	'dev' prefix  is for device objects.
-	template<typename Type> struct devPtr;
-	template<typename Type> struct devPtr2;
-	template<typename Type> struct devPtr3;
+	//	For device objects.
+	namespace dev
+	{
+		template<typename Type> struct Ptr;
+		template<typename Type> struct Ptr2;
+		template<typename Type> struct Ptr3;
 
-	template<typename Type> struct devSurf1D;
-	template<typename Type> struct devSurf2D;
-	template<typename Type> struct devSurf3D;
-	template<typename Type> struct devSurfCube;
-	template<typename Type> struct devSurf1DLayered;
-	template<typename Type> struct devSurf2DLayered;
-	template<typename Type> struct devSurfCubeLayered;
+		template<typename Type> struct Surf1D;
+		template<typename Type> struct Surf2D;
+		template<typename Type> struct Surf3D;
+		template<typename Type> struct SurfCube;
+		template<typename Type> struct Surf1DLayered;
+		template<typename Type> struct Surf2DLayered;
+		template<typename Type> struct SurfCubeLayered;
+	}
 
 	template<typename Type> class Array1D;
 	template<typename Type> class Array2D;
@@ -146,9 +149,9 @@ using NsDevAlloc										= NS_NAMESPACE::DeviceAllocator;
 using NsMemRes											= NS_NAMESPACE::MemoryResource;
 using NsAlloc											= NS_NAMESPACE::Allocator;
 
-template<typename Type> using NsDevPtr					= NS_NAMESPACE::devPtr<Type>;
-template<typename Type> using NsDevPtr2					= NS_NAMESPACE::devPtr2<Type>;
-template<typename Type> using NsDevPtr3					= NS_NAMESPACE::devPtr3<Type>;
+template<typename Type> using NsDevPtr					= NS_NAMESPACE::dev::Ptr<Type>;
+template<typename Type> using NsDevPtr2					= NS_NAMESPACE::dev::Ptr2<Type>;
+template<typename Type> using NsDevPtr3					= NS_NAMESPACE::dev::Ptr3<Type>;
 
 template<typename Type> using NsArray1D					= NS_NAMESPACE::Array1D<Type>;
 template<typename Type> using NsArray2D					= NS_NAMESPACE::Array2D<Type>;

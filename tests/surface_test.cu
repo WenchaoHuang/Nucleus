@@ -30,13 +30,13 @@
 **************************    test_dev_surf    ***************************
 *************************************************************************/
 
-__global__ void test_device_surface(ns::devSurf1D<int> surface0, ns::devSurf1D<const int> surface1,
-									ns::devSurf2D<short> surface2, ns::devSurf2D<const short> surface3,
-									ns::devSurf3D<float> surface4, ns::devSurf3D<const float> surface5,
-									ns::devSurfCube<ns::float2> surface6, ns::devSurfCube<const ns::float2> surface7,
-									ns::devSurf1DLayered<float> surface8, ns::devSurf1DLayered<const float> surface9,
-									ns::devSurf2DLayered<float> surface10, ns::devSurf2DLayered<const float> surface11,
-									ns::devSurfCubeLayered<int> surface12, ns::devSurfCubeLayered<const int> surface13)
+__global__ void test_device_surface(dev::Surf1D<int> surface0, dev::Surf1D<const int> surface1,
+									dev::Surf2D<short> surface2, dev::Surf2D<const short> surface3,
+									dev::Surf3D<float> surface4, dev::Surf3D<const float> surface5,
+									dev::SurfCube<ns::float2> surface6, dev::SurfCube<const ns::float2> surface7,
+									dev::Surf1DLayered<float> surface8, dev::Surf1DLayered<const float> surface9,
+									dev::Surf2DLayered<float> surface10, dev::Surf2DLayered<const float> surface11,
+									dev::SurfCubeLayered<int> surface12, dev::SurfCubeLayered<const int> surface13)
 {
 	//==	1D	  ==
 	surface0.empty();

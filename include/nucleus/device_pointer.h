@@ -23,32 +23,32 @@
 
 #include "fwd.h"
 
-namespace NS_NAMESPACE
+namespace NS_NAMESPACE::dev
 {
 	/*********************************************************************
-	**************************    devPtr<T>    ***************************
+	****************************    Ptr<T>    ****************************
 	*********************************************************************/
 
 	//	Template wrapper for 1D device pointer.
-	template<typename Type> struct devPtr
+	template<typename Type> struct Ptr
 	{
 		//	Default constructor, should not initialized.
-		NS_CUDA_CALLABLE devPtr() noexcept {}
+		NS_CUDA_CALLABLE Ptr() noexcept {}
 
 		//	Constructor with zero initialization.
-		NS_CUDA_CALLABLE devPtr(std::nullptr_t) : m_data(nullptr), m_width(0) {}
+		NS_CUDA_CALLABLE Ptr(std::nullptr_t) : m_data(nullptr), m_width(0) {}
 
 		//	Construct with pointer, width.
-		NS_CUDA_CALLABLE devPtr(Type * ptr, size_t width = SIZE_MAX) : m_data(ptr), m_width(width) {}
+		NS_CUDA_CALLABLE Ptr(Type * ptr, size_t width = SIZE_MAX) : m_data(ptr), m_width(width) {}
 
 		//	Copy constructor.
-		NS_CUDA_CALLABLE devPtr(const devPtr<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.width()) {}
+		NS_CUDA_CALLABLE Ptr(const Ptr<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.width()) {}
 
 		//	Copy constructor, construct with a given 2D device pointer.
-		NS_CUDA_CALLABLE explicit devPtr(const devPtr2<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.size()) {}
+		NS_CUDA_CALLABLE explicit Ptr(const Ptr2<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.size()) {}
 
 		//	Copy constructor, construct with a given 3D device pointer.
-		NS_CUDA_CALLABLE explicit devPtr(const devPtr3<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.size()) {}
+		NS_CUDA_CALLABLE explicit Ptr(const Ptr3<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.size()) {}
 
 		//	Returns size of the array in bytes.
 		NS_CUDA_CALLABLE size_t bytes() const { return sizeof(Type) * m_width; }
@@ -114,29 +114,29 @@ namespace NS_NAMESPACE
 	};
 
 	/*********************************************************************
-	**************************    devPtr2<T>    **************************
+	***************************    Ptr2<T>    ****************************
 	*********************************************************************/
 
 	//	Template wrapper for 2D device pointer.
-	template<typename Type> struct devPtr2
+	template<typename Type> struct Ptr2
 	{
 		//	Default constructor, should not initialized.
-		NS_CUDA_CALLABLE devPtr2() noexcept {}
+		NS_CUDA_CALLABLE Ptr2() noexcept {}
 
 		//	Constructor with zero initialization.
-		NS_CUDA_CALLABLE devPtr2(std::nullptr_t) : m_data(nullptr), m_width(0), m_height(0) {}
+		NS_CUDA_CALLABLE Ptr2(std::nullptr_t) : m_data(nullptr), m_width(0), m_height(0) {}
 
 		//	Construct with pointer, width and height.
-		NS_CUDA_CALLABLE devPtr2(Type * ptr, uint32_t width, uint32_t height) : m_data(ptr), m_width(width), m_height(height) {}
+		NS_CUDA_CALLABLE Ptr2(Type * ptr, uint32_t width, uint32_t height) : m_data(ptr), m_width(width), m_height(height) {}
 
 		//	Copy constructor.
-		NS_CUDA_CALLABLE devPtr2(const devPtr2<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(rhs.height()) {}
+		NS_CUDA_CALLABLE Ptr2(const Ptr2<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(rhs.height()) {}
 
 		//	Copy constructor, construct with a given 3D device pointer.
-		NS_CUDA_CALLABLE explicit devPtr2(const devPtr3<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(rhs.height() * rhs.depth()) {}
+		NS_CUDA_CALLABLE explicit Ptr2(const Ptr3<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(rhs.height() * rhs.depth()) {}
 
 		//	Copy constructor, construct with a given 1D device pointer.
-		NS_CUDA_CALLABLE explicit devPtr2(const devPtr<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(1) {}
+		NS_CUDA_CALLABLE explicit Ptr2(const Ptr<std::remove_cv_t<Type>> &rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(1) {}
 
 		//	Returns size of the array in bytes.
 		NS_CUDA_CALLABLE size_t bytes() const { return sizeof(Type) * m_width * m_height; }
@@ -163,7 +163,7 @@ namespace NS_NAMESPACE
 		NS_CUDA_CALLABLE Type * data() const { return m_data; }
 
 		//	Get address to the first element at [i]-th row.
-		NS_CUDA_CALLABLE devPtr<Type> operator[](size_t i) const
+		NS_CUDA_CALLABLE Ptr<Type> operator[](size_t i) const
 		{
 			NS_ASSERT((m_data != nullptr) && (i < m_height));
 
@@ -187,7 +187,7 @@ namespace NS_NAMESPACE
 			}
 		#endif
 
-			return devPtr<Type>(m_data + i * m_width, m_width);
+			return Ptr<Type>(m_data + i * m_width, m_width);
 		}
 
 	private:
@@ -198,29 +198,29 @@ namespace NS_NAMESPACE
 	};
 
 	/*********************************************************************
-	**************************    devPtr3<T>    **************************
+	***************************    Ptr3<T>    ****************************
 	*********************************************************************/
 
 	//	Template wrapper for 3D device pointer.
-	template<typename Type> struct devPtr3
+	template<typename Type> struct Ptr3
 	{
 		//	Default constructor, should not initialized.
-		NS_CUDA_CALLABLE devPtr3() noexcept {}
+		NS_CUDA_CALLABLE Ptr3() noexcept {}
 
 		//	Constructor with zero initialization.
-		NS_CUDA_CALLABLE devPtr3(std::nullptr_t) : m_data(nullptr), m_width(0), m_height(0), m_depth(0) {}
+		NS_CUDA_CALLABLE Ptr3(std::nullptr_t) : m_data(nullptr), m_width(0), m_height(0), m_depth(0) {}
 
 		//	Construct with pointer, width and height.
-		NS_CUDA_CALLABLE devPtr3(Type * ptr, uint32_t width, uint32_t height, uint32_t depth) : m_data(ptr), m_width(width), m_height(height), m_depth(depth) {}
+		NS_CUDA_CALLABLE Ptr3(Type * ptr, uint32_t width, uint32_t height, uint32_t depth) : m_data(ptr), m_width(width), m_height(height), m_depth(depth) {}
 
 		//	Copy constructor.
-		NS_CUDA_CALLABLE devPtr3(const devPtr3<std::remove_cv_t<Type>> & rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(rhs.height()), m_depth(rhs.depth()) {}
+		NS_CUDA_CALLABLE Ptr3(const Ptr3<std::remove_cv_t<Type>> & rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(rhs.height()), m_depth(rhs.depth()) {}
 
 		//	Copy constructor, construct with a given 2D device pointer.
-		NS_CUDA_CALLABLE explicit devPtr3(const devPtr2<std::remove_cv_t<Type>> & rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(rhs.height()), m_depth(1) {}
+		NS_CUDA_CALLABLE explicit Ptr3(const Ptr2<std::remove_cv_t<Type>> & rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(rhs.height()), m_depth(1) {}
 
 		//	Copy constructor, construct with a given 1D device pointer.
-		NS_CUDA_CALLABLE explicit devPtr3(const devPtr<std::remove_cv_t<Type>> & rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(1), m_depth(1) {}
+		NS_CUDA_CALLABLE explicit Ptr3(const Ptr<std::remove_cv_t<Type>> & rhs) : m_data(rhs.data()), m_width(rhs.width()), m_height(1), m_depth(1) {}
 
 		//	Returns size of the array in bytes.
 		NS_CUDA_CALLABLE size_t bytes() const { return sizeof(Type) * m_width * m_height * m_depth; }
@@ -250,7 +250,7 @@ namespace NS_NAMESPACE
 		NS_CUDA_CALLABLE Type * data() const { return m_data; }
 
 		//	Get address to the first element at [i]-th row.
-		NS_CUDA_CALLABLE devPtr2<Type> operator[](size_t i) const
+		NS_CUDA_CALLABLE Ptr2<Type> operator[](size_t i) const
 		{
 			NS_ASSERT((m_data != nullptr) && (i < m_depth));
 
@@ -274,7 +274,7 @@ namespace NS_NAMESPACE
 			}
 		#endif
 
-			return devPtr2<Type>(m_data + i * (m_width * m_height), m_width, m_height);
+			return Ptr2<Type>(m_data + i * (m_width * m_height), m_width, m_height);
 		}
 
 	private:

@@ -97,10 +97,10 @@ namespace NS_NAMESPACE
 		std::shared_ptr<Image1D<Type>> getImage() const { return std::dynamic_pointer_cast<Image1D<Type>>(m_image); }
 
 		//	Returns a const device surface object pointer.
-		operator devSurf1D<const Type>() const { return m_image ? devSurf1D<const Type>(m_hSurface, m_image->width()) : nullptr; }
+		operator dev::Surf1D<const Type>() const { return m_image ? dev::Surf1D<const Type>(m_hSurface, m_image->width()) : nullptr; }
 
 		//	Returns a device surface object pointer.
-		operator devSurf1D<Type>() { return m_image ? devSurf1D<Type>(m_hSurface, m_image->width()) : nullptr; }
+		operator dev::Surf1D<Type>() { return m_image ? dev::Surf1D<Type>(m_hSurface, m_image->width()) : nullptr; }
 	};
 
 	/*********************************************************************
@@ -128,10 +128,10 @@ namespace NS_NAMESPACE
 		std::shared_ptr<Image2D<Type>> getImage() const { return std::dynamic_pointer_cast<Image2D<Type>>(m_image); }
 
 		//	Returns a const device surface object pointer.
-		operator devSurf2D<const Type>() const { return m_image ? devSurf2D<const Type>(m_hSurface, getImage()->width(), getImage()->height()) : nullptr; }
+		operator dev::Surf2D<const Type>() const { return m_image ? dev::Surf2D<const Type>(m_hSurface, getImage()->width(), getImage()->height()) : nullptr; }
 
 		//	Returns a device surface object pointer.
-		operator devSurf2D<Type>() { return m_image ? devSurf2D<Type>(m_hSurface, getImage()->width(), getImage()->height()) : nullptr; }
+		operator dev::Surf2D<Type>() { return m_image ? dev::Surf2D<Type>(m_hSurface, getImage()->width(), getImage()->height()) : nullptr; }
 	};
 
 	/*********************************************************************
@@ -159,10 +159,10 @@ namespace NS_NAMESPACE
 		std::shared_ptr<Image3D<Type>> getImage() const { return std::dynamic_pointer_cast<Image3D<Type>>(m_image); }
 
 		//	Returns a const device surface object pointer.
-		operator devSurf3D<const Type>() const { return m_image ? devSurf3D<const Type>(m_hSurface, getImage()->width(), getImage()->height(), getImage()->depth()) : nullptr; }
+		operator dev::Surf3D<const Type>() const { return m_image ? dev::Surf3D<const Type>(m_hSurface, getImage()->width(), getImage()->height(), getImage()->depth()) : nullptr; }
 
 		//	Returns a device surface object pointer.
-		operator devSurf3D<Type>() { return m_image ? devSurf3D<Type>(m_hSurface, getImage()->width(), getImage()->height(), getImage()->depth()) : nullptr; }
+		operator dev::Surf3D<Type>() { return m_image ? dev::Surf3D<Type>(m_hSurface, getImage()->width(), getImage()->height(), getImage()->depth()) : nullptr; }
 	};
 
 	/*********************************************************************
@@ -190,10 +190,10 @@ namespace NS_NAMESPACE
 		std::shared_ptr<Image1DLayered<Type>> getImage() const { return std::dynamic_pointer_cast<Image1DLayered<Type>>(m_image); }
 
 		//	Returns a const device surface object pointer.
-		operator devSurf1DLayered<const Type>() const { return m_image ? devSurf1DLayered<const Type>(m_hSurface, getImage()->width(), getImage()->numLayers()) : nullptr; }
+		operator dev::Surf1DLayered<const Type>() const { return m_image ? dev::Surf1DLayered<const Type>(m_hSurface, getImage()->width(), getImage()->numLayers()) : nullptr; }
 
 		//	Returns a device surface object pointer.
-		operator devSurf1DLayered<Type>() { return m_image ? devSurf1DLayered<Type>(m_hSurface, getImage()->width(), getImage()->numLayers()) : nullptr; }
+		operator dev::Surf1DLayered<Type>() { return m_image ? dev::Surf1DLayered<Type>(m_hSurface, getImage()->width(), getImage()->numLayers()) : nullptr; }
 	};
 
 	/*********************************************************************
@@ -221,10 +221,10 @@ namespace NS_NAMESPACE
 		std::shared_ptr<Image2DLayered<Type>> getImage() const { return std::dynamic_pointer_cast<Image2DLayered<Type>>(m_image); }
 
 		//	Returns a const device surface object pointer.
-		operator devSurf2DLayered<const Type>() const { return m_image ? devSurf2DLayered<const Type>(m_hSurface, getImage()->width(), getImage()->height(), getImage()->numLayers()) : nullptr; }
+		operator dev::Surf2DLayered<const Type>() const { return m_image ? dev::Surf2DLayered<const Type>(m_hSurface, getImage()->width(), getImage()->height(), getImage()->numLayers()) : nullptr; }
 
 		//	Returns a device surface object pointer.
-		operator devSurf2DLayered<Type>() { return m_image ? devSurf2DLayered<Type>(m_hSurface, getImage()->width(), getImage()->height(), getImage()->numLayers()) : nullptr; }
+		operator dev::Surf2DLayered<Type>() { return m_image ? dev::Surf2DLayered<Type>(m_hSurface, getImage()->width(), getImage()->height(), getImage()->numLayers()) : nullptr; }
 	};
 
 	/*********************************************************************
@@ -252,10 +252,10 @@ namespace NS_NAMESPACE
 		std::shared_ptr<ImageCube<Type>> getImage() const { return std::dynamic_pointer_cast<ImageCube<Type>>(m_image); }
 
 		//	Returns a const device surface object pointer.
-		operator devSurfCube<const Type>() const { return m_image ? devSurfCube<const Type>(m_hSurface, getImage()->width()) : nullptr; }
+		operator dev::SurfCube<const Type>() const { return m_image ? dev::SurfCube<const Type>(m_hSurface, getImage()->width()) : nullptr; }
 
 		//	Returns a device surface object pointer.
-		operator devSurfCube<Type>() { return m_image ? devSurfCube<Type>(m_hSurface, getImage()->width()) : nullptr; }
+		operator dev::SurfCube<Type>() { return m_image ? dev::SurfCube<Type>(m_hSurface, getImage()->width()) : nullptr; }
 	};
 
 	/*********************************************************************
@@ -283,9 +283,9 @@ namespace NS_NAMESPACE
 		std::shared_ptr<ImageCubeLayered<Type>> getImage() const { return std::dynamic_pointer_cast<ImageCubeLayered<Type>>(m_image); }
 
 		//	Returns a const device surface object pointer.
-		operator devSurfCubeLayered<const Type>() const { return m_image ? devSurfCubeLayered<const Type>(m_hSurface, getImage()->width(), getImage()->numLayers()) : nullptr; }
+		operator dev::SurfCubeLayered<const Type>() const { return m_image ? dev::SurfCubeLayered<const Type>(m_hSurface, getImage()->width(), getImage()->numLayers()) : nullptr; }
 
 		//	Returns a device surface object pointer.
-		operator devSurfCubeLayered<Type>() { return m_image ? devSurfCubeLayered<Type>(m_hSurface, getImage()->width(), getImage()->numLayers()) : nullptr; }
+		operator dev::SurfCubeLayered<Type>() { return m_image ? dev::SurfCubeLayered<Type>(m_hSurface, getImage()->width(), getImage()->numLayers()) : nullptr; }
 	};
 }

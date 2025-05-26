@@ -92,4 +92,5 @@
 
 #define NS_USING_NAMESPACE				using namespace NS_NAMESPACE;
 
-namespace NS_NAMESPACE {}
+namespace NS_NAMESPACE { namespace dev {} }
+namespace dev = NS_NAMESPACE::dev;
