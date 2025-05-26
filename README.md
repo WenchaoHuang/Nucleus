@@ -1,4 +1,5 @@
 # Nucleus: C++ Bindings for CUDA Runtime API
+This project is in active development. This means the API is unstable, features may be added or removed, and breaking changes are likely to occur frequently and without notice as the design is refined.
 
 ## Features
 Coming soon...
@@ -8,7 +9,7 @@ Coming soon...
 
 ## Documentation
 ```cpp
-__global__ void add(ns::devPtr<int> out, ns::devPtr<const int> x, ns::devPtr<const int> y, unsigned int count)
+__global__ void add(dev::Ptr<int> out, dev::Ptr<const int> x, dev::Ptr<const int> y, unsigned int count)
 {
 	NS_FOR(i, count);		out[i] = x[i] + y[i];
 }
@@ -34,4 +35,4 @@ stream->sync();
 ```
 
 ## License
-Under the terms of the [MIT License](LICENSE).
+Nucleus is distributed under the terms of the [MIT License](LICENSE).
