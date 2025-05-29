@@ -68,37 +68,3 @@ endif()
 if(NUCLEUS_BUILD_SAMPLES)
     add_subdirectory(samples)
 endif()
-
-# Filters
-source_group("0. Logger" FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/logger.cpp)
-source_group("0. Logger" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/logger.h)
-
-source_group("1. Context" FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/context.cpp)
-source_group("1. Context" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/context.h)
-
-source_group("2. Device" FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/device.cpp)
-source_group("2. Device" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/device.h)
-
-source_group("3. Event" FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/event.cpp)
-source_group("3. Event" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/event.h)
-
-source_group("4. Stream" FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/stream.cpp)
-source_group("4. Stream" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/stream.h)
-source_group("4. Stream" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/stream.cuh)
-
-source_group("5. Allocator" FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/allocator.cpp)
-source_group("5. Allocator" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/allocator.h)
-
-source_group("6. Array" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/array_1d.h)
-source_group("6. Array" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/array_2d.h)
-source_group("6. Array" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/array_3d.h)
-
-source_group("7. Image" FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/image.cpp)
-source_group("7. Image" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/image.h)
-source_group("7. Image" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/image_1d.h)
-source_group("7. Image" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/image_2d.h)
-source_group("7. Image" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/image_3d.h)
-source_group("7. Image" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/image_cube.h)
-
-source_group("8. Surface" FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/surface.cpp)
-source_group("8. Surface" FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus/surface.h)
