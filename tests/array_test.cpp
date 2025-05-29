@@ -41,9 +41,9 @@ void test_array()
 	auto device = ns::Context::getInstance()->getDevice(0);
 	auto allocator = device->getDefaultAllocator();
 
-	ns::Array1D<int>	array0;
-	ns::Array1D<int>	array1(allocator, 100);
-	ns::Array1D<int>	array11 = std::move(array1);
+	ns::Array<int>		array0;
+	ns::Array<int>		array1(allocator, 100);
+	ns::Array<int>		array11 = std::move(array1);
 
 	ns::Array2D<float>	array2;
 	ns::Array2D<float>	array3(allocator, 100, 100);

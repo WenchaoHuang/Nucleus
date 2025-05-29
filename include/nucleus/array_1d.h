@@ -29,26 +29,26 @@
 namespace NS_NAMESPACE
 {
 	/*********************************************************************
-	***************************    Array1D    ****************************
+	****************************    Array    *****************************
 	*********************************************************************/
 
 	/**
 	 *	@brief		A 1D array template that provides device-accessible memory management.
 	 */
-	template<typename Type> class Array1D : public dev::Ptr<Type>
+	template<typename Type> class Array : public dev::Ptr<Type>
 	{
-		NS_NONCOPYABLE(Array1D)
+		NS_NONCOPYABLE(Array)
 
 	public:
 
 		//!	@brief		Construct an empty array.
-		Array1D() noexcept : dev::Ptr<Type>(nullptr), m_buffer(nullptr) {}
+		Array() noexcept : dev::Ptr<Type>(nullptr), m_buffer(nullptr) {}
 
 		//!	@brief		Allocates array with \p width elements.
-		explicit Array1D(std::shared_ptr<Allocator> alloctor, size_t width) : Array1D() { this->resize(alloctor, width); }
+		explicit Array(std::shared_ptr<Allocator> alloctor, size_t width) : Array() { this->resize(alloctor, width); }
 
 		//!	@brief		Move constructor. Transfers ownership from another array.
-		Array1D(Array1D && rhs) : dev::Ptr<Type>(std::exchange(rhs.m_data, nullptr), std::exchange(rhs.m_width, 0)), m_buffer(std::exchange(rhs.m_buffer, nullptr)) {}
+		Array(Array && rhs) : dev::Ptr<Type>(std::exchange(rhs.m_data, nullptr), std::exchange(rhs.m_width, 0)), m_buffer(std::exchange(rhs.m_buffer, nullptr)) {}
 
 	public:
 
@@ -111,7 +111,7 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Move assignment operator.
 		 */
-		void operator=(Array1D && rhs) noexcept
+		void operator=(Array && rhs) noexcept
 		{
 			m_buffer = std::exchange(rhs.m_buffer, nullptr);
 
@@ -124,7 +124,7 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Swaps contents with another array.
 		 */
-		void swap(Array1D & rhs) noexcept
+		void swap(Array & rhs) noexcept
 		{
 			std::swap(m_buffer, rhs.m_buffer);
 

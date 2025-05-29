@@ -80,7 +80,7 @@ namespace NS_NAMESPACE
 		template<typename Type> struct SurfCubeLayered;
 	}
 
-	template<typename Type> class Array1D;
+	template<typename Type> class Array;
 	template<typename Type> class Array2D;
 	template<typename Type> class Array3D;
 
@@ -153,7 +153,7 @@ template<typename Type> using NsDevPtr					= NS_NAMESPACE::dev::Ptr<Type>;
 template<typename Type> using NsDevPtr2					= NS_NAMESPACE::dev::Ptr2<Type>;
 template<typename Type> using NsDevPtr3					= NS_NAMESPACE::dev::Ptr3<Type>;
 
-template<typename Type> using NsArray1D					= NS_NAMESPACE::Array1D<Type>;
+template<typename Type> using NsArray					= NS_NAMESPACE::Array<Type>;
 template<typename Type> using NsArray2D					= NS_NAMESPACE::Array2D<Type>;
 template<typename Type> using NsArray3D					= NS_NAMESPACE::Array3D<Type>;
 
