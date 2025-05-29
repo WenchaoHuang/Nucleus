@@ -22,7 +22,8 @@
 #pragma once
 
 #include "fwd.h"
-#include "allocator.h"
+#include "buffer.h"
+#include "logger.h"
 #include "device_pointer.h"
 
 namespace NS_NAMESPACE
@@ -32,7 +33,7 @@ namespace NS_NAMESPACE
 	*********************************************************************/
 
 	/**
-	 *	@brief		Template for 2D array, which accessible to the device.
+	 *	@brief		A 2D array template that provides device-accessible memory management.
 	 */
 	template<typename Type> class Array2D : public dev::Ptr2<Type>
 	{
@@ -41,59 +42,36 @@ namespace NS_NAMESPACE
 	public:
 
 		//!	@brief		Construct an empty array.
-		Array2D() noexcept : m_allocator(nullptr), m_data(nullptr), m_width(0), m_height(0) {}
+		Array2D() noexcept : dev::Ptr2<Type>(nullptr), m_buffer(nullptr) {}
 
-		//!	@brief		Allocates 2d array with \p width * \p height elements.
-		explicit Array2D(std::shared_ptr<Allocator> alloctor, size_t width, size_t height) : Array2D() { this->reshape(alloctor, width, height); }
+		//!	@brief		Constructs and allocates a 2D array with specified dimensions.
+		explicit Array2D(std::shared_ptr<Allocator> alloctor, size_t width, size_t height) : Array2D() { this->resize(alloctor, width, height); }
 
-		//!	@brief		Move constructor.
-		Array2D(Array2D && rhs) noexcept : m_allocator(std::exchange(rhs.m_allocator, nullptr)), m_data(std::exchange(rhs.m_data, nullptr)), m_width(std::exchange(rhs.m_width, 0)), m_height(std::exchange(rhs.m_height, 0))
-		{}
-
-		//!	@brief		Move assignment.
-		void operator=(Array2D && rhs) noexcept
-		{
-			m_allocator = std::exchange(rhs.m_allocator, nullptr);
-
-			m_data = std::exchange(rhs.m_data, nullptr);
-
-			m_height = std::exchange(rhs.m_height, 0);
-
-			m_width = std::exchange(rhs.m_width, 0);
-		}
-
-		//!	@brief		Destroy array.
-		~Array2D() { this->clear(); }
+		//!	@brief		Move constructor. Transfers ownership from another array.
+		Array2D(Array2D && rhs) : dev::Ptr2<Type>(std::exchange(rhs.m_data, nullptr), std::exchange(rhs.m_width, 0), std::exchange(rhs.m_height, 0)),  m_buffer(std::exchange(rhs.m_buffer, nullptr)) {}
 
 	public:
 
 		/**
-		 *	@brief		Returns the allocator associated with.
+		 *	@brief		Resizes the array with new dimensions and allocator.
+		 *	@param[in]	allocator - New memory allocator (must not be null).
+		 *	@param[in]	width - New column count.
+		 *	@param[in]	height - New row count.
+		 *	@note		If the allocator or size changes, existing data will be lost.
 		 */
-		const std::shared_ptr<Allocator> & getAllocator() const { return m_allocator; }
-
-
-		/**
-		 *	@brief		Changes the number of elements stored.
-		 */
-		void reshape(std::shared_ptr<Allocator> alloctor, size_t width, size_t height)
+		void resize(std::shared_ptr<Allocator> allocator, size_t width, size_t height)
 		{
-			NS_ASSERT((alloctor != nullptr) && (width < UINT32_MAX) && (height < UINT32_MAX));
+			NS_ASSERT_LOG_IF(allocator == nullptr, "Empty allocator!");
 
-			if ((m_allocator != alloctor) || (width * height != m_width * m_height))
+			if ((this->getAllocator() != allocator) || (m_width * m_height != width * height))
 			{
-				this->clear();
+				m_buffer = std::make_shared<Buffer>(allocator, sizeof(Type) * width * height);
 
-				if (width * height > 0)
-				{
-					m_data = static_cast<Type*>(alloctor->allocateMemory(sizeof(Type) * width * height));
+				m_data = reinterpret_cast<Type*>(m_buffer->data());
 
-					m_height = static_cast<uint32_t>(height);
+				m_height = static_cast<uint32_t>(height);
 
-					m_width = static_cast<uint32_t>(width);
-
-					m_allocator = alloctor;
-				}
+				m_width = static_cast<uint32_t>(width);
 			}
 			else if ((m_width != width) || (m_height != height))
 			{
@@ -105,11 +83,79 @@ namespace NS_NAMESPACE
 
 
 		/**
+		 *	@brief		Resizes the array maintaining current allocator.
+		 *	@param[in]	width - New column count
+		 *	@param[in]	height - New row count
+		 *	@note		If the size changes, existing data will be lost.
+		 */
+		void resize(size_t width, size_t height)
+		{
+			NS_ASSERT_LOG_IF(m_buffer == nullptr, "Empty allocator!");
+
+			this->resize(m_buffer->getAllocator(), width, height);
+		}
+
+
+		/**
+		 *	@brief		Changes array dimensions without reallocation.
+		 *	@param[in]	width - New column count
+		 *	@param[in]	height - New row count
+		 */
+		void reshape(size_t width, size_t height)
+		{
+			NS_ASSERT_LOG_IF(m_width * m_height != width * height, "Size mismatch!");
+
+			if (m_width * m_height == width * height)
+			{
+				m_height = static_cast<uint32_t>(height);
+
+				m_width = static_cast<uint32_t>(width);
+			}
+		}
+
+
+		/**
+		 *	@brief		Gets the allocator associated with.
+		 */
+		std::shared_ptr<Allocator> getAllocator() const
+		{
+			return m_buffer ? m_buffer->getAllocator() : nullptr;
+		}
+
+
+		/**
+		 *	@brief		Releases the ownership of the internal buffer and returns it.
+		 *	@note		After this call, the Array2D will be in an empty state.
+		 */
+		std::shared_ptr<Buffer> releaseBuffer()
+		{
+			m_data = nullptr;		m_width = m_height = 0;
+
+			return std::exchange(m_buffer, nullptr);
+		}
+
+
+		/**
+		 *	@brief		Move assignment operator.
+		 */
+		void operator=(Array2D && rhs) noexcept
+		{
+			m_buffer = std::exchange(rhs.m_buffer, nullptr);
+
+			m_data = std::exchange(rhs.m_data, nullptr);
+
+			m_height = std::exchange(rhs.m_height, 0);
+
+			m_width = std::exchange(rhs.m_width, 0);
+		}
+
+
+		/**
 		 *	@brief		Swaps the contents.
 		 */
 		void swap(Array2D & rhs) noexcept
 		{
-			std::swap(m_allocator, rhs.m_allocator);
+			std::swap(m_buffer, rhs.m_buffer);
 
 			std::swap(m_height, rhs.m_height);
 
@@ -120,17 +166,15 @@ namespace NS_NAMESPACE
 
 
 		/**
-		 *	@brief		Clears the contents.
+		 *	@brief		Clears the array and releases all allocated memory.
 		 */
-		void clear()
+		void clear() noexcept
 		{
-			if (m_data != nullptr)
+			if (m_buffer != nullptr)
 			{
-				m_allocator->deallocateMemory(m_data);
-
 				m_height = m_width = 0;
 
-				m_allocator = nullptr;
+				m_buffer = nullptr;
 
 				m_data = nullptr;
 			}
@@ -138,9 +182,6 @@ namespace NS_NAMESPACE
 
 	private:
 
-		Type *							m_data;
-		uint32_t						m_width;
-		uint32_t						m_height;
-		std::shared_ptr<Allocator>		m_allocator;
+		std::shared_ptr<Buffer>		m_buffer;
 	};
 }

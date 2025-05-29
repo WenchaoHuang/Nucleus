@@ -22,7 +22,8 @@
 #pragma once
 
 #include "fwd.h"
-#include "allocator.h"
+#include "buffer.h"
+#include "logger.h"
 #include "device_pointer.h"
 
 namespace NS_NAMESPACE
@@ -32,7 +33,7 @@ namespace NS_NAMESPACE
 	*********************************************************************/
 
 	/**
-	 *	@brief		Template for 1D array, which accessible to the device.
+	 *	@brief		A 1D array template that provides device-accessible memory management.
 	 */
 	template<typename Type> class Array1D : public dev::Ptr<Type>
 	{
@@ -41,68 +42,91 @@ namespace NS_NAMESPACE
 	public:
 
 		//!	@brief		Construct an empty array.
-		Array1D() noexcept : m_allocator(nullptr), m_data(nullptr), m_width(0) {}
+		Array1D() noexcept : dev::Ptr<Type>(nullptr), m_buffer(nullptr) {}
 
 		//!	@brief		Allocates array with \p width elements.
-		explicit Array1D(std::shared_ptr<Allocator> alloctor, size_t width) : Array1D()
+		explicit Array1D(std::shared_ptr<Allocator> alloctor, size_t width) : Array1D() { this->resize(alloctor, width); }
+
+		//!	@brief		Move constructor. Transfers ownership from another array.
+		Array1D(Array1D && rhs) : dev::Ptr<Type>(std::exchange(rhs.m_data, nullptr), std::exchange(rhs.m_width, 0)), m_buffer(std::exchange(rhs.m_buffer, nullptr)) {}
+
+	public:
+
+		/**
+		 *	@brief		Resizes the array using a new allocator.
+		 *	@param[in]	allocator - The new allocator to use.
+		 *	@param[in]	width - The new number of elements.
+		 *	@note		If the allocator or size changes, existing data will be lost.
+		 */
+		void resize(std::shared_ptr<Allocator> allocator, size_t width)
 		{
-			this->reshape(alloctor, width);
+			NS_ASSERT_LOG_IF(allocator == nullptr, "Empty allocator!");
+
+			if ((this->getAllocator() != allocator) || (this->size() != width))
+			{
+				m_buffer = std::make_shared<Buffer>(allocator, sizeof(Type) * width);
+					
+				m_data = reinterpret_cast<Type*>(m_buffer->data());
+
+				m_width = width;
+			}
 		}
 
-		//!	@brief		Move constructor.
-		Array1D(Array1D && rhs) noexcept : m_allocator(std::exchange(rhs.m_allocator, nullptr)), m_data(std::exchange(rhs.m_data, nullptr)), m_width(std::exchange(rhs.m_width, 0))
-		{}
 
-		//!	@brief		Move assignment.
+		/**
+		 *	@brief		Resizes the array using the current allocator.
+		 *	@param[in]	width - The new number of elements.
+		 *	@note		If the size changes, existing data will be lost.
+		 */
+		void resize(size_t width)
+		{
+			NS_ASSERT_LOG_IF(m_buffer == nullptr, "Empty allocator!");
+
+			this->resize(m_buffer->getAllocator(), width);
+		}
+
+
+		/**
+		 *	@brief		Gets the allocator associated with.
+		 */
+		 std::shared_ptr<Allocator> getAllocator() const
+		 {
+			 return m_buffer ? m_buffer->getAllocator() : nullptr;
+		 }
+
+
+		/**
+		 *	@brief		Releases ownership of the internal buffer.
+		 *	@return		The released buffer (nullptr if array was empty).
+		 *	@note		After this call, the array will be empty but still valid.
+		 */
+		std::shared_ptr<Buffer> releaseBuffer() noexcept
+		{
+			m_data = nullptr;		m_width = 0;
+
+			return std::exchange(m_buffer, nullptr);
+		}
+
+
+		/**
+		 *	@brief		Move assignment operator.
+		 */
 		void operator=(Array1D && rhs) noexcept
 		{
-			m_allocator = std::exchange(rhs.m_allocator, nullptr);
+			m_buffer = std::exchange(rhs.m_buffer, nullptr);
 
 			m_data = std::exchange(rhs.m_data, nullptr);
 
 			m_width = std::exchange(rhs.m_width, 0);
 		}
 
-		//!	@brief		Destroy array.
-		~Array1D() { this->clear(); }
-
-	public:
 
 		/**
-		 *	@brief		Returns the allocator associated with.
-		 */
-		const std::shared_ptr<Allocator> & getAllocator() const { return m_allocator; }
-
-
-		/**
-		 *	@brief		Changes the number of elements stored.
-		 */
-		void reshape(std::shared_ptr<Allocator> alloctor, size_t width)
-		{
-			NS_ASSERT(alloctor != nullptr);
-
-			if ((m_allocator != alloctor) || (m_width != width))
-			{
-				this->clear();
-
-				if (width > 0)
-				{
-					m_data = static_cast<Type*>(alloctor->allocateMemory(sizeof(Type) * width));
-
-					m_allocator = alloctor;
-
-					m_width = width;
-				}
-			}
-		}
-
-
-		/**
-		 *	@brief		Swaps the contents.
+		 *	@brief		Swaps contents with another array.
 		 */
 		void swap(Array1D & rhs) noexcept
 		{
-			std::swap(m_allocator, rhs.m_allocator);
+			std::swap(m_buffer, rhs.m_buffer);
 
 			std::swap(m_width, rhs.m_width);
 
@@ -111,15 +135,13 @@ namespace NS_NAMESPACE
 
 
 		/**
-		 *	@brief		Clears the contents.
+		 *	@brief		Clears the array and releases all allocated memory.
 		 */
-		void clear()
+		void clear() noexcept
 		{
-			if (m_data != nullptr)
+			if (m_buffer != nullptr)
 			{
-				m_allocator->deallocateMemory(m_data);
-
-				m_allocator = nullptr;
+				m_buffer = nullptr;
 
 				m_data = nullptr;
 
@@ -129,8 +151,6 @@ namespace NS_NAMESPACE
 
 	private:
 
-		Type *							m_data;
-		size_t							m_width;
-		std::shared_ptr<Allocator>		m_allocator;
+		std::shared_ptr<Buffer>		m_buffer;
 	};
 }

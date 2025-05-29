@@ -30,6 +30,12 @@
 ****************************    test_array    ****************************
 *************************************************************************/
 
+static void test(dev::Ptr<int> a, dev::Ptr2<const float> b, dev::Ptr3<float> c)
+{
+
+}
+
+
 void test_array()
 {
 	auto device = ns::Context::getInstance()->getDevice(0);
@@ -37,54 +43,71 @@ void test_array()
 
 	ns::Array1D<int>	array0;
 	ns::Array1D<int>	array1(allocator, 100);
-	ns::Array1D<int>	array22 = std::move(array1);
+	ns::Array1D<int>	array11 = std::move(array1);
 
 	ns::Array2D<float>	array2;
 	ns::Array2D<float>	array3(allocator, 100, 100);
+	ns::Array2D<float>	array33 = std::move(array3);
 
 	ns::Array3D<float>	array4;
 	ns::Array3D<float>	array5(allocator, 100, 100, 100);
+	ns::Array3D<float>	array55 = std::move(array5);
 
-	if (array1.empty())
+	assert(array0.empty());
+	assert(array1.empty());
+	assert(!array11.empty());
+
+	if (!array11.empty())
 	{
-		int * data = &array1[0];
-
-		array1.size();
-		array1.bytes();
-		array1.getAllocator();
-		array1.reshape(allocator, 200);
-		array1.clear();
-		array1.data();
+		assert(array11.size() == 100);
+		assert(array11.width() == 100);
+		assert(array11.bytes() == 100 * sizeof(int));
+		assert(array11.pitch() == 100 * sizeof(int));
+		assert(array11.getAllocator() == allocator);
+		assert(array11.releaseBuffer() != nullptr);
+		array11.resize(allocator, 200);
+		array11.resize(300);
+		array11.resize(300);
+		array11.clear();
+		assert(array11.data() == nullptr);
 	}
 
-	if (array3.empty())
+	if (!array33.empty())
 	{
-		float * data = &array3[0][2];
+		float * data = &array33[0][2];
 
-		array3.size();
-		array3.bytes();
-		array3.width();
-		array3.pitch();
-		array3.height();
-		array3.getAllocator();
-		array3.reshape(allocator, 200, 400);
-		array3.clear();
-		array3.data();
+		assert(array33.size() == 100 * 100);
+		assert(array33.bytes() == 100 * 100 * sizeof(float));
+		assert(array33.width() == 100);
+		assert(array33.pitch() == 100 * sizeof(float));
+		assert(array33.height() == 100);
+		assert(array33.getAllocator() == allocator);
+		assert(array33.releaseBuffer() != nullptr);
+		array33.resize(allocator, 200, 400);
+		array33.reshape(100, 800);
+		array33.resize(400, 200);
+		array33.clear();
+		assert(array33.data() == nullptr);
 	}
 
-	if (array5.empty())
+	if (!array55.empty())
 	{
-		float * data = &array5[0][0][0];
+		float * data = &array55[0][0][0];
 
-		array5.size();
-		array5.bytes();
-		array5.width();
-		array5.pitch();
-		array5.depth();
-		array5.height();
-		array5.getAllocator();
-		array5.reshape(allocator, 200, 400, 500);
-		array5.clear();
-		array5.data();
+		assert(array55.size() == 100 * 100 * 100);
+		assert(array55.bytes() == 100 * 100 * 100 * sizeof(float));
+		assert(array55.width() == 100);
+		assert(array55.pitch() == 100 * sizeof(float));
+		assert(array55.depth() == 100);
+		assert(array55.height() == 100);
+		assert(array55.getAllocator() == allocator);
+		array55.resize(allocator, 200, 400, 500);
+		array55.reshape(200, 500, 400);
+		array55.resize(500, 200, 300);
+		array55.clear();
+		array55.data();
+		assert(array5.data() == nullptr);
 	}
+
+	test(array11, array33, array55);
 }

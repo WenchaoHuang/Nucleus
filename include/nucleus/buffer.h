@@ -46,7 +46,7 @@ namespace NS_NAMESPACE
 		 *	@note		Creates a Buffer object with null data pointer and zero capacity.
 		 *				No memory allocation is performed.
 		 */
-		Buffer() : m_allocator(nullptr), m_data(nullptr), m_capacity(0) {}
+		Buffer() noexcept : m_allocator(nullptr), m_data(nullptr), m_capacity(0) {}
 
 
 		/**
@@ -84,20 +84,6 @@ namespace NS_NAMESPACE
 	public:
 
 		/**
-		 *	@brief		Gets the associated memory allocator.
-		 *	@return		Shared pointer to the Allocator instance.
-		 */
-		std::shared_ptr<Allocator> getAllocator() const { return m_allocator; }
-
-
-		/**
-		 *	@brief		Checks if buffer is empty.
-		 *	@return		Returns true if buffer is empty (nullptr), false otherwise.
-		 */
-		bool empty() const { return (m_data == nullptr); }
-
-
-		/**
 		 *	@brief		Gets the buffer capacity.
 		 *	@return		Returns the total number of bytes allocated for this buffer.
 		 */
@@ -105,9 +91,24 @@ namespace NS_NAMESPACE
 
 
 		/**
+		 *	@brief		Checks if buffer is empty.
+		 *	@return		Returns true if buffer is empty (nullptr), false otherwise.
+		 */
+		bool empty() const { return m_data == nullptr; }
+
+
+		/**
+		 *	@brief		Gets the associated memory allocator.
+		 *	@return		Shared pointer to the Allocator instance.
+		 */
+		const std::shared_ptr<Allocator> & getAllocator() const { return m_allocator; }
+
+
+		/**
 		 *	@brief		Retrun logical address of the memory.
 		 */
 		std::uintptr_t address() const { return reinterpret_cast<std::uintptr_t>(m_data); }
+
 
 		/**
 		 *	@brief		Gets constant pointer to the underlying data.

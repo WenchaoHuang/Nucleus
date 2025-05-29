@@ -22,7 +22,8 @@
 #pragma once
 
 #include "fwd.h"
-#include "allocator.h"
+#include "buffer.h"
+#include "logger.h"
 #include "device_pointer.h"
 
 namespace NS_NAMESPACE
@@ -32,7 +33,7 @@ namespace NS_NAMESPACE
 	*********************************************************************/
 
 	/**
-	 *	@brief		Template for 3D array, which accessible to the device.
+	 *	@brief		A 3D array template that provides device-accessible memory management.
 	 */
 	template<typename Type> class Array3D : public dev::Ptr3<Type>
 	{
@@ -41,63 +42,40 @@ namespace NS_NAMESPACE
 	public:
 
 		//!	@brief		Construct an empty array.
-		Array3D() noexcept : m_allocator(nullptr), m_data(nullptr), m_width(0), m_height(0), m_depth(0) {}
+		Array3D() noexcept : dev::Ptr3<Type>(nullptr), m_buffer(nullptr) {}
 
-		//!	@brief		Allocates 3d array with \p width * \p height * \p depth elements.
-		explicit Array3D(std::shared_ptr<Allocator> pAlloc, size_t width, size_t height, size_t depth) : Array3D() { this->reshape(pAlloc, width, height, depth); }
+		//!	@brief		Constructs and allocates a 2D array with specified dimensions.
+		explicit Array3D(std::shared_ptr<Allocator> allocator, size_t width, size_t height, size_t depth) : Array3D() { this->resize(allocator, width, height, depth); }
 
-		//!	@brief		Move constructor.
-		Array3D(Array3D && rhs) noexcept : m_allocator(std::exchange(rhs.m_allocator, nullptr)), m_data(std::exchange(rhs.m_data, nullptr)), m_width(std::exchange(rhs.m_width, 0)), m_height(std::exchange(rhs.m_height, 0)), m_depth(std::exchange(rhs.m_depth, 0))
-		{}
-
-		//!	@brief		Move assignment.
-		void operator=(Array3D && rhs) noexcept
-		{
-			m_allocator = std::exchange(rhs.m_allocator, nullptr);
-
-			m_data = std::exchange(rhs.m_data, nullptr);
-
-			m_height = std::exchange(rhs.m_height, 0);
-
-			m_width = std::exchange(rhs.m_width, 0);
-
-			m_depth = std::exchange(rhs.m_depth, 0);
-		}
-
-		//!	@brief		Destroy array.
-		~Array3D() { this->clear(); }
+		//!	@brief		Move constructor. Transfers ownership from another array.
+		Array3D(Array3D && rhs) : m_buffer(std::exchange(rhs.m_buffer, nullptr)),
+			dev::Ptr3<Type>(std::exchange(rhs.m_data, nullptr), std::exchange(rhs.m_height, 0), std::exchange(rhs.m_width, 0), std::exchange(rhs.m_depth, 0)) {}
 
 	public:
 
 		/**
-		 *	@brief		Returns the allocator associated with.
+		 *	@brief		Resizes the array with new dimensions and allocator.
+		 *	@param[in]	allocator - New memory allocator (must not be null).
+		 *	@param[in]	width - New column count.
+		 *	@param[in]	height - New row count.
+		 *	@param[in]	depth - New layer count.
+		 *	@note		If the allocator or size changes, existing data will be lost.
 		 */
-		const std::shared_ptr<Allocator> & getAllocator() const { return m_allocator; }
-
-
-		/**
-		 *	@brief		Changes the number of elements stored.
-		 */
-		void reshape(std::shared_ptr<Allocator> allocator, size_t width, size_t height, size_t depth)
+		void resize(std::shared_ptr<Allocator> allocator, size_t width, size_t height, size_t depth)
 		{
-			NS_ASSERT((allocator != nullptr) && (width < UINT32_MAX) && (height < UINT32_MAX) && (depth < UINT32_MAX));
+			NS_ASSERT_LOG_IF(allocator == nullptr, "Empty allocator!");
 
-			if ((m_allocator != allocator) || (width * height * depth != this->size()))
+			if ((this->getAllocator() != allocator) || (m_width * m_height * m_depth != width * height * depth))
 			{
-				this->clear();
+				m_buffer = std::make_shared<Buffer>(allocator, sizeof(Type) * width * height * depth);
 
-				if (width * height * depth > 0)
-				{
-					m_data = static_cast<Type*>(allocator->allocateMemory(sizeof(Type) * width * height * depth));
+				m_data = reinterpret_cast<Type*>(m_buffer->data());
 
-					m_height = static_cast<uint32_t>(height);
+				m_height = static_cast<uint32_t>(height);
 
-					m_width = static_cast<uint32_t>(width);
+				m_width = static_cast<uint32_t>(width);
 
-					m_depth = static_cast<uint32_t>(depth);
-
-					m_allocator = allocator;
-				}
+				m_depth = static_cast<uint32_t>(depth);
 			}
 			else if ((m_width != width) || (m_height != height) || (m_depth != depth))
 			{
@@ -111,11 +89,85 @@ namespace NS_NAMESPACE
 
 
 		/**
+		 *	@brief		Resizes the array maintaining current allocator.
+		 *	@param[in]	width - New column count.
+		 *	@param[in]	height - New row count.
+		 *	@param[in]	depth - New layer count.
+		 */
+		void resize(size_t width, size_t height, size_t depth)
+		{
+			NS_ASSERT_LOG_IF(m_buffer == nullptr, "Empty allocator!");
+			
+			this->resize(m_buffer->getAllocator(), width, height, depth);
+		}
+
+
+		/**
+		 *	@brief		Changes array dimensions without reallocation.
+		 *	@param[in]	width - New column count
+		 *	@param[in]	height - New row count
+		 *	@param[in]	depth - New layer count.
+		 */
+		void reshape(size_t width, size_t height, size_t depth)
+		{
+			NS_ASSERT_LOG_IF(m_width * m_height * m_depth != width * height * depth, "Size mismatch!");
+
+			if (m_width * m_height * m_depth == width * height * depth)
+			{
+				m_height = static_cast<uint32_t>(height);
+
+				m_width = static_cast<uint32_t>(width);
+
+				m_depth = static_cast<uint32_t>(depth);
+			}
+		}
+
+
+		/**
+		 *	@brief		Gets the allocator associated with.
+		 */
+		std::shared_ptr<Allocator> getAllocator() const
+		{
+			return m_buffer ? m_buffer->getAllocator() : nullptr;
+		}
+
+
+		/**
+		 *	@brief		Releases the ownership of the internal buffer and returns it.
+		 *	@note		After this call, the Array3D will be in an empty state.
+		 */
+		std::shared_ptr<Buffer> releaseBuffer()
+		{
+			m_data = nullptr;		m_width = m_height = m_depth = 0;
+
+			return std::exchange(m_buffer, nullptr);
+		}
+
+
+		/**
+		 *	@brief		Move assignment operator.
+		 */
+		void operator=(Array3D && rhs) noexcept
+		{
+			m_buffer = std::exchange(rhs.m_buffer, nullptr);
+
+			m_data = std::exchange(rhs.m_data, nullptr);
+
+			m_height = std::exchange(rhs.m_height, 0);
+
+			m_width = std::exchange(rhs.m_width, 0);
+
+			m_depth = std::exchange(rhs.m_depth, 0);
+		}
+
+
+
+		/**
 		 *	@brief		Swaps the contents.
 		 */
 		void swap(Array3D & rhs) noexcept
 		{
-			std::swap(m_allocator, rhs.m_allocator);
+			std::swap(m_buffer, rhs.m_buffer);
 
 			std::swap(m_height, rhs.m_height);
 
@@ -128,17 +180,15 @@ namespace NS_NAMESPACE
 
 
 		/**
-		 *	@brief		Clears the contents.
+		 *	@brief		Clears the array and releases all allocated memory.
 		 */
-		void clear()
+		void clear() noexcept
 		{
-			if (m_allocator != nullptr)
+			if (m_buffer != nullptr)
 			{
-				m_allocator->deallocateMemory(m_data);
-
 				m_width = m_height = m_depth = 0;
 
-				m_allocator = nullptr;
+				m_buffer = nullptr;
 
 				m_data = nullptr;
 			}
@@ -146,10 +196,6 @@ namespace NS_NAMESPACE
 
 	private:
 
-		Type *							m_data;
-		uint32_t						m_width;
-		uint32_t						m_height;
-		uint32_t						m_depth;
-		std::shared_ptr<Allocator>		m_allocator;
+		std::shared_ptr<Buffer>		m_buffer;
 	};
 }

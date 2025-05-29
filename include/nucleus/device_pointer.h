@@ -107,7 +107,7 @@ namespace NS_NAMESPACE::dev
 			return m_data[i];
 		}
 
-	private:
+	protected:
 
 		Type *		m_data;
 		size_t		m_width;
@@ -190,7 +190,7 @@ namespace NS_NAMESPACE::dev
 			return Ptr<Type>(m_data + i * m_width, m_width);
 		}
 
-	private:
+	protected:
 
 		Type *			m_data;
 		uint32_t		m_width;
@@ -277,7 +277,7 @@ namespace NS_NAMESPACE::dev
 			return Ptr2<Type>(m_data + i * (m_width * m_height), m_width, m_height);
 		}
 
-	private:
+	protected:
 
 		Type *			m_data;
 		uint32_t		m_width;
