@@ -55,6 +55,7 @@ namespace NS_NAMESPACE
 	class Texture;
 	class Allocator;
 	class TimedEvent;
+	class ScopedTimer;
 	class HostAllocator;
 	class MemoryResource;
 	class DeviceAllocator;
@@ -145,6 +146,7 @@ using NsContext											= NS_NAMESPACE::Context;
 using NsVersion											= NS_NAMESPACE::Version;
 using NsTimedEvent										= NS_NAMESPACE::TimedEvent;
 using NsFilterMode										= NS_NAMESPACE::FilterMode;
+using NsScopedTimer										= NS_NAMESPACE::ScopedTimer;
 using NsAddressMode										= NS_NAMESPACE::AddressMode;
 using NsHostAlloc										= NS_NAMESPACE::HostAllocator;
 using NsDevAlloc										= NS_NAMESPACE::DeviceAllocator;

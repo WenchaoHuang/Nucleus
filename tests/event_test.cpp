@@ -24,6 +24,7 @@
 #include <nucleus/device.h>
 #include <nucleus/stream.h>
 #include <nucleus/context.h>
+#include <nucleus/scoped_timer.h>
 
 /*************************************************************************
 ****************************    test_event    ****************************
@@ -37,6 +38,7 @@ void test_event()
 	ns::Event		event0(device);
 	ns::TimedEvent	event1(device);
 	ns::TimedEvent	event2(device);
+	ns::ScopedTimer	timer(stream, [](float us) { printf("ScopedTime: %fus\n", us); });
 
 	stream->recordEvent(event0);
 	stream->recordEvent(event1);
