@@ -121,7 +121,7 @@ Stream & Stream::launchHostFunc(HostFunc<void> func, void * userData)
 }
 
 
-void Stream::launchKernel(const void * func, const dim3 & gridDim, const dim3 & blockDim, size_t sharedMem, void ** args)
+Stream & Stream::launchKernel(const void * func, const dim3 & gridDim, const dim3 & blockDim, size_t sharedMem, void ** args)
 {
 	if (gridDim.x * gridDim.y * gridDim.z * blockDim.x * blockDim.y * blockDim.z != 0)
 	{
@@ -142,6 +142,8 @@ void Stream::launchKernel(const void * func, const dim3 & gridDim, const dim3 & 
 			throw err;
 		}
 	}
+
+	return *this;
 }
 
 

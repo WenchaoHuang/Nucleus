@@ -122,7 +122,7 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Launches an executable graph in a stream
 		 *	@param[in]	hGraphExec - Executable graph to launch
-		 *	@retval		Stream - Reference to this stream, convenient for further operations.
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 *	@note		Each launch is ordered behind both any previous work in this stream and any previous launches of graphExec.
 		 *	@example	stream.launchGraph(hGraph)
 		 *	@example	stream.launchGraph(hGraph).sync()
@@ -135,7 +135,7 @@ namespace NS_NAMESPACE
 		 *	@brief		Enqueue a host function call in a stream.
 		 *	@param[in]	func - The function to call once preceding stream operations are complete.
 		 *	@param[in]	userData - User-specified data to be passed to the function.
-		 *	@retval		Stream - Reference to this stream, convenient for further operations.
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 *	@note		Host function will be called from the thread named nvcuda64.dll.
 		 *	@note		The function will be called after currently enqueued work and will block work added after it.
 		 *	@warning	The host function must not perform any synchronization that may depend on outstanding CUDA work not mandated to run earlier.
@@ -154,10 +154,10 @@ namespace NS_NAMESPACE
 		 *	@param[in]	gDim - Grid dimensions.
 		 *	@param[in]	bDim - Block dimensions.
 		 *	@param[in]	sharedMem - Number of bytes for shared memory.
-		 *	@example	stream.launch(KernelAdd, gridDim, blockDim, sharedMem)(pResult, pA, pB, num);
+		 *	@example	stream.launch(KernelAdd, gridDim, blockDim, sharedMem)(A, B, C, count);
 		 *	@note		The returned lambda is a temporary object that should be used immediately to configure and launch the kernel.
 		 *				It encapsulates all necessary information for the kernel launch, including the kernel function, its arguments.
-		 *	@warning	Only available in *.cu files (implemented in stream.cuh).
+		 *	@warning	Only available in *.cu files (implemented in launch_utils.cuh).
 		 */
 		template<typename... Args> NS_NODISCARD auto launch(KernelFunc<Args...> func, const dim3 & gridDim, const dim3 & blockDim, size_t sharedMem = 0);
 
@@ -184,9 +184,9 @@ namespace NS_NAMESPACE
 		 *	@param[in]	pValues - Pointer to the device memory.
 		 *	@param[in]	value - Value to set for.
 		 *	@param[in]	count - Count of values to set.
-		 *	@param[in]	blockSize - 
-		 *	@retval		Stream - Reference to this stream, convenient for further operations.
-		 *	@warning	Only available in *.cu files.
+		 *	@param[in]	blockSize - CUDA thread block size (default = 256, which is near-optimal for most modern GPUs). 
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 *	@warning	Only available in *.cu files (CUDA compilation required).
 		 */
 		template<typename Type> Stream & memset(Type * pValues, Type value, size_t count, int blockSize = 256);
 
@@ -195,7 +195,7 @@ namespace NS_NAMESPACE
 		 *	@brief		Initialize or set device memory to zeros.
 		 *	@param[in]	address - Pointer to device memory.
 		 *	@param[in]	bytes - Size in bytes to set.
-		 *	@retval		Stream - Reference to this stream, convenient for further operations.
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 */
 		Stream & memsetZero(void * address, size_t bytes);
 		
@@ -208,11 +208,15 @@ namespace NS_NAMESPACE
 		 *	@param[in]	bDim - Block dimensions.
 		 *	@param[in]	sharedMemBytes - Number of bytes for shared memory.
 		 *	@param[in]	args - Pointers to kernel arguments.
+		 *	@retval		Stream - Reference to this stream, convenient for further operations.
 		 *	@warning	Only available in *.cu files.
 		 */
-		void launchKernel(const void * func, const dim3 & gridDim, const dim3 & blockDim, size_t sharedMem, void ** args);
+		Stream & launchKernel(const void * func, const dim3 & gridDim, const dim3 & blockDim, size_t sharedMem, void ** args);
 
 
+		/**
+		 *	@brief		Acquires the device context for this stream.
+		 */
 		void acquireDeviceContext() const;
 
 	private:

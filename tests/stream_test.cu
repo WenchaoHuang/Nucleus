@@ -24,10 +24,21 @@
 #include <nucleus/stream.h>
 #include <nucleus/device.h>
 #include <nucleus/context.h>
+#include <nucleus/array_1d.h>
+#include <nucleus/launch_utils.cuh>
+#include <device_launch_parameters.h>
 
 /*************************************************************************
 ***************************    stream_event    ***************************
 *************************************************************************/
+
+__global__ void test_kernel()
+{
+	CUDA_for(i, 1);
+
+	printf("device: Happy Nucleus!\n");
+}
+
 
 void test_stream()
 {
@@ -41,6 +52,7 @@ void test_stream()
 	stream->getDevice();
 	
 	int a;
-	auto pfnTask = [](int*) { printf("Happy!\n"); };
+	auto pfnTask = [](int*) { printf("host: Happy Nucleus!\n"); };
 	stream->launchHostFunc<int>(pfnTask, &a);
+	stream->launch(test_kernel, ns::ceil_div(15, 32), 32)().sync();
 }
