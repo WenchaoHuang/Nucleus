@@ -66,9 +66,9 @@ namespace NS_NAMESPACE
 			{
 				m_buffer = std::make_shared<Buffer>(allocator, sizeof(Type) * width);
 					
-				m_data = reinterpret_cast<Type*>(m_buffer->data());
+				dev::Ptr<Type>::m_data = reinterpret_cast<Type*>(m_buffer->data());
 
-				m_width = width;
+				dev::Ptr<Type>::m_width = width;
 			}
 		}
 
@@ -102,7 +102,9 @@ namespace NS_NAMESPACE
 		 */
 		std::shared_ptr<Buffer> releaseBuffer() noexcept
 		{
-			m_data = nullptr;		m_width = 0;
+			dev::Ptr<Type>::m_width = 0;
+
+			dev::Ptr<Type>::m_data = nullptr;
 
 			return std::exchange(m_buffer, nullptr);
 		}
@@ -115,9 +117,9 @@ namespace NS_NAMESPACE
 		{
 			m_buffer = std::exchange(rhs.m_buffer, nullptr);
 
-			m_data = std::exchange(rhs.m_data, nullptr);
+			dev::Ptr<Type>::m_width = std::exchange(rhs.m_width, 0);
 
-			m_width = std::exchange(rhs.m_width, 0);
+			dev::Ptr<Type>::m_data = std::exchange(rhs.m_data, nullptr);
 		}
 
 
@@ -126,11 +128,11 @@ namespace NS_NAMESPACE
 		 */
 		void swap(Array & rhs) noexcept
 		{
+			std::swap(dev::Ptr<Type>::m_width, rhs.m_width);
+
+			std::swap(dev::Ptr<Type>::m_data, rhs.m_data);
+
 			std::swap(m_buffer, rhs.m_buffer);
-
-			std::swap(m_width, rhs.m_width);
-
-			std::swap(m_data, rhs.m_data);
 		}
 
 
@@ -141,11 +143,11 @@ namespace NS_NAMESPACE
 		{
 			if (m_buffer != nullptr)
 			{
+				dev::Ptr<Type>::m_data = nullptr;
+
+				dev::Ptr<Type>::m_width = 0;
+
 				m_buffer = nullptr;
-
-				m_data = nullptr;
-
-				m_width = 0;
 			}
 		}
 

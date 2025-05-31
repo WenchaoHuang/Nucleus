@@ -63,21 +63,21 @@ namespace NS_NAMESPACE
 		{
 			NS_ASSERT_LOG_IF(allocator == nullptr, "Empty allocator!");
 
-			if ((this->getAllocator() != allocator) || (m_width * m_height != width * height))
+			if ((this->getAllocator() != allocator) || (this->size() != width * height))
 			{
 				m_buffer = std::make_shared<Buffer>(allocator, sizeof(Type) * width * height);
 
-				m_data = reinterpret_cast<Type*>(m_buffer->data());
+				dev::Ptr2<Type>::m_data = reinterpret_cast<Type*>(m_buffer->data());
 
-				m_height = static_cast<uint32_t>(height);
+				dev::Ptr2<Type>::m_height = static_cast<uint32_t>(height);
 
-				m_width = static_cast<uint32_t>(width);
+				dev::Ptr2<Type>::m_width = static_cast<uint32_t>(width);
 			}
-			else if ((m_width != width) || (m_height != height))
+			else if ((this->width() != width) || (this->height() != height))
 			{
-				m_height = static_cast<uint32_t>(height);
+				dev::Ptr2<Type>::m_height = static_cast<uint32_t>(height);
 
-				m_width = static_cast<uint32_t>(width);
+				dev::Ptr2<Type>::m_width = static_cast<uint32_t>(width);
 			}
 		}
 
@@ -103,13 +103,13 @@ namespace NS_NAMESPACE
 		 */
 		void reshape(size_t width, size_t height)
 		{
-			NS_ASSERT_LOG_IF(m_width * m_height != width * height, "Size mismatch!");
+			NS_ASSERT_LOG_IF(this->size() != width * height, "Size mismatch!");
 
-			if (m_width * m_height == width * height)
+			if (this->size() == width * height)
 			{
-				m_height = static_cast<uint32_t>(height);
+				dev::Ptr2<Type>::m_height = static_cast<uint32_t>(height);
 
-				m_width = static_cast<uint32_t>(width);
+				dev::Ptr2<Type>::m_width = static_cast<uint32_t>(width);
 			}
 		}
 
@@ -129,7 +129,11 @@ namespace NS_NAMESPACE
 		 */
 		std::shared_ptr<Buffer> releaseBuffer()
 		{
-			m_data = nullptr;		m_width = m_height = 0;
+			dev::Ptr2<Type>::m_width = 0;
+
+			dev::Ptr2<Type>::m_height = 0;
+
+			dev::Ptr2<Type>::m_data = nullptr;
 
 			return std::exchange(m_buffer, nullptr);
 		}
@@ -140,13 +144,13 @@ namespace NS_NAMESPACE
 		 */
 		void operator=(Array2D && rhs) noexcept
 		{
+			dev::Ptr2<Type>::m_data = std::exchange(rhs.m_data, nullptr);
+
+			dev::Ptr2<Type>::m_height = std::exchange(rhs.m_height, 0);
+
+			dev::Ptr2<Type>::m_width = std::exchange(rhs.m_width, 0);
+
 			m_buffer = std::exchange(rhs.m_buffer, nullptr);
-
-			m_data = std::exchange(rhs.m_data, nullptr);
-
-			m_height = std::exchange(rhs.m_height, 0);
-
-			m_width = std::exchange(rhs.m_width, 0);
 		}
 
 
@@ -155,13 +159,13 @@ namespace NS_NAMESPACE
 		 */
 		void swap(Array2D & rhs) noexcept
 		{
+			std::swap(dev::Ptr2<Type>::m_height, rhs.m_height);
+
+			std::swap(dev::Ptr2<Type>::m_width, rhs.m_width);
+
+			std::swap(dev::Ptr2<Type>::m_data, rhs.m_data);
+
 			std::swap(m_buffer, rhs.m_buffer);
-
-			std::swap(m_height, rhs.m_height);
-
-			std::swap(m_width, rhs.m_width);
-
-			std::swap(m_data, rhs.m_data);
 		}
 
 
@@ -172,11 +176,13 @@ namespace NS_NAMESPACE
 		{
 			if (m_buffer != nullptr)
 			{
-				m_height = m_width = 0;
+				dev::Ptr2<Type>::m_data = nullptr;
+
+				dev::Ptr2<Type>::m_height = 0;
+				
+				dev::Ptr2<Type>::m_width = 0;
 
 				m_buffer = nullptr;
-
-				m_data = nullptr;
 			}
 		}
 

@@ -65,25 +65,25 @@ namespace NS_NAMESPACE
 		{
 			NS_ASSERT_LOG_IF(allocator == nullptr, "Empty allocator!");
 
-			if ((this->getAllocator() != allocator) || (m_width * m_height * m_depth != width * height * depth))
+			if ((this->getAllocator() != allocator) || (this->size() != width * height * depth))
 			{
 				m_buffer = std::make_shared<Buffer>(allocator, sizeof(Type) * width * height * depth);
 
-				m_data = reinterpret_cast<Type*>(m_buffer->data());
+				dev::Ptr3<Type>::m_data = reinterpret_cast<Type*>(m_buffer->data());
 
-				m_height = static_cast<uint32_t>(height);
+				dev::Ptr3<Type>::m_height = static_cast<uint32_t>(height);
 
-				m_width = static_cast<uint32_t>(width);
+				dev::Ptr3<Type>::m_width = static_cast<uint32_t>(width);
 
-				m_depth = static_cast<uint32_t>(depth);
+				dev::Ptr3<Type>::m_depth = static_cast<uint32_t>(depth);
 			}
-			else if ((m_width != width) || (m_height != height) || (m_depth != depth))
+			else if ((this->width() != width) || (this->height() != height) || (this->depth() != depth))
 			{
-				m_height = static_cast<uint32_t>(height);
+				dev::Ptr3<Type>::m_height = static_cast<uint32_t>(height);
 
-				m_width = static_cast<uint32_t>(width);
+				dev::Ptr3<Type>::m_width = static_cast<uint32_t>(width);
 
-				m_depth = static_cast<uint32_t>(depth);
+				dev::Ptr3<Type>::m_depth = static_cast<uint32_t>(depth);
 			}
 		}
 
@@ -110,15 +110,15 @@ namespace NS_NAMESPACE
 		 */
 		void reshape(size_t width, size_t height, size_t depth)
 		{
-			NS_ASSERT_LOG_IF(m_width * m_height * m_depth != width * height * depth, "Size mismatch!");
+			NS_ASSERT_LOG_IF(this->size() != width * height * depth, "Size mismatch!");
 
-			if (m_width * m_height * m_depth == width * height * depth)
+			if (this->size() == width * height * depth)
 			{
-				m_height = static_cast<uint32_t>(height);
+				dev::Ptr3<Type>::m_height = static_cast<uint32_t>(height);
 
-				m_width = static_cast<uint32_t>(width);
+				dev::Ptr3<Type>::m_width = static_cast<uint32_t>(width);
 
-				m_depth = static_cast<uint32_t>(depth);
+				dev::Ptr3<Type>::m_depth = static_cast<uint32_t>(depth);
 			}
 		}
 
@@ -138,7 +138,13 @@ namespace NS_NAMESPACE
 		 */
 		std::shared_ptr<Buffer> releaseBuffer()
 		{
-			m_data = nullptr;		m_width = m_height = m_depth = 0;
+			dev::Ptr3<Type>::m_width = 0;
+			
+			dev::Ptr3<Type>::m_depth = 0;
+
+			dev::Ptr3<Type>::m_height = 0;
+
+			dev::Ptr3<Type>::m_data = nullptr;
 
 			return std::exchange(m_buffer, nullptr);
 		}
@@ -149,15 +155,15 @@ namespace NS_NAMESPACE
 		 */
 		void operator=(Array3D && rhs) noexcept
 		{
+			dev::Ptr3<Type>::m_data = std::exchange(rhs.m_data, nullptr);
+
+			dev::Ptr3<Type>::m_height = std::exchange(rhs.m_height, 0);
+
+			dev::Ptr3<Type>::m_width = std::exchange(rhs.m_width, 0);
+
+			dev::Ptr3<Type>::m_depth = std::exchange(rhs.m_depth, 0);
+
 			m_buffer = std::exchange(rhs.m_buffer, nullptr);
-
-			m_data = std::exchange(rhs.m_data, nullptr);
-
-			m_height = std::exchange(rhs.m_height, 0);
-
-			m_width = std::exchange(rhs.m_width, 0);
-
-			m_depth = std::exchange(rhs.m_depth, 0);
 		}
 
 
@@ -167,15 +173,15 @@ namespace NS_NAMESPACE
 		 */
 		void swap(Array3D & rhs) noexcept
 		{
+			std::swap(dev::Ptr3<Type>::m_height, rhs.m_height);
+
+			std::swap(dev::Ptr3<Type>::m_width, rhs.m_width);
+
+			std::swap(dev::Ptr3<Type>::m_depth, rhs.m_depth);
+
+			std::swap(dev::Ptr3<Type>::m_data, rhs.m_data);
+
 			std::swap(m_buffer, rhs.m_buffer);
-
-			std::swap(m_height, rhs.m_height);
-
-			std::swap(m_width, rhs.m_width);
-
-			std::swap(m_depth, rhs.m_depth);
-
-			std::swap(m_data, rhs.m_data);
 		}
 
 
@@ -186,11 +192,15 @@ namespace NS_NAMESPACE
 		{
 			if (m_buffer != nullptr)
 			{
-				m_width = m_height = m_depth = 0;
+				dev::Ptr3<Type>::m_data = nullptr;
+
+				dev::Ptr3<Type>::m_height = 0;
+
+				dev::Ptr3<Type>::m_depth = 0;
+
+				dev::Ptr3<Type>::m_width = 0;
 
 				m_buffer = nullptr;
-
-				m_data = nullptr;
 			}
 		}
 
