@@ -22,6 +22,7 @@
 
 #include <nucleus/event.h>
 #include <nucleus/device.h>
+#include <nucleus/stream.h>
 #include <nucleus/context.h>
 
 /*************************************************************************
@@ -31,14 +32,23 @@
 void test_event()
 {
 	auto device = ns::Context::getInstance()->getDevice(0);
+	auto stream = device->getDefaultStream();
 
-	NsEvent event(device);
+	ns::Event		event0(device);
+	ns::TimedEvent	event1(device);
+	ns::TimedEvent	event2(device);
 
-	event.getDevice();
-	event.sync();
+	stream->recordEvent(event0);
+	stream->recordEvent(event1);
+	stream->recordEvent(event2);
+	stream->waitEvent(event1).sync();
 
-	if (event.query())
+	auto time = ns::TimedEvent::getElapsedTime(event1, event2);
+
+	if (event1.query())
 	{
-
+		event1.sync();
+		event1.getDevice();
+		event1.getHandle();
 	}
 }

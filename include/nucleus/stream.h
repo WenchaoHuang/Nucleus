@@ -102,21 +102,22 @@ namespace NS_NAMESPACE
 
 		/**
 		 *	@brief		Record an event.
-		 *	@param[in]	hEvent - Valid event handle to record.
+		 *	@param[in]	event - Valid event to record.
 		 *	@note		Call such as Event::query() or Stream::waitEvent() will then examine or wait for completion of the work that was captured.
 		 *	@note		Can be called multiple times on the same event and will overwrite the previously captured state.
 		 *	@warning	Event and stream must be on the same device.
 		 */
-		void recordEvent(cudaEvent_t hEvent);
+		Stream & recordEvent(Event & event);
 
 
 		/**
 		 *	@brief		Make a compute stream wait on an event.
-		 *	@param[in]	hEvent - Valid event handle to wait on.
+		 *	@param[in]	event - Valid event to wait on.
+		 * 	@retval		Stream - Reference to this stream (enables method chaining).
 		 *	@note		Make all future work submitted to this stream wait for all work captured in event.
 		 *	@note		Event may be from a different device than this stream.
 		 */
-		void waitEvent(cudaEvent_t hEvent) const;
+		Stream & waitEvent(Event & event);
 
 
 		/**

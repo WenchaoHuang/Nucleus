@@ -37,18 +37,33 @@ namespace NS_NAMESPACE
 	{
 		NS_NONCOPYABLE(Event)
 
+	private:
+
+		friend class TimedEvent;
+
+		/**
+		 *	@brief		Create CUDA event object.
+		 *	@param[in]	device - Pointer to the device associated with.
+		 *	@param[in]	isBlockingSync - Specify that event should use blocking synchronization.
+		 *	@param[in]	isDisableTiming - Specify that the created event does not need to record timing data.
+		 *	@details	If isBlockingSync is set, thread calling Event::sync() will give up CPU time until event happened (default method).
+		 *	@details	If isBlockingSync is not set, thread calling Event::sync() will enter a check-event loop until event happened, results in the minimum latency.
+		 *	@throw		cudaError_t - In case of failure.
+		 *	@note		Designed for class `TimedEvent`.
+		 */
+		explicit Event(Device * device, bool isBlockingSync, bool isDisableTiming);
+
 	public:
 
 		/**
 		 *	@brief		Create CUDA event object.
-		 *	@param[in]	pDevice - Pointer to the device associated with.
+		 *	@param[in]	device - Pointer to the device associated with.
 		 *	@param[in]	isBlockingSync - Specify that event should use blocking synchronization.
-		 *	@param[in]	isDisableTiming - Specify that the created event does not need to record timing data.
-		 *	@note		If isBlockingSync is set, thread calling Event::sync() will give up CPU time until event happened (default method).
-		 *	@note		If isBlockingSync is not set, thread calling Event::sync() will enter a check-event loop until event happened, results in the minimum latency.
+		 *	@details	If isBlockingSync is set, thread calling Event::sync() will give up CPU time until event happened (default method).
+		 *	@details	If isBlockingSync is not set, thread calling Event::sync() will enter a check-event loop until event happened, results in the minimum latency.
 		 *	@throw		cudaError_t - In case of failure.
 		 */
-		explicit Event(Device * pDevice, bool isBlockingSync = false, bool isDisableTiming = false);
+		explicit Event(Device * device, bool isBlockingSync = false) : Event(device, isBlockingSync, true) {}
 
 
 		/**
@@ -61,7 +76,7 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Return pointer to the device associated with.
 		 */
-		Device * getDevice() const { return m_pDevice; }
+		Device * getDevice() const { return m_device; }
 
 
 		/**
@@ -72,13 +87,10 @@ namespace NS_NAMESPACE
 
 
 		/**
-		 *	@brief		Compute the elapsed time between events.
-		 *	@param[in]	hEventStart - Valid starting event handle.
-		 *	@param[in]	hEventEnd - Valid ending event handle.
-		 *	@warning	pEventStart and pEventEnd must from the same device.
-		 *	@note		With a resolution of around 0.5 microseconds.
+		 *	@brief		query an event's status.
+		 *	@retval		True - If all captured work has been completed.
 		 */
-		static std::chrono::nanoseconds getElapsedTime(cudaEvent_t hEventStart, cudaEvent_t hEventEnd);
+		bool query() const;
 
 
 		/**
@@ -87,18 +99,44 @@ namespace NS_NAMESPACE
 		 */
 		void sync() const;
 
-
-		/**
-		 *	@brief		query an event's status.
-		 *	@retval		True - If all captured work has been completed.
-		 */
-		bool query() const;
-
 	private:
 
-		const cudaEvent_t 			m_hEvent;
-		Device * const				m_pDevice;
-		const bool					m_isBlockingSync;
-		const bool					m_isDisableTiming;
+		cudaEvent_t				m_hEvent;
+		Device * const			m_device;
+		const bool				m_isBlockingSync;
+	};
+
+	/*********************************************************************
+	**************************    TimedEvent    **************************
+	*********************************************************************/
+
+	/**
+	 *	@brief		RAII wrapper for timed CUDA event object.
+	 */
+	class TimedEvent : public Event
+	{
+
+	public:
+
+		/**
+		 *	@brief		Create CUDA event object.
+		 *	@param[in]	device - Pointer to the device associated with.
+		 *	@param[in]	isBlockingSync - Specify that event should use blocking synchronization.
+		 *	@details	If isBlockingSync is set, thread calling Event::sync() will give up CPU time until event happened (default method).
+		 *	@details	If isBlockingSync is not set, thread calling Event::sync() will enter a check-event loop until event happened, results in the minimum latency.
+		 *	@throw		cudaError_t - In case of failure.
+		 */
+		explicit TimedEvent(Device * device, bool isBlockingSync = false) : Event(device, isBlockingSync, false) {}
+
+	public:
+
+		/**
+		 *	@brief		Compute the elapsed time between events.
+		 *	@param[in]	eventStart - Valid starting event.
+		 *	@param[in]	eventEnd - Valid ending event.
+		 *	@warning	eventStart and eventEnd must from the same device.
+		 *	@note		With a resolution of around 0.5 microseconds.
+		 */
+		static std::chrono::nanoseconds getElapsedTime(TimedEvent & eventStart, TimedEvent & eventEnd);
 	};
 }

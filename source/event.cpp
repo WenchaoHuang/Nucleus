@@ -30,18 +30,20 @@ NS_USING_NAMESPACE
 /*************************************************************************
 ******************************    Event    *******************************
 *************************************************************************/
-Event::Event(class Device * pDevice, bool isBlockingSync, bool isDisableTiming) : m_pDevice(pDevice), m_hEvent(nullptr), m_isBlockingSync(isBlockingSync), m_isDisableTiming(isDisableTiming)
-{
-	NS_ASSERT(pDevice != nullptr);
 
-	pDevice->setCurrent();
+Event::Event(Device * device, bool isBlockingSync, bool isDisableTiming)
+	: m_device(device), m_hEvent(nullptr), m_isBlockingSync(isBlockingSync)
+{
+	NS_ASSERT(device != nullptr);
+
+	device->setCurrent();
 
 	unsigned int flags = cudaEventDefault;
 
 	if (isBlockingSync)		flags |= cudaEventBlockingSync;
 	if (isDisableTiming)	flags |= cudaEventDisableTiming;
 
-	cudaError_t err = cudaEventCreateWithFlags(const_cast<cudaEvent_t*>(&m_hEvent), flags);
+	cudaError_t err = cudaEventCreateWithFlags(&m_hEvent, flags);
 
 	if (err != cudaSuccess)
 	{
@@ -51,23 +53,6 @@ Event::Event(class Device * pDevice, bool isBlockingSync, bool isDisableTiming) 
 
 		throw err;
 	}
-}
-
-
-std::chrono::nanoseconds Event::getElapsedTime(cudaEvent_t hEventStart, cudaEvent_t hEventEnd)
-{
-	float elapsedTime = 0.0f;
-
-	cudaError_t err = cudaEventElapsedTime(&elapsedTime, hEventStart, hEventEnd);
-
-	if (err != cudaSuccess)
-	{
-		NS_ERROR_LOG("%s.", cudaGetErrorString(err));
-
-		cudaGetLastError();
-	}
-
-	return std::chrono::nanoseconds(static_cast<long long>(elapsedTime * 1e6));
 }
 
 
@@ -112,4 +97,24 @@ Event::~Event() noexcept
 			cudaGetLastError();
 		}
 	}
+}
+
+/*************************************************************************
+****************************    TimedEvent    ****************************
+*************************************************************************/
+
+std::chrono::nanoseconds TimedEvent::getElapsedTime(TimedEvent & eventStart, TimedEvent & eventEnd)
+{
+	float elapsedTime = 0.0f;
+
+	cudaError_t err = cudaEventElapsedTime(&elapsedTime, eventStart.getHandle(), eventEnd.getHandle());
+
+	if (err != cudaSuccess)
+	{
+		NS_ERROR_LOG("%s.", cudaGetErrorString(err));
+
+		cudaGetLastError();
+	}
+
+	return std::chrono::nanoseconds(static_cast<long long>(elapsedTime * 1e6));
 }

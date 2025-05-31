@@ -20,6 +20,7 @@
  *	SOFTWARE.
  */
 
+#include "event.h"
 #include "logger.h"
 #include "device.h"
 #include "stream.h"
@@ -57,11 +58,11 @@ Stream::Stream(Device * device, std::nullptr_t) : m_device(device), m_hStream(nu
 }
 
 
-void Stream::recordEvent(cudaEvent_t hEvent)
+Stream & Stream::recordEvent(Event & event)
 {
 	this->acquireDeviceContext();
 
-	cudaError_t err = cudaEventRecord(hEvent, m_hStream);
+	cudaError_t err = cudaEventRecord(event.getHandle(), m_hStream);
 
 	if (err != cudaSuccess)
 	{
@@ -69,14 +70,16 @@ void Stream::recordEvent(cudaEvent_t hEvent)
 
 		cudaGetLastError();
 	}
+
+	return *this;
 }
 
 
-void Stream::waitEvent(cudaEvent_t hEvent) const
+Stream & Stream::waitEvent(Event & event)
 {
 	this->acquireDeviceContext();
 
-	cudaError_t err = cudaStreamWaitEvent(m_hStream, hEvent, cudaEventWaitDefault);
+	cudaError_t err = cudaStreamWaitEvent(m_hStream, event.getHandle(), cudaEventWaitDefault);
 
 	if (err != cudaSuccess)
 	{
@@ -84,6 +87,8 @@ void Stream::waitEvent(cudaEvent_t hEvent) const
 
 		cudaGetLastError();
 	}
+
+	return *this;
 }
 
 
