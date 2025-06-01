@@ -137,6 +137,9 @@ namespace NS_NAMESPACE
 		static constexpr Format value = details::FormatMapping<Type>::value;
 	};
 
+	//	Defines the internal CUDA-compatible value type for a given C++ type.
+	template<typename Type> using InternalValueType = typename details::TypeMapping<FormatMapping<std::remove_const_t<Type>>::value>::type;
+
 	/*********************************************************************
 	*********************    IsValidFormatMapping    *********************
 	*********************************************************************/

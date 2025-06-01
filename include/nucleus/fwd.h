@@ -80,6 +80,21 @@ namespace NS_NAMESPACE
 		template<typename Type> struct Surf1DLayered;
 		template<typename Type> struct Surf2DLayered;
 		template<typename Type> struct SurfCubeLayered;
+
+		template<typename Type> class Tex1D;
+		template<typename Type> class Tex2D;
+		template<typename Type> class Tex3D;
+		template<typename Type> class TexCube;
+		template<typename Type> class Tex1DLod;
+		template<typename Type> class Tex2DLod;
+		template<typename Type> class Tex3DLod;
+		template<typename Type> class TexCubeLod;
+		template<typename Type> class Tex1DLayered;
+		template<typename Type> class Tex2DLayered;
+		template<typename Type> class TexCubeLayered;
+		template<typename Type> class Tex1DLayeredLod;
+		template<typename Type> class Tex2DLayeredLod;
+		template<typename Type> class TexCubeLayeredLod;
 	}
 
 	template<typename Type> class Array;
@@ -97,7 +112,6 @@ namespace NS_NAMESPACE
 	template<typename Type> class Image1DLayered;
 	template<typename Type> class Image2DLayered;
 	template<typename Type> class ImageCubeLayered;
-
 	template<typename Type> class Image1DLod;
 	template<typename Type> class Image2DLod;
 	template<typename Type> class Image3DLod;
