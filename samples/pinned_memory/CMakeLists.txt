@@ -20,12 +20,30 @@
 
 cmake_minimum_required(VERSION 3.12)
 
-# Project name
-project(Nucleus-Samples)
+# Target name
+set(TARGET_NAME pinned_memory)
+project(${TARGET_NAME} LANGUAGES CXX CUDA)
 
-# Organize targets into folders
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+# Set C++ standard (adjust as needed)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CUDA_STANDARD 17)
+set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 
-# Add samples
-add_subdirectory(JuliaSet)
-add_subdirectory(pinned_memory)
+# Create the executable target
+add_executable(${TARGET_NAME} main.cpp)
+
+# Include directories
+target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
+
+# Link directories
+target_link_libraries(${TARGET_NAME} PRIVATE nucleus cudart_static)
+
+# 设置CUDA编译属性
+set_target_properties(${TARGET_NAME} PROPERTIES
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_ARCHITECTURES "75"
+)
+
+set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "Samples")
