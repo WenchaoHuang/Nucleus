@@ -31,6 +31,7 @@ NS_USING_NAMESPACE
 /*************************************************************************
 ******************************    Stream    ******************************
 *************************************************************************/
+
 Stream::Stream(Device * device, int priority) : m_device(device), m_hStream(nullptr), m_priority(priority)
 {
 	device->setCurrent();
@@ -152,7 +153,7 @@ Stream & Stream::launchKernel(const void * func, const dim3 & gridDim, const dim
 }
 
 
-void Stream::memcpy3D(void * dst, size_t dstPitch, size_t dstHeight, const void * src, size_t srcPitch, size_t srcHeight, size_t width, size_t height, size_t depth)
+Stream & Stream::memcpyLinear(void * dst, size_t dstPitch, size_t dstHeight, const void * src, size_t srcPitch, size_t srcHeight, size_t width, size_t height, size_t depth)
 {
 	this->acquireDeviceContext();
 
@@ -170,6 +171,8 @@ void Stream::memcpy3D(void * dst, size_t dstPitch, size_t dstHeight, const void 
 
 		cudaGetLastError();
 	}
+
+	return *this;
 }
 
 

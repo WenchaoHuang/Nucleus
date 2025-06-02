@@ -20,11 +20,14 @@
  *	SOFTWARE.
  */
 
+#include <vector>
 #include <functional>
 #include <nucleus/stream.h>
 #include <nucleus/device.h>
 #include <nucleus/context.h>
 #include <nucleus/array_1d.h>
+#include <nucleus/array_2d.h>
+#include <nucleus/array_3d.h>
 #include <nucleus/launch_utils.cuh>
 #include <device_launch_parameters.h>
 
@@ -43,16 +46,45 @@ __global__ void test_kernel()
 void test_stream()
 {
 	auto device = ns::Context::getInstance()->getDevice(0);
-
+	auto allocator = device->getDefaultAllocator();
 	auto stream = device->getDefaultStream();
 
 	stream->sync();
 	stream->query();
-	stream->getHandle();
-	stream->getDevice();
+	assert(stream->getDevice() == device);
+	assert(stream->getHandle() == nullptr);
 	
 	int a;
 	auto pfnTask = [](int*) { printf("host: Happy Nucleus!\n"); };
 	stream->launchHostFunc<int>(pfnTask, &a);
-	stream->launch(test_kernel, ns::ceil_div(15, 32), 32)().sync();
+	stream->launch(test_kernel, ns::ceil_div(15, 32), 32)();
+
+	std::vector<int>	host_data(100, 0);
+	ns::Array<int>		dev_data1(allocator, 100);
+	ns::Array2D<int>	dev_data2(allocator, 10, 10);
+	ns::Array3D<int>	dev_data3(allocator, 2, 5, 10);
+
+	stream->memset(dev_data1.data(), 1, dev_data1.size());
+	stream->memcpy(host_data.data(), dev_data1.data(), dev_data1.size());
+
+	for (size_t i = 0; i < host_data.size(); i++)
+	{
+		assert(host_data[i] == 1);
+	}
+
+	stream->memset(dev_data2.data(), 2, dev_data2.size());
+	stream->memcpy2D(host_data.data(), dev_data2.pitch(), dev_data2.data(), dev_data2.pitch(), dev_data2.width(), dev_data2.height());
+	
+	for (size_t i = 0; i < host_data.size(); i++)
+	{
+		assert(host_data[i] == 2);
+	}
+
+	stream->memset(dev_data3.data(), 3, dev_data3.size());
+	stream->memcpy3D(host_data.data(), dev_data3.pitch(), dev_data3.height(), dev_data3.data(), dev_data3.pitch(), dev_data3.height(), dev_data3.width(), dev_data3.height(), dev_data3.depth());
+
+	for (size_t i = 0; i < host_data.size(); i++)
+	{
+		assert(host_data[i] == 3);
+	}
 }

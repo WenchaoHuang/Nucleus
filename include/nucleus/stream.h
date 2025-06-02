@@ -119,6 +119,7 @@ namespace NS_NAMESPACE
 		 */
 		Stream & waitEvent(Event & event);
 
+	public:
 
 		/**
 		 *	@brief		Launches an executable graph in a stream
@@ -161,7 +162,8 @@ namespace NS_NAMESPACE
 		 *	@warning	Only available in *.cu files (implemented in launch_utils.cuh).
 		 */
 		template<typename... Args> NS_NODISCARD auto launch(KernelFunc<Args...> func, const dim3 & gridDim, const dim3 & blockDim, size_t sharedMem = 0);
-
+		
+	public:
 
 		/**
 		 *	@brief		Copies data between 3D objects.
@@ -171,14 +173,50 @@ namespace NS_NAMESPACE
 		 *	@param[in]	src - Source memory address.
 		 *	@param[in]	srcPitch - Pitch of source memory.
 		 *	@param[in]	srcHeight - Height of source memory.
-		 *	@param[in]	width - Width of matrix transfer (columns in bytes).
+		 *	@param[in]	width - Width of matrix transfer (columns).
 		 *	@param[in]	height - Height of matrix transfer (rows).
 		 *	@param[in]	depth - Depth of matrix transfer (layers).
 		 *	@param[in]	extext - Extent of matrix transfer.
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 *	@warning	The memory areas may not overlap. \p width must not exceed either \p dstPitch or \p srcPitch.
 		 */
-		void memcpy3D(void * dst, size_t dstPitch, size_t dstHeight, const void * src, size_t srcPitch, size_t srcHeight, size_t width, size_t height, size_t depth);
+		template<typename Type> Stream & memcpy3D(Type * dst, size_t dstPitch, size_t dstHeight, const Type * src, size_t srcPitch, size_t srcHeight, size_t width, size_t height, size_t depth)
+		{
+			return this->memcpyLinear(dst, dstPitch, dstHeight, src, srcPitch, srcHeight, std::is_same_v<Type, void> ? width : sizeof(Type) * width, height, depth);
+		}
 
+
+		/**
+		 *	@brief		Copies data between 2D objects.
+		 *	@param[in]	dst - Destination memory address.
+		 *	@param[in]	dstPitch - Pitch of destination memory.
+		 *	@param[in]	src - Source memory address.
+		 *	@param[in]	srcPitch - Pitch of source memory.
+		 *	@param[in]	width - Width of matrix transfer (columns).
+		 *	@param[in]	height - Height of matrix transfer (rows).
+		 *	@param[in]	extent - Extent of matrix transfer.
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 *	@warning	The memory areas may not overlap. \p width must not exceed either \p dstPitch or \p srcPitch.
+		 */
+		template<typename Type> Stream & memcpy2D(Type * dst, size_t dstPitch, const Type * src, size_t srcPitch, size_t width, size_t height)
+		{
+			return this->memcpyLinear(dst, dstPitch, 0, src, srcPitch, 0, std::is_same_v<Type, void> ? width : sizeof(Type) * width, height, 1);
+		}
+
+
+		/**
+		 *	@brief		Copies \p count bytes from the memory area pointed to by \p src to the memory area pointed to by \p dst.
+		 *	@param[in]	dst - Destination memory address.
+		 *	@param[in]	src - Source memory address.
+		 *	@param[in]	count - Size to copy.
+		 * 	@retval		Stream - Reference to this stream (enables method chaining).
+		 *	@note		Copying memory on different devices is also available.
+		 */
+		template<typename Type> Stream & memcpy(Type * dst, const Type * src, size_t count)
+		{
+			return this->memcpyLinear(dst, 0, 0, src, 0, 0, std::is_same_v<Type, void> ? count : sizeof(Type) * count, 1, 1);
+		}
+		
 
 		/**
 		 *	@brief		Initialize or set device memory to a value.
@@ -203,13 +241,31 @@ namespace NS_NAMESPACE
 	private:
 
 		/**
+		 *	@brief		Copies data between 3D linear memory.
+		 *	@param[in]	dst - Destination memory address.
+		 *	@param[in]	dstPitch - Pitch of destination memory.
+		 *	@param[in]	dstHeight - Height of destination memory.
+		 *	@param[in]	src - Source memory address.
+		 *	@param[in]	srcPitch - Pitch of source memory.
+		 *	@param[in]	srcHeight - Height of source memory.
+		 *	@param[in]	width - Width of matrix transfer (columns in bytes).
+		 *	@param[in]	height - Height of matrix transfer (rows).
+		 *	@param[in]	depth - Depth of matrix transfer (layers).
+		 *	@param[in]	extext - Extent of matrix transfer.
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 *	@warning	The memory areas may not overlap. \p width must not exceed either \p dstPitch or \p srcPitch.
+		 */
+		Stream & memcpyLinear(void * dst, size_t dstPitch, size_t dstHeight, const void * src, size_t srcPitch, size_t srcHeight, size_t width, size_t height, size_t depth);
+
+
+		/**
 		 *	@brief		Launches a device function
 		 *	@param[in]	func - Device function symbol.
 		 *	@param[in]	gDim - Grid dimensions.
 		 *	@param[in]	bDim - Block dimensions.
 		 *	@param[in]	sharedMemBytes - Number of bytes for shared memory.
 		 *	@param[in]	args - Pointers to kernel arguments.
-		 *	@retval		Stream - Reference to this stream, convenient for further operations.
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 *	@warning	Only available in *.cu files.
 		 */
 		Stream & launchKernel(const void * func, const dim3 & gridDim, const dim3 & blockDim, size_t sharedMem, void ** args);
