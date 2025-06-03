@@ -24,14 +24,14 @@ cmake_minimum_required(VERSION 3.18)
 set(TARGET_NAME julia_set)
 project(${TARGET_NAME} LANGUAGES CXX CUDA)
 
-# Set C++ standard (adjust as needed)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CUDA_STANDARD 17)
-set(CMAKE_CUDA_STANDARD_REQUIRED ON)
-
 # Create the executable target
 add_executable(${TARGET_NAME} julia_set.cu)
+
+# Include directories
+target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
+
+# Link directories
+target_link_libraries(${TARGET_NAME} PRIVATE nucleus cudart_static)
 
 # 设置CUDA编译属性
 set_target_properties(${TARGET_NAME} PROPERTIES

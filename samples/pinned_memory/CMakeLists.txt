@@ -24,12 +24,6 @@ cmake_minimum_required(VERSION 3.18)
 set(TARGET_NAME pinned_memory)
 project(${TARGET_NAME} LANGUAGES CXX CUDA)
 
-# Set C++ standard (adjust as needed)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CUDA_STANDARD 17)
-set(CMAKE_CUDA_STANDARD_REQUIRED ON)
-
 # Create the executable target
 add_executable(${TARGET_NAME} main.cpp)
 
