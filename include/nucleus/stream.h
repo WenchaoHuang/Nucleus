@@ -182,7 +182,10 @@ namespace NS_NAMESPACE
 		 */
 		template<typename Type> Stream & memcpy3D(Type * dst, size_t dstPitch, size_t dstHeight, const Type * src, size_t srcPitch, size_t srcHeight, size_t width, size_t height, size_t depth)
 		{
-			return this->memcpyLinear(dst, dstPitch, dstHeight, src, srcPitch, srcHeight, std::is_same_v<Type, void> ? width : sizeof(Type) * width, height, depth);
+			if constexpr (!std::is_same_v<Type, void>)
+				return this->memcpyLinear(dst, dstPitch, dstHeight, src, srcPitch, srcHeight, width * sizeof(Type), height, depth);
+			else
+				return this->memcpyLinear(dst, dstPitch, dstHeight, src, srcPitch, srcHeight, width, height, depth);
 		}
 
 
@@ -200,7 +203,10 @@ namespace NS_NAMESPACE
 		 */
 		template<typename Type> Stream & memcpy2D(Type * dst, size_t dstPitch, const Type * src, size_t srcPitch, size_t width, size_t height)
 		{
-			return this->memcpyLinear(dst, dstPitch, 0, src, srcPitch, 0, std::is_same_v<Type, void> ? width : sizeof(Type) * width, height, 1);
+			if constexpr (!std::is_same_v<Type, void>)
+				return this->memcpyLinear(dst, dstPitch, 0, src, srcPitch, 0, width * sizeof(Type), height, 1);
+			else
+				return this->memcpyLinear(dst, dstPitch, 0, src, srcPitch, 0, width, height, 1);
 		}
 
 
@@ -208,13 +214,16 @@ namespace NS_NAMESPACE
 		 *	@brief		Copies \p count bytes from the memory area pointed to by \p src to the memory area pointed to by \p dst.
 		 *	@param[in]	dst - Destination memory address.
 		 *	@param[in]	src - Source memory address.
-		 *	@param[in]	count - Size to copy.
+		 *	@param[in]	count - If Type is void: bytes to copy. Otherwise, number of elements to copy.
 		 * 	@retval		Stream - Reference to this stream (enables method chaining).
 		 *	@note		Copying memory on different devices is also available.
 		 */
 		template<typename Type> Stream & memcpy(Type * dst, const Type * src, size_t count)
 		{
-			return this->memcpyLinear(dst, 0, 0, src, 0, 0, std::is_same_v<Type, void> ? count : sizeof(Type) * count, 1, 1);
+			if constexpr (!std::is_same_v<Type, void>)
+				return this->memcpyLinear(dst, 0, 0, src, 0, 0, count * sizeof(Type), 1, 1);
+			else
+				return this->memcpyLinear(dst, 0, 0, src, 0, 0, count, 1, 1);
 		}
 		
 
