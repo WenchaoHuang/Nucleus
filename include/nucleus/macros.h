@@ -26,6 +26,29 @@
 
 #pragma warning(disable: 4201)		//!	Nonstandard extension used: nameless struct/union.
 
+/*************************************************************************
+***************************    C++ Version     ***************************
+*************************************************************************/
+
+#if defined(_MSVC_LANG)
+	#define NS_CPLUSPLUS			_MSVC_LANG
+#else
+	#define NS_CPLUSPLUS			__cplusplus
+#endif
+
+#if NS_CPLUSPLUS > 202002L
+	#define NS_CPP_VERSION 23
+#elif NS_CPLUSPLUS > 201703L
+	#define NS_CPP_VERSION 20
+#elif NS_CPLUSPLUS > 201402L
+	#define NS_CPP_VERSION 17
+#else
+	#error "Requires at least c++ standard version 17"
+#endif
+
+#define NS_HAS_CXX_20				(NS_CPP_VERSION >= 20)
+#define NS_HAS_CXX_17				(NS_CPP_VERSION >= 17)
+
  /*************************************************************************
  ************************    Compiling Numbers     ************************
  *************************************************************************/

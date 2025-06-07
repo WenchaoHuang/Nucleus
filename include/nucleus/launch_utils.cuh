@@ -93,7 +93,7 @@ namespace NS_NAMESPACE
 	 */
 	template<typename... Args> auto Stream::launch(KernelFunc<Args...> func, const dim3 & gridDim, const dim3 & blockDim, size_t sharedMem)
 	{
-	#if _HAS_CXX20
+	#if NS_HAS_CXX_20
 		return [=, this](Args... args) -> Stream& { void * params[] = { &args... };		return this->launchKernel(func, gridDim, blockDim, sharedMem, params); };
 	#else
 		return [=](Args... args) -> Stream& { void * params[] = { &args... };	return this->launchKernel(func, gridDim, blockDim, sharedMem, params); };
@@ -103,7 +103,7 @@ namespace NS_NAMESPACE
 	//	Specialization for parameterless kernels
 	template<> inline auto Stream::launch(KernelFunc<> func, const dim3 & gridDim, const dim3 & blockDim, size_t sharedMem)
 	{
-	#if _HAS_CXX20
+	#if NS_HAS_CXX_20
 		return [=, this]() -> Stream& { return this->launchKernel(func, gridDim, blockDim, sharedMem, nullptr); };
 	#else
 		return [=]() -> Stream& { return this->launchKernel(func, gridDim, blockDim, sharedMem, nullptr); };
