@@ -21,6 +21,7 @@
  */
 
 #include "event.h"
+#include "image.h"
 #include "logger.h"
 #include "device.h"
 #include "stream.h"
@@ -158,8 +159,81 @@ Stream & Stream::memcpyLinear(void * dst, size_t dstPitch, size_t dstHeight, con
 	this->acquireDeviceContext();
 
 	cudaMemcpy3DParms mempcyParams = {};
-	mempcyParams.dstPtr = make_cudaPitchedPtr(dst, dstPitch, 0, dstHeight);
+	mempcyParams.dstPtr	= make_cudaPitchedPtr(dst, dstPitch, 0, dstHeight);
 	mempcyParams.srcPtr = make_cudaPitchedPtr(const_cast<void*>(src), srcPitch, 0, srcHeight);
+	mempcyParams.extent = make_cudaExtent(width, height, depth);
+	mempcyParams.kind = cudaMemcpyDefault;
+
+	cudaError_t err = cudaMemcpy3DAsync(&mempcyParams, m_hStream);
+
+	if (err != cudaSuccess)
+	{
+		NS_ERROR_LOG("%s.", cudaGetErrorString(err));
+
+		cudaGetLastError();
+	}
+
+	return *this;
+}
+
+
+Stream & Stream::memcpyLinearImage(void * dst, size_t dstPitch, size_t dstHeight, ImageAccessor<void> srcImg, size_t width, size_t height, size_t depth)
+{
+	this->acquireDeviceContext();
+
+	cudaMemcpy3DParms mempcyParams = {};
+	mempcyParams.dstPtr = make_cudaPitchedPtr(dst, dstPitch, 0, dstHeight);
+	mempcyParams.srcArray = srcImg.handle;
+	mempcyParams.srcPos = make_cudaPos(srcImg.pos.x, srcImg.pos.y, srcImg.pos.z);
+	mempcyParams.extent = make_cudaExtent(width, height, depth);
+	mempcyParams.kind = cudaMemcpyDefault;
+
+	cudaError_t err = cudaMemcpy3DAsync(&mempcyParams, m_hStream);
+
+	if (err != cudaSuccess)
+	{
+		NS_ERROR_LOG("%s.", cudaGetErrorString(err));
+
+		cudaGetLastError();
+	}
+
+	return *this;
+}
+
+
+Stream & Stream::memcpyImageLinear(ImageAccessor<void> dstImg, const void * src, size_t srcPitch, size_t srcHeight, size_t width, size_t height, size_t depth)
+{
+	this->acquireDeviceContext();
+
+	cudaMemcpy3DParms mempcyParams = {};
+	mempcyParams.dstArray = dstImg.handle;
+	mempcyParams.dstPos = make_cudaPos(dstImg.pos.x, dstImg.pos.y, dstImg.pos.z);
+	mempcyParams.srcPtr = make_cudaPitchedPtr(const_cast<void*>(src), srcPitch, 0, srcHeight);
+	mempcyParams.extent = make_cudaExtent(width, height, depth);
+	mempcyParams.kind = cudaMemcpyDefault;
+
+	cudaError_t err = cudaMemcpy3DAsync(&mempcyParams, m_hStream);
+
+	if (err != cudaSuccess)
+	{
+		NS_ERROR_LOG("%s.", cudaGetErrorString(err));
+
+		cudaGetLastError();
+	}
+
+	return *this;
+}
+
+
+Stream & Stream::memcpyImage(ImageAccessor<void> dstImg, ImageAccessor<void> srcImg, size_t width, size_t height, size_t depth)
+{
+	this->acquireDeviceContext();
+
+	cudaMemcpy3DParms mempcyParams = {};
+	mempcyParams.dstArray = dstImg.handle;
+	mempcyParams.dstPos = make_cudaPos(dstImg.pos.x, dstImg.pos.y, dstImg.pos.z);
+	mempcyParams.srcArray = srcImg.handle;
+	mempcyParams.srcPos = make_cudaPos(srcImg.pos.x, srcImg.pos.y, srcImg.pos.z);
 	mempcyParams.extent = make_cudaExtent(width, height, depth);
 	mempcyParams.kind = cudaMemcpyDefault;
 

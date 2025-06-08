@@ -22,6 +22,7 @@
 #pragma once
 
 #include "fwd.h"
+#include "host_types.h"
 
 namespace NS_NAMESPACE
 {
@@ -190,6 +191,57 @@ namespace NS_NAMESPACE
 
 
 		/**
+		 *	@brief		Copies data between linear memory and image.
+		 *	@param[in]	dst - Destination memory address.
+		 *	@param[in]	dstPitch - Pitch of destination memory.
+		 *	@param[in]	dstHeight - Height of destination memory.
+		 *	@param[in]	srcImg - Accessor to the source image.
+		 *	@param[in]	width - Width of matrix transfer (columns).
+		 *	@param[in]	height - Height of matrix transfer (rows).
+		 *	@param[in]	depth - Depth of matrix transfer (layers).
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 */
+		template<typename Type> Stream & memcpy3D(Type * dst, size_t dstPitch, size_t dstHeight, ImageAccessor<Type> srcImg, size_t width, size_t height, size_t depth)
+		{
+			return this->memcpyLinearImage(dst, dstPitch, dstHeight, srcImg, width, height, depth);
+		}
+
+
+		/**
+		 *	@brief		Copies data between image and linear memory.
+		 *	@param[in]	dstImg - Accessor to the destination image.
+		 *	@param[in]	src - Source memory address.
+		 *	@param[in]	srcPitch - Pitch of source memory.
+		 *	@param[in]	srcHeight - Height of source memory.
+		 *	@param[in]	width - Width of matrix transfer (columns).
+		 *	@param[in]	height - Height of matrix transfer (rows).
+		 *	@param[in]	depth - Depth of matrix transfer (layers).
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 */
+		template<typename Type> Stream & memcpy3D(ImageAccessor<Type> dstImg, const Type * src, size_t srcPitch, size_t srcHeight, size_t width, size_t height, size_t depth)
+		{
+			return this->memcpyImageLinear(dstImg, src, srcPitch, srcHeight, width, height, depth);
+		}
+
+
+		/**
+		 *	@brief		Copies data between images.
+		 *	@param[in]	dstImg - Accessor to the destination image.
+		 *	@param[in]	srcImg - Accessor to the source image.
+		 *	@param[in]	width - Width of matrix transfer (columns in bytes).
+		 *	@param[in]	height - Height of matrix transfer (rows).
+		 *	@param[in]	depth - Depth of matrix transfer (layers).
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 *	@warning	The memory areas may not overlap.
+		 */
+		template<typename Type> Stream & memcpy3D(ImageAccessor<Type> dstImg, ImageAccessor<Type> srcImg, size_t width, size_t height, size_t depth)
+		{
+			return this->memcpyImage(dstImg, srcImg, width, height, depth);
+		}
+
+	public:
+
+		/**
 		 *	@brief		Copies data between 2D objects.
 		 *	@param[in]	dst - Destination memory address.
 		 *	@param[in]	dstPitch - Pitch of destination memory.
@@ -211,6 +263,55 @@ namespace NS_NAMESPACE
 
 
 		/**
+		 *	@brief		Copies data between linear memory and image.
+		 *	@param[in]	dst - Destination memory address.
+		 *	@param[in]	dstPitch - Pitch of destination memory.
+		 *	@param[in]	dstHeight - Height of destination memory.
+		 *	@param[in]	srcImg - Accessor to the source image.
+		 *	@param[in]	width - Width of matrix transfer (columns).
+		 *	@param[in]	height - Height of matrix transfer (rows).
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 */
+		template<typename Type> Stream & memcpy2D(Type * dst, size_t dstPitch, size_t dstHeight, ImageAccessor<Type> srcImg, size_t width, size_t height)
+		{
+			return this->memcpyLinearImage(dst, dstPitch, dstHeight, srcImg, width, height, 1);
+		}
+
+
+		/**
+		 *	@brief		Copies data between image and linear memory.
+		 *	@param[in]	dstImg - Accessor to the destination image.
+		 *	@param[in]	src - Source memory address.
+		 *	@param[in]	srcPitch - Pitch of source memory.
+		 *	@param[in]	srcHeight - Height of source memory.
+		 *	@param[in]	width - Width of matrix transfer (columns).
+		 *	@param[in]	height - Height of matrix transfer (rows).
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 */
+		template<typename Type> Stream & memcpy2D(ImageAccessor<Type> dstImg, const Type * src, size_t srcPitch, size_t srcHeight, size_t width, size_t height)
+		{
+			return this->memcpyImageLinear(dstImg, src, srcPitch, srcHeight, width, height, 1);
+		}
+
+
+		/**
+		 *	@brief		Copies data between images.
+		 *	@param[in]	dstImg - Accessor to the destination image.
+		 *	@param[in]	srcImg - Accessor to the source image.
+		 *	@param[in]	srcPitch - Offset of source image data.
+		 *	@param[in]	width - Width of matrix transfer (columns in bytes).
+		 *	@param[in]	height - Height of matrix transfer (rows).
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 *	@warning	The memory areas may not overlap.
+		 */
+		template<typename Type> Stream & memcpy2D(ImageAccessor<Type> dstImg, ImageAccessor<Type> srcImg, size_t width, size_t height)
+		{
+			return this->memcpyImage(dstImg, srcImg, width, height, 1);
+		}
+
+	public:
+
+		/**
 		 *	@brief		Copies \p count bytes from the memory area pointed to by \p src to the memory area pointed to by \p dst.
 		 *	@param[in]	dst - Destination memory address.
 		 *	@param[in]	src - Source memory address.
@@ -225,7 +326,54 @@ namespace NS_NAMESPACE
 			else
 				return this->memcpyLinear(dst, 0, 0, src, 0, 0, count, 1, 1);
 		}
-		
+
+
+		/**
+		 *	@brief		Copies data between linear memory and image.
+		 *	@param[in]	dst - Destination memory address.
+		 *	@param[in]	srcImg - Accessor to the source image.
+		 *	@param[in]	srcPosX - x offset of image data.
+		 *	@param[in]	srcPosY - y offset of image data.
+		 *	@param[in]	srcPosZ - z offset of image data.
+		 *	@param[in]	count - number of elements to copy.
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 */
+		template<typename Type> Stream & memcpy(Type * dst, ImageAccessor<Type> srcImg, size_t count)
+		{
+			return this->memcpyLinearImage(dst, 0, 0, srcImg, count, 1, 1);
+		}
+
+
+		/**
+		 *	@brief		Copies data between image and linear memory.
+		 *	@param[in]	dstImg - Accessor to the destination image.
+		 *	@param[in]	dstPosX - x offset of destination image data.
+		 *	@param[in]	dstPosY - y offset of destination image data.
+		 *	@param[in]	dstPosZ - z offset of destination image data.
+		 *	@param[in]	src - Source memory address.
+		 *	@param[in]	count - number of elements to copy.
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 */
+		template<typename Type> Stream & memcpy(ImageAccessor<Type> dstImg, const Type * src, size_t count)
+		{
+			return this->memcpyImageLinear(dstImg, src, 0, 0, count, 1, 1);
+		}
+
+
+		/**
+		 *	@brief		Copies data between images.
+		 *	@param[in]	dstImg - Accessor to the destination image.
+		 *	@param[in]	srcImg - Accessor to the source image.
+		 *	@param[in]	count - number of elements to copy.
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 *	@warning	The memory areas may not overlap.
+		 */
+		template<typename Type> Stream & memcpy(ImageAccessor<Type> dstImg, ImageAccessor<Type> srcImg, size_t count)
+		{
+			return this->memcpyImage(dstImg, srcImg, count, 1, 1);
+		}
+
+	public:
 
 		/**
 		 *	@brief		Initialize or set device memory to a value.
@@ -250,7 +398,7 @@ namespace NS_NAMESPACE
 	private:
 
 		/**
-		 *	@brief		Copies data between 3D linear memory.
+		 *	@brief		Copies data between linear memory.
 		 *	@param[in]	dst - Destination memory address.
 		 *	@param[in]	dstPitch - Pitch of destination memory.
 		 *	@param[in]	dstHeight - Height of destination memory.
@@ -260,11 +408,49 @@ namespace NS_NAMESPACE
 		 *	@param[in]	width - Width of matrix transfer (columns in bytes).
 		 *	@param[in]	height - Height of matrix transfer (rows).
 		 *	@param[in]	depth - Depth of matrix transfer (layers).
-		 *	@param[in]	extext - Extent of matrix transfer.
 		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 *	@warning	The memory areas may not overlap. \p width must not exceed either \p dstPitch or \p srcPitch.
 		 */
 		Stream & memcpyLinear(void * dst, size_t dstPitch, size_t dstHeight, const void * src, size_t srcPitch, size_t srcHeight, size_t width, size_t height, size_t depth);
+
+
+		/**
+		 *	@brief		Copies data between linear memory and image.
+		 *	@param[in]	dst - Destination memory address.
+		 *	@param[in]	dstPitch - Pitch of destination memory.
+		 *	@param[in]	dstHeight - Height of destination memory.
+		 *	@param[in]	srcImg - Accessor to the source image.
+		 *	@param[in]	width - Width of matrix transfer (columns).
+		 *	@param[in]	height - Height of matrix transfer (rows).
+		 *	@param[in]	depth - Depth of matrix transfer (layers).
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 */
+		Stream & memcpyLinearImage(void * dst, size_t dstPitch, size_t dstHeight, ImageAccessor<void> srcImg, size_t width, size_t height, size_t depth);
+
+
+		/**
+		 *	@brief		Copies data between image and linear memory.
+		 *	@param[in]	dstImg - Accessor to the destination image.
+		 *	@param[in]	src - Source memory address.
+		 *	@param[in]	srcPitch - Pitch of source memory.
+		 *	@param[in]	srcHeight - Height of source memory.
+		 *	@param[in]	width - Width of matrix transfer (columns).
+		 *	@param[in]	height - Height of matrix transfer (rows).
+		 *	@param[in]	depth - Depth of matrix transfer (layers).
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 */
+		Stream & memcpyImageLinear(ImageAccessor<void> dstImg, const void * src, size_t srcPitch, size_t srcHeight, size_t width, size_t height, size_t depth);
+
+
+		/**
+		 *	@brief		Copies data between images.
+		 *	@param[in]	dstImg - Accessor to the destination image.
+		 *	@param[in]	srcImg - Accessor to the source image.
+		 *	@param[in]	srcPitch - Offset of source image data.
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 *	@warning	The memory areas may not overlap.
+		 */
+		Stream & memcpyImage(ImageAccessor<void> dstImg, ImageAccessor<void> srcImg, size_t width, size_t height, size_t depth);
 
 
 		/**

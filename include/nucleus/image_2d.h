@@ -92,6 +92,11 @@ namespace NS_NAMESPACE
 		 *	@throw		cudaError_t - In case of failure.
 		 */
 		explicit Image2D(std::shared_ptr<DeviceAllocator> allocator, size_t width, size_t height, bool bSurfaceLoadStore = false) : Image2D<void>(allocator, FormatMapping<Type>::value, width, height, bSurfaceLoadStore) {}
+
+	public:
+
+		//	Returns accessor to the data.
+		ImageAccessor<Type> data() const { return ImageAccessor<Type>{ m_texHandle }; }
 	};
 
 	/*********************************************************************
@@ -165,6 +170,11 @@ namespace NS_NAMESPACE
 		 *	@throw		cudaError_t - In case of failure.
 		 */
 		explicit Image2DLayered(std::shared_ptr<DeviceAllocator> allocator, size_t width, size_t height, size_t numLayers, bool bSurfaceLoadStore = false) : Image2DLayered<void>(allocator, FormatMapping<Type>::value, width, height, numLayers, bSurfaceLoadStore) {}
+	
+	public:
+
+		//	Returns accessor to the data.
+		ImageAccessor<Type> data() const { return ImageAccessor<Type>{ m_texHandle }; }
 	};
 
 	/*********************************************************************

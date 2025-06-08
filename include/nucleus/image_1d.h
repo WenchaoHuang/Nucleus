@@ -82,6 +82,11 @@ namespace NS_NAMESPACE
 		 *	@param[in]	bSurfaceLoadStore - Boolean flag indicating whether the buffer should support surface load/store operations.
 		 */
 		explicit Image1D(std::shared_ptr<DeviceAllocator> allocator, size_t width, bool bSurfaceLoadStore = false) : Image1D<void>(allocator, FormatMapping<Type>::value, width, bSurfaceLoadStore) {}
+
+	public:
+
+		//	Returns accessor to the data.
+		ImageAccessor<Type> data() const { return ImageAccessor<Type>{ m_texHandle }; }
 	};
 
 	/*********************************************************************
@@ -148,6 +153,11 @@ namespace NS_NAMESPACE
 		 *	@param[in]	bSurfaceLoadStore - Boolean flag indicating whether the buffer should support surface load/store operations.
 		 */
 		explicit Image1DLayered(std::shared_ptr<DeviceAllocator> allocator, size_t width, size_t numLayers, bool bSurfaceLoadStore = false) : Image1DLayered<void>(allocator, FormatMapping<Type>::value, width, numLayers, bSurfaceLoadStore) {}
+
+	public:
+
+		//	Returns accessor to the data.
+		ImageAccessor<Type> data() const { return ImageAccessor<Type>{ m_texHandle }; }
 	};
 
 	/*********************************************************************

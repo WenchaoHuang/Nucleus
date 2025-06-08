@@ -23,6 +23,7 @@
 
 #include "fwd.h"
 #include "format.h"
+#include "host_types.h"
 #include <vector>
 
 namespace NS_NAMESPACE
@@ -78,11 +79,11 @@ namespace NS_NAMESPACE
 		//	Returns the texel format of the image.
 		Format format() const { return m_format; }
 
-		//	Returns CUDA type of this object.
-		cudaArray_t getHandle() const { return m_texHandle; }
-
 		//	Returns pointer to the allocator associated with.
 		std::shared_ptr<DeviceAllocator> getAllocator() const { return m_allocator; }
+
+		//	Returns accessor to the data.
+		ImageAccessor<void> data() const { return ImageAccessor<void>{ m_texHandle }; }
 
 		//	Checks if the buffer supports surface load/store operations.
 		bool isSurfaceLoadStoreSupported() const;

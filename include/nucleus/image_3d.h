@@ -96,6 +96,11 @@ namespace NS_NAMESPACE
 		 *	@throw		cudaError_t - In case of failure.
 		 */
 		explicit Image3D(std::shared_ptr<DeviceAllocator> allocator, size_t width, size_t height, size_t depth, bool bSurfaceLoadStore = false) : Image3D<void>(allocator, FormatMapping<Type>::value, width, height, depth, bSurfaceLoadStore) {}
+
+	public:
+
+		//	Returns accessor to the data.
+		ImageAccessor<Type> data() const { return ImageAccessor<Type>{ m_texHandle }; }
 	};
 
 	/*********************************************************************

@@ -22,8 +22,7 @@
 #pragma once
 
 #include "fwd.h"
-#include "version.h"
-
+#include "host_types.h"
 #include <vector>
 
 namespace NS_NAMESPACE

@@ -45,7 +45,6 @@
 
 namespace NS_NAMESPACE
 {
-	class Image;
 	class Event;
 	class Graph;
 	class Buffer;
@@ -143,6 +142,7 @@ namespace NS_NAMESPACE
 	template<typename Type> class Texture2DLayeredLod;
 	template<typename Type> class TextureCubeLayeredLod;
 
+	template<typename Type> struct ImageAccessor;
 	template<typename... Args> using KernelFunc = void(*)(Args...);
 }
 

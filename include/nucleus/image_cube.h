@@ -85,6 +85,11 @@ namespace NS_NAMESPACE
 		 *	@throw		cudaError_t - In case of failure.
 		 */
 		explicit ImageCube(std::shared_ptr<DeviceAllocator> allocator, size_t width, bool bSurfaceLoadStore = false) : ImageCube<void>(allocator, FormatMapping<Type>::value, width, bSurfaceLoadStore) {}
+
+	public:
+
+		//	Returns accessor to the data.
+		ImageAccessor<Type> data() const { return ImageAccessor<Type>{ m_texHandle }; }
 	};
 
 	/*********************************************************************
@@ -153,6 +158,11 @@ namespace NS_NAMESPACE
 		 *	@throw		cudaError_t - In case of failure.
 		 */
 		explicit ImageCubeLayered(std::shared_ptr<DeviceAllocator> allocator, size_t width, size_t numLayers, bool bSurfaceLoadStore = false) : ImageCubeLayered<void>(allocator, FormatMapping<Type>::value, width, numLayers, bSurfaceLoadStore) {}
+	
+	public:
+
+		//	Returns accessor to the data.
+		ImageAccessor<Type> data() const { return ImageAccessor<Type>{ m_texHandle }; }
 	};
 
 	/*********************************************************************

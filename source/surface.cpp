@@ -43,7 +43,7 @@ void Surface::bindImage(std::shared_ptr<Image> pImage)
 
 	cudaResourceDesc resDesc = {};
 	resDesc.resType = cudaResourceTypeArray;
-	resDesc.res.array.array = pImage->getHandle();
+	resDesc.res.array.array = pImage->data().handle;
 
 	cudaError_t err = cudaCreateSurfaceObject(&m_hSurface, &resDesc);
 
