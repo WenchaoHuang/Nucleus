@@ -38,6 +38,8 @@
 ***************************    stream_event    ***************************
 *************************************************************************/
 
+__constant__ int cache[100];
+
 __global__ void test_kernel()
 {
 	CUDA_for(i, 1);
@@ -56,13 +58,13 @@ void test_stream()
 	stream->query();
 	assert(stream->getDevice() == device);
 	assert(stream->getHandle() == nullptr);
-	
+
 	int a;
 	auto pfnTask = [](int*) { printf("host: Happy Nucleus!\n"); };
 	stream->launchHostFunc<int>(pfnTask, &a);
 	stream->launch(test_kernel, ns::ceil_div(15, 32), 32)();
 
-	std::vector<int>	host_data(100, 0);
+	std::vector<int>	host_data(100, 33);
 	ns::Array<int>		dev_data1(allocator, 100);
 	ns::Array2D<int>	dev_data2(allocator, 10, 10);
 	ns::Array3D<int>	dev_data3(allocator, 2, 5, 10);
@@ -119,5 +121,15 @@ void test_stream()
 	for (size_t i = 0; i < host_data.size(); i++)
 	{
 		assert(host_data[i] == 6);
+	}
+
+	host_data.assign(100, 7);
+	stream->memcpyToSymbol(cache, host_data.data(), host_data.size());
+	host_data.assign(100, 0);
+	stream->memcpyFromSymbol(host_data.data(), cache, host_data.size());
+
+	for (size_t i = 0; i < host_data.size(); i++)
+	{
+		assert(host_data[i] == 7);
 	}
 }

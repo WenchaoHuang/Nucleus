@@ -376,6 +376,55 @@ namespace NS_NAMESPACE
 	public:
 
 		/**
+		 *	@brief		Copies data to the given symbol on the device.
+		 *	@param[in]	symbol - Device symbol address.
+		 *	@param[in]	offset - Offset from start of symbol (in bytes when Type = void).
+		 *	@param[in]	src - Source memory address.
+		 *	@param[in]	count - Element count to copy (in bytes when Type = void).
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 */
+		template<typename Type> Stream & memcpyToSymbol(Type * symbol, size_t offset, const Type * src, size_t count)
+		{
+			if constexpr (!std::is_same_v<Type, void>)
+				return this->memcpyToSymbol_void(symbol, offset * sizeof(Type), src, count * sizeof(Type));
+			else
+				return this->memcpyToSymbol_void(symbol, offset, src, count);
+		}
+		template<typename Type> Stream & memcpyToSymbol(Type * symbol, const Type * src, size_t count)
+		{
+			if constexpr (!std::is_same_v<Type, void>)
+				return this->memcpyToSymbol_void(symbol, 0, src, count * sizeof(Type));
+			else
+				return this->memcpyToSymbol_void(symbol, 0, src, count);
+		}
+
+
+		/**
+		 *	@brief		Copies data from the given symbol on the device
+		 *	@param[in]	src - Destination memory address.
+		 *	@param[in]	symbol - Device symbol address.
+		 *	@param[in]	offset - Offset from start of symbol (in bytes when Type = void).
+		 *	@param[in]	count - Element count to copy (in bytes when Type = void).
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 */
+		template<typename Type> Stream & memcpyFromSymbol(Type * dst, const Type * symbol, size_t offset, size_t count)
+		{
+			if (!std::is_same_v<Type, void>)
+				return this->memcpyFromSymbol_void(dst, symbol, offset * sizeof(Type), count * sizeof(Type));
+			else
+				return this->memcpyFromSymbol_void(dst, symbol, offset, count);
+		}
+		template<typename Type> Stream & memcpyFromSymbol(Type * dst, const Type * symbol, size_t count)
+		{
+			if (!std::is_same_v<Type, void>)
+				return this->memcpyFromSymbol_void(dst, symbol, 0, count * sizeof(Type));
+			else
+				return this->memcpyFromSymbol_void(dst, symbol, 0, count);
+		}
+
+	public:
+
+		/**
 		 *	@brief		Initialize or set device memory to a value.
 		 *	@param[in]	pValues - Pointer to the device memory.
 		 *	@param[in]	value - Value to set for.
@@ -451,6 +500,28 @@ namespace NS_NAMESPACE
 		 *	@warning	The memory areas may not overlap.
 		 */
 		Stream & memcpyImage(ImageAccessor<void> dstImg, ImageAccessor<void> srcImg, size_t width, size_t height, size_t depth);
+
+
+		/**
+		 *	@brief		Copies data from the given symbol on the device
+		 *	@param[in]	src - Destination memory address.
+		 *	@param[in]	symbol - Device symbol address.
+		 *	@param[in]	offset - Offset from start of symbol in bytes.
+		 *	@param[in]	count - Element count to copy in bytes.
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 */
+		Stream & memcpyFromSymbol_void(void * dst, const void * symbol, size_t offset, size_t count);
+
+
+		/**
+		 *	@brief		Copies data to the given symbol on the device.
+		 *	@param[in]	symbol - Device symbol address.
+		 *	@param[in]	offset - Offset from start of symbol in bytes.
+		 *	@param[in]	src - Source memory address.
+		 *	@param[in]	count - Element count to copy in bytes.
+		 *	@retval		Stream - Reference to this stream (enables method chaining).
+		 */
+		Stream & memcpyToSymbol_void(void * symbol, size_t offset, const void * src, size_t count);
 
 
 		/**

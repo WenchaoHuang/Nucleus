@@ -250,6 +250,40 @@ Stream & Stream::memcpyImage(ImageAccessor<void> dstImg, ImageAccessor<void> src
 }
 
 
+Stream & Stream::memcpyToSymbol_void(void * symbol, size_t offset, const void * src, size_t count)
+{
+	this->acquireDeviceContext();
+
+	cudaError_t err = cudaMemcpyToSymbolAsync(symbol, src, count, offset, cudaMemcpyHostToDevice, m_hStream);
+
+	if (err != cudaSuccess)
+	{
+		NS_ERROR_LOG("%s.", cudaGetErrorString(err));
+
+		cudaGetLastError();
+	}
+
+	return *this;
+}
+
+
+Stream & Stream::memcpyFromSymbol_void(void * dst, const void * symbol, size_t offset, size_t count)
+{
+	this->acquireDeviceContext();
+
+	cudaError_t err = cudaMemcpyFromSymbolAsync(dst, symbol, count, offset, cudaMemcpyDeviceToHost, m_hStream);
+
+	if (err != cudaSuccess)
+	{
+		NS_ERROR_LOG("%s.", cudaGetErrorString(err));
+
+		cudaGetLastError();
+	}
+
+	return *this;
+}
+
+
 Stream & Stream::memsetZero(void * address, size_t bytes)
 {
 	this->acquireDeviceContext();
