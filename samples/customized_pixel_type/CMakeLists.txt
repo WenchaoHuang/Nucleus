@@ -20,14 +20,24 @@
 
 cmake_minimum_required(VERSION 3.18)
 
-# Project name
-project(Nucleus-Samples)
+# Target name
+set(TARGET_NAME customized_pixel_type)
+project(${TARGET_NAME} LANGUAGES CXX CUDA)
 
-# Organize targets into folders
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+# Create the executable target
+add_executable(${TARGET_NAME} main.cu)
 
-# Add samples
-add_subdirectory(JuliaSet)
-add_subdirectory(pinned_memory)
-add_subdirectory(customized_allocator)
-add_subdirectory(customized_pixel_type)
+# Include directories
+target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
+
+# Link directories
+target_link_libraries(${TARGET_NAME} PRIVATE nucleus cudart_static)
+
+# 设置CUDA编译属性
+set_target_properties(${TARGET_NAME} PROPERTIES
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_ARCHITECTURES "75"
+)
+
+set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "Samples")
