@@ -25,7 +25,7 @@ set(TARGET_NAME julia_set)
 project(${TARGET_NAME} LANGUAGES CXX CUDA)
 
 # Create the executable target
-add_executable(${TARGET_NAME} julia_set.cu)
+add_executable(${TARGET_NAME} main.cu)
 
 # Include directories
 target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)

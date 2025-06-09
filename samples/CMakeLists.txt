@@ -27,7 +27,10 @@ project(Nucleus-Samples)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Add samples
-add_subdirectory(JuliaSet)
 add_subdirectory(pinned_memory)
 add_subdirectory(customized_allocator)
 add_subdirectory(customized_pixel_type)
+
+if(MSVC)
+	add_subdirectory(julia_set)
+endif()
