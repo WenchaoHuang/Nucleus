@@ -32,20 +32,29 @@
 NS_USING_NAMESPACE
 
 /*************************************************************************
+****************************    ImageBase    *****************************
+*************************************************************************/
+
+ImageBase::ImageBase(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t height, size_t depth, int flags)
+	: m_allocator(allocator), m_format(format), m_width(static_cast<uint32_t>(width)), m_height(static_cast<uint32_t>(height)),
+	  m_depth(static_cast<uint32_t>(depth)), m_flags(flags)
+{
+
+}
+
+/*************************************************************************
 ******************************    Image    *******************************
 *************************************************************************/
 
 Image::Image(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t height, size_t depth, int flags)
-	: m_allocator(allocator), m_hImage(allocator->allocateTextureMemory(format, width, height, depth, flags)), m_format(format),
-	  m_width(static_cast<uint32_t>(width)), m_height(static_cast<uint32_t>(height)), m_depth(static_cast<uint32_t>(depth)), m_flags(flags)
+	: ImageBase(allocator, format, width, height, depth, flags), m_hImage(allocator->allocateTextureMemory(format, width, height, depth, flags))
 {
 	NS_ASSERT(allocator != nullptr);
 }
 
 
 Image::Image(cudaArray_t hImage, Format format, size_t width, size_t height, size_t depth, int flags)
-	: m_allocator(nullptr), m_hImage(hImage), m_format(format), m_width(static_cast<uint32_t>(width)),
-	  m_height(static_cast<uint32_t>(height)), m_depth(static_cast<uint32_t>(depth)), m_flags(flags)
+	: ImageBase(nullptr, format, width, height, depth, flags), m_hImage(hImage)
 {
 	NS_ASSERT(hImage != nullptr);
 }
@@ -70,8 +79,8 @@ Image::~Image() noexcept
 *************************************************************************/
 
 ImageLod::ImageLod(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t height, size_t depth, unsigned int numLevels, int flags)
-	: m_allocator(allocator), m_hImageLod(allocator->allocateMipmapTextureMemory(format, width, height, depth, numLevels, flags)), m_format(format),
-	m_width(static_cast<uint32_t>(width)), m_height(static_cast<uint32_t>(height)), m_depth(static_cast<uint32_t>(depth)), m_numLevels(numLevels), m_flags(flags)
+	: ImageBase(allocator, format, width, height, depth, flags), m_numLevels(numLevels),
+	  m_hImageLod(allocator->allocateMipmapTextureMemory(format, width, height, depth, numLevels, flags))
 {
 	NS_ASSERT(allocator != 0);
 }

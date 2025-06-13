@@ -29,14 +29,65 @@
 namespace NS_NAMESPACE
 {
 	/*********************************************************************
+	**************************    ImageBase    ***************************
+	*********************************************************************/
+
+	/**
+	 *	@brief		Base class of `Image` and `ImageLod`
+	 */
+	class ImageBase
+	{
+
+	protected:
+
+		/**
+		 *	@brief		Constructor
+		 *	@param[in]	allocator - Pointer to the associated allocator.
+		 *	@param[in]	format - Texel format of the image.
+		 *	@param[in]	width - Width of the image.
+		 *	@param[in]	height - height of the image.
+		 *	@param[in]	depth - Depth of the image.
+		 *	@param[in]	flags - Flags for image creation (interanl use).
+		 */
+		explicit ImageBase(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t height, size_t depth, int flags);
+
+
+		/**
+		 *	@brief		Virtual destructor.
+		 */
+		virtual ~ImageBase() noexcept {}
+
+	public:
+
+		//	Returns the texel format of the image.
+		Format format() const { return m_format; }
+
+		//	Retruns the width of the image.
+		uint32_t width() const { return m_width; }
+
+		//	Returns pointer to the allocator associated with.
+		std::shared_ptr<DeviceAllocator> getAllocator() const { return m_allocator; }
+
+	protected:
+
+		const std::shared_ptr<DeviceAllocator>		m_allocator;
+		const Format								m_format;
+		const uint32_t								m_width;
+		const uint32_t								m_height;
+		const uint32_t								m_depth;
+		const int									m_flags;
+	};
+
+	/*********************************************************************
 	****************************    Image    *****************************
 	*********************************************************************/
 
 	/**
 	 *	@brief		Base class represents a arbitrary texture memory.
 	 *	@note		Texture memory are opaque memory layouts optimized for texture fetching.
+	 *	@see		class `ImageBase`
 	 */
-	class Image
+	class Image : public ImageBase
 	{
 		
 	protected:
@@ -73,30 +124,15 @@ namespace NS_NAMESPACE
 
 	public:
 
-		//	Returns the texel format of the image.
-		Format format() const { return m_format; }
-
-		//	Retruns the width of the image.
-		uint32_t width() const { return m_width; }
-
 		//	Returns accessor to the data.
 		ImageAccessor<void> data() const { return ImageAccessor<void>{ m_hImage }; }
-
-		//	Returns pointer to the allocator associated with.
-		std::shared_ptr<DeviceAllocator> getAllocator() const { return m_allocator; }
 
 		//	Checks if the buffer supports surface load/store operations.
 		bool isSurfaceLoadStoreSupported() const;
 
 	protected:
         
-        const cudaArray_t							m_hImage;
-		const std::shared_ptr<DeviceAllocator>		m_allocator;
-		const Format								m_format;
-        const uint32_t								m_width;
-        const uint32_t								m_height;
-		const uint32_t								m_depth;
-		const int									m_flags;
+        const cudaArray_t		m_hImage;
 	};
 
 	/*********************************************************************
@@ -106,9 +142,9 @@ namespace NS_NAMESPACE
 	/**
 	 *	@brief		Base class represents a arbitrary mipmapped texture memory.
 	 *  @note		Texture memory are opaque memory layouts optimized for texture fetching.
-	 *	@see		class `Image`
+	 *	@see		class `ImageBase` and `Image`
 	 */
-	class ImageLod
+	class ImageLod : public ImageBase
 	{
 
 	protected:
@@ -134,30 +170,15 @@ namespace NS_NAMESPACE
 
 	public:
 
-		//	Returns the texel format of the image.
-		Format format() const { return m_format; }
-
-		//	Retruns the width of the image.
-		uint32_t width() const { return m_width; }
+		//	Returns CUDA type of this object.
+		cudaMipmappedArray_t getHandle() const { return m_hImageLod; }
 
 		//	Returns the number of mipmap levels.
 		unsigned int numLevels() const { return m_numLevels; }
 
-		//	Returns CUDA type of this object.
-		cudaMipmappedArray_t getHandle() const { return m_hImageLod; }
-
-		//	Returns pointer to the allocator associated with.
-		std::shared_ptr<DeviceAllocator> getAllocator() const { return m_allocator; }
-
 	protected:
 
-		const cudaMipmappedArray_t					m_hImageLod;
-		const std::shared_ptr<DeviceAllocator>		m_allocator;
-		const unsigned int							m_numLevels;
-		const Format								m_format;
-		const uint32_t								m_width;
-		const uint32_t								m_height;
-		const uint32_t								m_depth;
-		const int									m_flags;
+		const cudaMipmappedArray_t		m_hImageLod;
+		const unsigned int				m_numLevels;
 	};
 }
