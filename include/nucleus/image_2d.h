@@ -53,7 +53,7 @@ namespace NS_NAMESPACE
 
 		/**
 		 *	@brief		Constructs from Image2DLod.
-		 *	@param[in]	texHandle - Handle of texture memory (from cudaMipmappedArray_t).
+		 *	@param[in]	hImage - Handle of texture memory (from cudaMipmappedArray_t).
 		 *	@param[in]	format - Texel format of the image.
 		 *	@param[in]	width - Width of the image.
 		 *	@param[in]	height - height of the image.
@@ -62,7 +62,7 @@ namespace NS_NAMESPACE
 		 *	@throw		cudaError_t - In case of failure.
 		 *	@note		Created by class `Image2DLod<void>` only.
 		 */
-		explicit Image2D(cudaArray_t texHandle, Format format, size_t width, size_t height, size_t depth, int flags) : Image(texHandle, format, width, height, depth, flags) {}
+		explicit Image2D(cudaArray_t hImage, Format format, size_t width, size_t height, size_t depth, int flags) : Image(hImage, format, width, height, depth, flags) {}
 
 	public:
 
@@ -96,7 +96,7 @@ namespace NS_NAMESPACE
 	public:
 
 		//	Returns accessor to the data.
-		ImageAccessor<Type> data() const { return ImageAccessor<Type>{ m_texHandle }; }
+		ImageAccessor<Type> data() const { return ImageAccessor<Type>{ m_hImage }; }
 	};
 
 	/*********************************************************************
@@ -128,7 +128,7 @@ namespace NS_NAMESPACE
 
 		/**
 		 *	@brief		Constructs from MipmappedTextureMemory2DLayered.
-		 *	@param[in]	texHandle - Handle of texture memory (from cudaMipmappedArray_t).
+		 *	@param[in]	hImage - Handle of texture memory (from cudaMipmappedArray_t).
 		 *	@param[in]	format - Texel format of the image.
 		 *	@param[in]	width - Width of the image.
 		 *	@param[in]	height - height of the image.
@@ -137,7 +137,7 @@ namespace NS_NAMESPACE
 		 *	@throw		cudaError_t - In case of failure.
 		 *	@note		Created by class `Image2DLayeredLod<void>` only.
 		 */
-		explicit Image2DLayered(cudaArray_t texHandle, Format format, size_t width, size_t height, size_t depth, int flags) : Image(texHandle, format, width, height, depth, flags) {}
+		explicit Image2DLayered(cudaArray_t hImage, Format format, size_t width, size_t height, size_t depth, int flags) : Image(hImage, format, width, height, depth, flags) {}
 
 	public:
 
@@ -174,7 +174,7 @@ namespace NS_NAMESPACE
 	public:
 
 		//	Returns accessor to the data.
-		ImageAccessor<Type> data() const { return ImageAccessor<Type>{ m_texHandle }; }
+		ImageAccessor<Type> data() const { return ImageAccessor<Type>{ m_hImage }; }
 	};
 
 	/*********************************************************************

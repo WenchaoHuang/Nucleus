@@ -60,9 +60,9 @@ namespace NS_NAMESPACE
 	 *				- lower_case (ns_bounds_check): For ergonomic coding and rapid prototyping
 	 *				(Can you guess which one I prefer?)
 	 */
-	#define ns_bounds_check(i, num_threads)		const auto i = ns::tid();	if (i >= (num_threads)) return;
-	#define NS_BOUNDS_CHECK(i, num_threads)		ns_bounds_check(i, num_threads)
-	#define CUDA_for(i, num_threads)			ns_bounds_check(i, num_threads)
+	#define NS_BOUNDS_CHECK(i, num_threads)		const auto i = ns::tid();	if (i >= (num_threads)) return;
+	#define ns_bounds_check(i, num_threads)		NS_BOUNDS_CHECK(i, num_threads)
+	#define CUDA_for(i, num_threads)			NS_BOUNDS_CHECK(i, num_threads)
 
 	/*********************************************************************
 	****************************    kernel    ****************************
@@ -83,8 +83,8 @@ namespace NS_NAMESPACE
 	/**
 	 *	@brief		Prepares to launch a CUDA kernel with specified parameters and dependencies.
 	 *	@param[in]	func - Device function symbol.
-	 *	@param[in]	gDim - Grid dimensions.
-	 *	@param[in]	bDim - Block dimensions.
+	 *	@param[in]	gridDim - Grid dimensions.
+	 *	@param[in]	blockDim - Block dimensions.
 	 *	@param[in]	sharedMem - Number of bytes for shared memory.
 	 *	@example	stream.launch(KernelAdd, gridDim, blockDim, sharedMem)(A, B, C, count);
 	 *	@note		The returned lambda is a temporary object that should be used immediately to configure and launch the kernel.

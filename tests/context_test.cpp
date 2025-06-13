@@ -28,9 +28,11 @@
 
 void test_context()
 {
-	NS_ASSERT(ns::Version(10, 2) < ns::Version(10, 3));
-	NS_ASSERT(ns::Version(10, 4) > ns::Version(10, 3));
-	NS_ASSERT(ns::Version(10, 5) == ns::Version(10, 5));
+	assert(ns::Version(10, 2) < ns::Version(10, 3));
+	assert(ns::Version(10, 4) > ns::Version(10, 3));
+	assert(ns::Version(10, 5) == ns::Version(10, 5));
+	assert(ns::Version(10, 5) >= ns::Version(10, 5));
+	assert(ns::Version(10, 5) <= ns::Version(10, 5));
 
 	auto context = ns::Context::getInstance();
 	auto driverVersion = context->getDriverVersion();

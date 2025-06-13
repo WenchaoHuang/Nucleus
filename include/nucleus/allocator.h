@@ -30,7 +30,8 @@ namespace NS_NAMESPACE
 	*********************************************************************/
 
 	/**
-	 *	@brief		An abstract interface to an unbounded set of classes encapsulating memory resources accessible to the device.
+	 *	@brief		An abstract interface to an unbounded set of classes
+	 *				encapsulating memory resources accessible to the device.
 	 */
 	class NS_NOVTABLE Allocator
 	{
@@ -122,7 +123,7 @@ namespace NS_NAMESPACE
 		explicit DeviceAllocator(Device * pDevice);
 
 		//!	@brief		Return pointer to the device associated with.
-		Device * getDevice() const { return m_pDevice; }
+		Device * getDevice() const { return m_device; }
 
 	public:
 
@@ -189,6 +190,6 @@ namespace NS_NAMESPACE
 
 	private:
 
-		Device * const		m_pDevice;
+		Device * const		m_device;
 	};
 }

@@ -67,11 +67,11 @@ void HostAllocator::doDeallocateMemory(void * ptr)
 	}
 }
 
-
 /*************************************************************************
 *************************    DeviceAllocator    **************************
 *************************************************************************/
-DeviceAllocator::DeviceAllocator(class Device * pDevice) : m_pDevice(pDevice)
+
+DeviceAllocator::DeviceAllocator(class Device * pDevice) : m_device(pDevice)
 {
 	NS_ASSERT(pDevice != nullptr);
 }
@@ -113,7 +113,7 @@ static cudaChannelFormatDesc CreateChannelDesc(Format eFormat)
 
 cudaArray_t DeviceAllocator::allocateTextureMemory(Format eFormat, size_t width, size_t height, size_t depth, int flags)
 {
-	m_pDevice->setCurrent();
+	m_device->setCurrent();
 
 	cudaArray_t hArray = nullptr;
 
@@ -136,7 +136,7 @@ cudaArray_t DeviceAllocator::allocateTextureMemory(Format eFormat, size_t width,
 
 cudaMipmappedArray_t DeviceAllocator::allocateMipmapTextureMemory(Format eFormat, size_t width, size_t height, size_t depth, unsigned int numLevels, int flags)
 {
-	m_pDevice->setCurrent();
+	m_device->setCurrent();
 
 	cudaMipmappedArray_t hMipmapedArray = nullptr;
 
@@ -187,7 +187,7 @@ void * DeviceAllocator::doAllocateMemory(size_t bytes)
 {
 	void * ptr = nullptr;
 
-	m_pDevice->setCurrent();
+	m_device->setCurrent();
 
 	cudaError_t err = cudaMalloc(&ptr, bytes);
 

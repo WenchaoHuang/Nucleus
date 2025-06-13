@@ -52,7 +52,7 @@ namespace NS_NAMESPACE
 
 		/**
 		 *	@brief		Constructs from ImageCubeLod.
-		 *	@param[in]	hArray - Handle of texture memory (from cudaMipmappedArray_t).
+		 *	@param[in]	hImage - Handle of texture memory (from cudaMipmappedArray_t).
 		 *	@param[in]	format - Texel format of the image.
 		 *	@param[in]	width - Width of the image.
 		 *	@param[in]	height - height of the image.
@@ -61,7 +61,7 @@ namespace NS_NAMESPACE
 		 *	@throw		cudaError_t - In case of failure.
 		 * 	@note		Created by class `ImageCubeLod<void>` only.
 		 */
-		explicit ImageCube(cudaArray_t hArray, Format format, size_t width, size_t height, size_t depth, int flags) : Image(hArray, format, width, height, depth, flags) {}
+		explicit ImageCube(cudaArray_t hImage, Format format, size_t width, size_t height, size_t depth, int flags) : Image(hImage, format, width, height, depth, flags) {}
 	};
 
 	/*********************************************************************
@@ -89,7 +89,7 @@ namespace NS_NAMESPACE
 	public:
 
 		//	Returns accessor to the data.
-		ImageAccessor<Type> data() const { return ImageAccessor<Type>{ m_texHandle }; }
+		ImageAccessor<Type> data() const { return ImageAccessor<Type>{ m_hImage }; }
 	};
 
 	/*********************************************************************
@@ -120,7 +120,7 @@ namespace NS_NAMESPACE
 
 		/**
 		 *	@brief		Constructs from MipmappedTextureMemoryCubemapLayered.
-		 *	@param[in]	hArray - Handle of texture memory (from cudaMipmappedArray_t).
+		 *	@param[in]	hImage - Handle of texture memory (from cudaMipmappedArray_t).
 		 *	@param[in]	format - Texel format of the image.
 		 *	@param[in]	width - Width of the image.
 		 *	@param[in]	height - height of the image.
@@ -129,7 +129,7 @@ namespace NS_NAMESPACE
 		 *	@throw		cudaError_t - In case of failure.
 		 * 	@note		Created by class `ImageCubeLayeredLod<void>` only.
 		 */
-		explicit ImageCubeLayered(cudaArray_t hArray, Format format, size_t width, size_t height, size_t depth, int flags) : Image(hArray, format, width, height, depth, flags) {}
+		explicit ImageCubeLayered(cudaArray_t hImage, Format format, size_t width, size_t height, size_t depth, int flags) : Image(hImage, format, width, height, depth, flags) {}
 
 	public:
 
@@ -162,7 +162,7 @@ namespace NS_NAMESPACE
 	public:
 
 		//	Returns accessor to the data.
-		ImageAccessor<Type> data() const { return ImageAccessor<Type>{ m_texHandle }; }
+		ImageAccessor<Type> data() const { return ImageAccessor<Type>{ m_hImage }; }
 	};
 
 	/*********************************************************************

@@ -36,18 +36,18 @@ NS_USING_NAMESPACE
 *************************************************************************/
 
 Image::Image(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t height, size_t depth, int flags)
-	: m_allocator(allocator), m_texHandle(allocator->allocateTextureMemory(format, width, height, depth, flags)), m_format(format),
-	m_width(static_cast<uint32_t>(width)), m_height(static_cast<uint32_t>(height)), m_depth(static_cast<uint32_t>(depth)), m_flags(flags)
+	: m_allocator(allocator), m_hImage(allocator->allocateTextureMemory(format, width, height, depth, flags)), m_format(format),
+	  m_width(static_cast<uint32_t>(width)), m_height(static_cast<uint32_t>(height)), m_depth(static_cast<uint32_t>(depth)), m_flags(flags)
 {
 	NS_ASSERT(allocator != nullptr);
 }
 
 
-Image::Image(cudaArray_t texHandle, Format format, size_t width, size_t height, size_t depth, int flags)
-	: m_texHandle(texHandle), m_format(format), m_width(static_cast<uint32_t>(width)), m_height(static_cast<uint32_t>(height)),
-	m_depth(static_cast<uint32_t>(depth)), m_flags(flags)
+Image::Image(cudaArray_t hImage, Format format, size_t width, size_t height, size_t depth, int flags)
+	: m_allocator(nullptr), m_hImage(hImage), m_format(format), m_width(static_cast<uint32_t>(width)),
+	  m_height(static_cast<uint32_t>(height)), m_depth(static_cast<uint32_t>(depth)), m_flags(flags)
 {
-	NS_ASSERT(texHandle != nullptr);
+	NS_ASSERT(hImage != nullptr);
 }
 
 
@@ -59,9 +59,9 @@ bool Image::isSurfaceLoadStoreSupported() const
 
 Image::~Image() noexcept
 {
-	if ((m_allocator != nullptr) && (m_texHandle != nullptr))
+	if ((m_allocator != nullptr) && (m_hImage != nullptr))
 	{
-		m_allocator->deallocateTextureMemory(m_texHandle);
+		m_allocator->deallocateTextureMemory(m_hImage);
 	}
 }
 
@@ -70,20 +70,32 @@ Image::~Image() noexcept
 *************************************************************************/
 
 ImageLod::ImageLod(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t height, size_t depth, unsigned int numLevels, int flags)
-	: m_allocator(allocator), m_texHandle(allocator->allocateMipmapTextureMemory(format, width, height, depth, numLevels, flags)), m_format(format),
+	: m_allocator(allocator), m_hImageLod(allocator->allocateMipmapTextureMemory(format, width, height, depth, numLevels, flags)), m_format(format),
 	m_width(static_cast<uint32_t>(width)), m_height(static_cast<uint32_t>(height)), m_depth(static_cast<uint32_t>(depth)), m_numLevels(numLevels), m_flags(flags)
 {
 	NS_ASSERT(allocator != 0);
 }
 
 
-std::vector<cudaArray_t> ImageLod::getMipmapHandles() const
+ImageLod::~ImageLod()
 {
-	std::vector<cudaArray_t> mipmapHandles(m_numLevels);
-
-	for (unsigned int i = 0; i < m_numLevels; i++)
+	if ((m_allocator != nullptr) && (m_hImageLod != nullptr))
 	{
-		cudaError_t err = cudaGetMipmappedArrayLevel(mipmapHandles.data() + i, m_texHandle, i);
+		m_allocator->deallocateMipmapTextureMemory(m_hImageLod);
+	}
+}
+
+/*************************************************************************
+************************    NS_CREATE_MIPMAPS    *************************
+*************************************************************************/
+
+static std::vector<cudaArray_t> getMipmapHandles(cudaMipmappedArray_t hImageLod, unsigned int numLevels)
+{
+	std::vector<cudaArray_t> hImages(numLevels);
+
+	for (unsigned int i = 0; i < numLevels; i++)
+	{
+		cudaError_t err = cudaGetMipmappedArrayLevel(hImages.data() + i, hImageLod, i);
 
 		if (err != cudaSuccess)
 		{
@@ -95,25 +107,12 @@ std::vector<cudaArray_t> ImageLod::getMipmapHandles() const
 		}
 	}
 
-	return mipmapHandles;
+	return hImages;
 }
-
-
-ImageLod::~ImageLod()
-{
-	if ((m_allocator != nullptr) && (m_texHandle != nullptr))
-	{
-		m_allocator->deallocateMipmapTextureMemory(m_texHandle);
-	}
-}
-
-/*************************************************************************
-************************    NS_CREATE_MIPMAPS    *************************
-*************************************************************************/
 
 #define NS_CREATE_MIPMAPS(ImageType)										\
 																			\
-	auto mipmapHandles = this->getMipmapHandles();							\
+	auto mipmapHandles = getMipmapHandles(m_hImageLod, m_numLevels);		\
 																			\
 	m_mipmaps.resize(mipmapHandles.size());									\
 																			\

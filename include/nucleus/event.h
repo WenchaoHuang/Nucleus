@@ -87,7 +87,7 @@ namespace NS_NAMESPACE
 
 
 		/**
-		 *	@brief		query an event's status.
+		 *	@brief		Query an event's status.
 		 *	@retval		True - If all captured work has been completed.
 		 */
 		bool query() const;

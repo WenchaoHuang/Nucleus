@@ -154,8 +154,8 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Prepares to launch a CUDA kernel with specified parameters and dependencies.
 		 *	@param[in]	func - Device function symbol.
-		 *	@param[in]	gDim - Grid dimensions.
-		 *	@param[in]	bDim - Block dimensions.
+		 *	@param[in]	gridDim - Grid dimensions.
+		 *	@param[in]	blockDim - Block dimensions.
 		 *	@param[in]	sharedMem - Number of bytes for shared memory.
 		 *	@example	stream.launch(KernelAdd, gridDim, blockDim, sharedMem)(A, B, C, count);
 		 *	@note		The returned lambda is a temporary object that should be used immediately to configure and launch the kernel.
@@ -527,8 +527,8 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Launches a device function
 		 *	@param[in]	func - Device function symbol.
-		 *	@param[in]	gDim - Grid dimensions.
-		 *	@param[in]	bDim - Block dimensions.
+		 *	@param[in]	gridDim - Grid dimensions.
+		 *	@param[in]	blockDim - Block dimensions.
 		 *	@param[in]	sharedMemBytes - Number of bytes for shared memory.
 		 *	@param[in]	args - Pointers to kernel arguments.
 		 *	@retval		Stream - Reference to this stream (enables method chaining).
