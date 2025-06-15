@@ -88,37 +88,30 @@ namespace NS_NAMESPACE
 
 		//	Maps C++ types to corresponding Format enum values.
 		template<> struct FormatMapping<int>  { static constexpr Format value = Format::Int; };
-		template<> struct FormatMapping<int1> { static constexpr Format value = Format::Int; };
 		template<> struct FormatMapping<int2> { static constexpr Format value = Format::Int2; };
 		template<> struct FormatMapping<int4> { static constexpr Format value = Format::Int4; };
 
 		template<> struct FormatMapping<uint>  { static constexpr Format value = Format::Uint; };
-		template<> struct FormatMapping<uint1> { static constexpr Format value = Format::Uint; };
 		template<> struct FormatMapping<uint2> { static constexpr Format value = Format::Uint2; };
 		template<> struct FormatMapping<uint4> { static constexpr Format value = Format::Uint4; };
 
 		template<> struct FormatMapping<char>  { static constexpr Format value = Format::Char; };
-		template<> struct FormatMapping<char1> { static constexpr Format value = Format::Char; };
 		template<> struct FormatMapping<char2> { static constexpr Format value = Format::Char2; };
 		template<> struct FormatMapping<char4> { static constexpr Format value = Format::Char4; };
 
 		template<> struct FormatMapping<uchar>  { static constexpr Format value = Format::Uchar; };
-		template<> struct FormatMapping<uchar1> { static constexpr Format value = Format::Uchar; };
 		template<> struct FormatMapping<uchar2> { static constexpr Format value = Format::Uchar2; };
 		template<> struct FormatMapping<uchar4> { static constexpr Format value = Format::Uchar4; };
 
 		template<> struct FormatMapping<short>  { static constexpr Format value = Format::Short; };
-		template<> struct FormatMapping<short1> { static constexpr Format value = Format::Short; };
 		template<> struct FormatMapping<short2> { static constexpr Format value = Format::Short2; };
 		template<> struct FormatMapping<short4> { static constexpr Format value = Format::Short4; };
 
 		template<> struct FormatMapping<ushort>  { static constexpr Format value = Format::Ushort; };
-		template<> struct FormatMapping<ushort1> { static constexpr Format value = Format::Ushort; };
 		template<> struct FormatMapping<ushort2> { static constexpr Format value = Format::Ushort2; };
 		template<> struct FormatMapping<ushort4> { static constexpr Format value = Format::Ushort4; };
 
 		template<> struct FormatMapping<float>  { static constexpr Format value = Format::Float; };
-		template<> struct FormatMapping<float1> { static constexpr Format value = Format::Float; };
 		template<> struct FormatMapping<float2> { static constexpr Format value = Format::Float2; };
 		template<> struct FormatMapping<float4> { static constexpr Format value = Format::Float4; };
 	}
