@@ -86,12 +86,12 @@ namespace NS_NAMESPACE
 		Surface1D() {}
 
 		//	Constructs a 1D surface and binds a texture memory object.
-		explicit Surface1D(std::shared_ptr<Image1D<Type>> image) { this->Bind(image); }
+		explicit Surface1D(std::shared_ptr<Image1D<Type>> image) { this->bind(image); }
 
 	public:
 
 		//	Binds a 1D texture memory object to the surface.
-		void Bind(std::shared_ptr<Image1D<Type>> image) { this->bindImage(image); }
+		void bind(std::shared_ptr<Image1D<Type>> image) { this->bindImage(image); }
 
 		//	Returns shared pointer to the binded texture memory.
 		std::shared_ptr<Image1D<Type>> getImage() const { return std::dynamic_pointer_cast<Image1D<Type>>(m_image); }
@@ -114,12 +114,12 @@ namespace NS_NAMESPACE
 		Surface2D() {}
 
 		//	Constructs a 2D surface and binds a texture memory object.
-		explicit Surface2D(std::shared_ptr<Image2D<Type>> image) { this->Bind(image); }
+		explicit Surface2D(std::shared_ptr<Image2D<Type>> image) { this->bind(image); }
 
 	public:
 
 		//	Binds a 2D texture memory object to the surface.
-		void Bind(std::shared_ptr<Image2D<Type>> image) { this->bindImage(image); }
+		void bind(std::shared_ptr<Image2D<Type>> image) { this->bindImage(image); }
 
 		//	Returns shared pointer to the binded texture memory.
 		std::shared_ptr<Image2D<Type>> getImage() const { return std::dynamic_pointer_cast<Image2D<Type>>(m_image); }
@@ -142,12 +142,12 @@ namespace NS_NAMESPACE
 		Surface3D() {}
 
 		//	Constructs a 3D surface and binds a texture memory object.
-		explicit Surface3D(std::shared_ptr<Image3D<Type>> image) { this->Bind(image); }
+		explicit Surface3D(std::shared_ptr<Image3D<Type>> image) { this->bind(image); }
 
 	public:
 
 		//	Binds a 3D texture memory object to the surface.
-		void Bind(std::shared_ptr<Image3D<Type>> image) { this->bindImage(image); }
+		void bind(std::shared_ptr<Image3D<Type>> image) { this->bindImage(image); }
 
 		//	Returns shared pointer to the binded texture memory.
 		std::shared_ptr<Image3D<Type>> getImage() const { return std::dynamic_pointer_cast<Image3D<Type>>(m_image); }
@@ -170,12 +170,12 @@ namespace NS_NAMESPACE
 		Surface1DLayered() {}
 
 		//	Constructs a 1D layered surface and binds a texture memory object.
-		explicit Surface1DLayered(std::shared_ptr<Image1DLayered<Type>> image) { this->Bind(image); }
+		explicit Surface1DLayered(std::shared_ptr<Image1DLayered<Type>> image) { this->bind(image); }
 
 	public:
 
 		//	Binds a 1D layered texture memory object to the surface.
-		void Bind(std::shared_ptr<Image1DLayered<Type>> image) { this->bindImage(image); }
+		void bind(std::shared_ptr<Image1DLayered<Type>> image) { this->bindImage(image); }
 
 		//	Returns shared pointer to the binded texture memory.
 		std::shared_ptr<Image1DLayered<Type>> getImage() const { return std::dynamic_pointer_cast<Image1DLayered<Type>>(m_image); }
@@ -198,12 +198,12 @@ namespace NS_NAMESPACE
 		Surface2DLayered() {}
 
 		//	Constructs a 2D layered surface and binds a texture memory object.
-		explicit Surface2DLayered(std::shared_ptr<Image2DLayered<Type>> image) { this->Bind(image); }
+		explicit Surface2DLayered(std::shared_ptr<Image2DLayered<Type>> image) { this->bind(image); }
 
 	public:
 
 		//	Binds a 2D layered texture memory object to the surface.
-		void Bind(std::shared_ptr<Image2DLayered<Type>> image) { this->bindImage(image); }
+		void bind(std::shared_ptr<Image2DLayered<Type>> image) { this->bindImage(image); }
 
 		//	Returns shared pointer to the binded texture memory.
 		std::shared_ptr<Image2DLayered<Type>> getImage() const { return std::dynamic_pointer_cast<Image2DLayered<Type>>(m_image); }
@@ -226,12 +226,12 @@ namespace NS_NAMESPACE
 		SurfaceCube() {}
 
 		//	Constructs a cubemap surface and binds a texture memory object.
-		explicit SurfaceCube(std::shared_ptr<ImageCube<Type>> image) { this->Bind(image); }
+		explicit SurfaceCube(std::shared_ptr<ImageCube<Type>> image) { this->bind(image); }
 
 	public:
 
 		//	Binds a cubemap texture memory object to the surface.
-		void Bind(std::shared_ptr<ImageCube<Type>> image) { this->bindImage(image); }
+		void bind(std::shared_ptr<ImageCube<Type>> image) { this->bindImage(image); }
 
 		//	Returns shared pointer to the binded texture memory.
 		std::shared_ptr<ImageCube<Type>> getImage() const { return std::dynamic_pointer_cast<ImageCube<Type>>(m_image); }
@@ -254,12 +254,12 @@ namespace NS_NAMESPACE
 		SurfaceCubeLayered() {}
 
 		//	Constructs a layered cubemap surface and binds a texture memory object.
-		explicit SurfaceCubeLayered(std::shared_ptr<ImageCubeLayered<Type>> image) { this->Bind(image); }
+		explicit SurfaceCubeLayered(std::shared_ptr<ImageCubeLayered<Type>> image) { this->bind(image); }
 
 	public:
 
 		//	Binds a layered cubemap texture memory object to the surface.
-		void Bind(std::shared_ptr<ImageCubeLayered<Type>> image) { this->bindImage(image); }
+		void bind(std::shared_ptr<ImageCubeLayered<Type>> image) { this->bindImage(image); }
 
 		//	Returns shared pointer to the binded texture memory.
 		std::shared_ptr<ImageCubeLayered<Type>> getImage() const { return std::dynamic_pointer_cast<ImageCubeLayered<Type>>(m_image); }
