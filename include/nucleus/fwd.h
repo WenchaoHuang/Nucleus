@@ -80,20 +80,20 @@ namespace NS_NAMESPACE
 		template<typename Type> struct Surf2DLayered;
 		template<typename Type> struct SurfCubeLayered;
 
-		template<typename Type> class Tex1D;
-		template<typename Type> class Tex2D;
-		template<typename Type> class Tex3D;
-		template<typename Type> class TexCube;
-		template<typename Type> class Tex1DLod;
-		template<typename Type> class Tex2DLod;
-		template<typename Type> class Tex3DLod;
-		template<typename Type> class TexCubeLod;
-		template<typename Type> class Tex1DLayered;
-		template<typename Type> class Tex2DLayered;
-		template<typename Type> class TexCubeLayered;
-		template<typename Type> class Tex1DLayeredLod;
-		template<typename Type> class Tex2DLayeredLod;
-		template<typename Type> class TexCubeLayeredLod;
+		template<typename Type> struct Tex1D;
+		template<typename Type> struct Tex2D;
+		template<typename Type> struct Tex3D;
+		template<typename Type> struct TexCube;
+		template<typename Type> struct Tex1DLod;
+		template<typename Type> struct Tex2DLod;
+		template<typename Type> struct Tex3DLod;
+		template<typename Type> struct TexCubeLod;
+		template<typename Type> struct Tex1DLayered;
+		template<typename Type> struct Tex2DLayered;
+		template<typename Type> struct TexCubeLayered;
+		template<typename Type> struct Tex1DLayeredLod;
+		template<typename Type> struct Tex2DLayeredLod;
+		template<typename Type> struct TexCubeLayeredLod;
 	}
 
 	template<typename Type> class Array;

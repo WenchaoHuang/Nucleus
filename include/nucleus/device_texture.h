@@ -406,7 +406,7 @@ namespace NS_NAMESPACE::dev
 
 		//	Read method for CUDA texture object.
 	#ifndef __CUDACC__
-		__device__ value_type Grad(float x, float y, int layer, NS_NAMESPACE::float2 dPdx, NS_NAMESPACE::float2 dPdy) const
+		__device__ value_type Grad(float x, float y, int layer, NS_NAMESPACE::float2 dPdx, NS_NAMESPACE::float2 dPdy) const;
 	#else
 		__device__ value_type Grad(float x, float y, int layer, NS_NAMESPACE::float2 dPdx, NS_NAMESPACE::float2 dPdy) const
 		{
@@ -496,13 +496,13 @@ namespace NS_NAMESPACE::dev
 
 		//	Read method for CUDA texture object.
 	#ifndef __CUDACC__
-		__device__ value_type Grad(float x, float y, float z, NS_NAMESPACE::float3 dPdx, NS_NAMESPACE::float3 dPdy) const;
+		__device__ value_type Grad(float x, float y, float z, NS_NAMESPACE::float4 dPdx, NS_NAMESPACE::float4 dPdy) const;
 	#else
-		__device__ value_type Grad(float x, float y, float z, NS_NAMESPACE::float3 dPdx, NS_NAMESPACE::float3 dPdy) const
+		__device__ value_type Grad(float x, float y, float z, NS_NAMESPACE::float4 dPdx, NS_NAMESPACE::float4 dPdy) const
 		{
 			InternalValueType<Type> value;
 
-			tex3DGrad<decltype(value)>(&value, m_hTexture, x, y, z, reinterpret_cast<::float3&>(dPdx), reinterpret_cast<::float3&>(dPdy));
+			tex3DGrad<decltype(value)>(&value, m_hTexture, x, y, z, reinterpret_cast<::float4&>(dPdx), reinterpret_cast<::float4&>(dPdy));
 
 			return reinterpret_cast<value_type&>(value);
 		}

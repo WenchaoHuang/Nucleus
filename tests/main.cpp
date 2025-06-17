@@ -20,9 +20,11 @@
  *	SOFTWARE.
  */
 
- /*************************************************************************
- *******************************    main    *******************************
- *************************************************************************/
+#include <stdlib.h>
+
+/*************************************************************************
+*******************************    main    *******************************
+*************************************************************************/
 
 extern void test_event();
 extern void test_array();
@@ -34,6 +36,7 @@ extern void test_stream();
 extern void test_context();
 extern void test_dev_ptr();
 extern void test_surface();
+extern void test_texture();
 extern void test_allocator();
 extern void test_buffer_view();
 
@@ -49,8 +52,11 @@ int main()
 	test_image();
 	test_stream();
 	test_surface();
+	test_texture();
 	test_buffer_view();
 	test_logger();
+
+	system("pause");
 
 	return 0;
 }
