@@ -21,6 +21,7 @@
  */
 #pragma once
 
+#include "graph.h"
 #include "stream.h"
 #include <device_launch_parameters.h>
 
@@ -123,5 +124,130 @@ namespace NS_NAMESPACE
 	template<typename Type> Stream & Stream::memset(Type * pValues, Type value, size_t count, int blockSize)
 	{
 		return this->launch(kernel::memset<Type>, ns::ceil_div(count, blockSize), blockSize)(pValues, value, count);
+	}
+
+	/*********************************************************************
+	****************************    Graph    *****************************
+	*********************************************************************/
+
+	template<typename Type> ExecDep Graph::memset(Type * pValues, Type value, size_t count, std::initializer_list<ExecDep> dependencies)
+	{
+		constexpr unsigned int [[maybe_unused]] optimal_block_size_RTX_3080_Ti = 512;
+		constexpr unsigned int [[maybe_unused]] optimal_block_size_RTX_2070_SUPER = 256;
+
+		constexpr int blockSize = optimal_block_size_RTX_3080_Ti;
+
+		return this->launch(kernel::memset<Type>, dependencies, ns::ceil_div(count, blockSize), blockSize)(pValues, value, count);
+	}
+
+	template<typename... Args> ExecDep Graph::launchKernel(KernelFunc<Args...> func, std::initializer_list<ExecDep> dependencies, dim3 gridDim, dim3 blockDim, unsigned int sharedMem, Args... args)
+	{
+		if (m_pImmediateLaunchStream != nullptr)	//	in immediate launch mode
+		{
+			m_pImmediateLaunchStream->launch(func, gridDim, blockDim, sharedMem)(args...);
+
+			return ExecDep(m_ID, -1);
+		}
+		else if (gridDim.x * gridDim.y * gridDim.z * blockDim.x * blockDim.y * blockDim.z == 0)
+		{
+			return this->barrier(dependencies);
+		}
+		else /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		{
+			const uint64_t depHash = this->cacheDependencies(dependencies);
+
+			constexpr size_t paramBytes = sizeof(gridDim) + sizeof(blockDim) + sizeof(sharedMem) + (sizeof(args) + ...);
+
+			char paramCache[paramBytes];												size_t paramOffset = 0;
+			((std::memcpy(paramCache + paramOffset, &gridDim, sizeof(gridDim)), paramOffset += sizeof(gridDim)));
+			((std::memcpy(paramCache + paramOffset, &blockDim, sizeof(blockDim)), paramOffset += sizeof(blockDim)));
+			((std::memcpy(paramCache + paramOffset, &sharedMem, sizeof(sharedMem)), paramOffset += sizeof(sharedMem)));
+			((std::memcpy(paramCache + paramOffset, &args, sizeof(args)), paramOffset += sizeof(args)), ...);
+
+			if (m_indicator < m_nodes.size())	//	in validating state
+			{
+				if ((m_nodes[m_indicator].func != (void*)func) || (m_nodes[m_indicator].depHash != depHash))	//	dependencies changes
+				{
+					m_nodes.resize(m_indicator);
+				}
+				else if (std::memcmp(m_paramBinaries.data() + m_paramOffset, paramCache, paramBytes) != 0)	//	parameters changes
+				{
+					cudaKernelNodeParams			launchParams = {};
+					launchParams.func = func;
+					launchParams.extra = nullptr;
+					launchParams.kernelParams = nullptr;
+					launchParams.sharedMemBytes = sharedMem;
+					launchParams.blockDim = blockDim;
+					launchParams.gridDim = gridDim;
+
+					if constexpr (sizeof...(Args))
+					{
+						void * params[] = { ((void*)&args)... };
+
+						launchParams.kernelParams = params;
+
+						cudaError_t err = cudaGraphKernelNodeSetParams(m_nodes[m_indicator].hGraphNode, &launchParams);
+
+						NS_ERROR_LOG_IF(err != cudaSuccess, "%s.", cudaGetErrorString(cudaGetLastError()));
+					}
+					else
+					{
+						cudaError_t err = cudaGraphKernelNodeSetParams(m_nodes[m_indicator].hGraphNode, &launchParams);
+
+						NS_ERROR_LOG_IF(err != cudaSuccess, "%s.", cudaGetErrorString(cudaGetLastError()));
+					}
+
+					std::memcpy(m_paramBinaries.data() + m_paramOffset, paramCache, paramBytes);
+
+					m_isParamChg = true;
+				}
+			}
+
+			if (m_indicator >= m_nodes.size())	//	topology changed
+			{
+				auto createFunc = [=](cudaGraph_t hGraph, const cudaGraphNode_t * pDependencies, size_t numDependencies) -> cudaGraphNode_t
+				{
+					cudaGraphNode_t					hGraphNode = nullptr;
+					cudaKernelNodeParams			launchParams = {};
+					launchParams.func = func;
+					launchParams.extra = nullptr;
+					launchParams.kernelParams = nullptr;
+					launchParams.sharedMemBytes = sharedMem;
+					launchParams.blockDim = blockDim;
+					launchParams.gridDim = gridDim;
+
+					if constexpr (sizeof...(Args))
+					{
+						void * params[] = { ((void*)&args)... };	//	where magic happen, all parameters will captured in the lambda!
+
+						launchParams.kernelParams = params;
+
+						cudaError_t err = cudaGraphAddKernelNode(&hGraphNode, hGraph, pDependencies, numDependencies, &launchParams);
+
+						NS_ERROR_LOG_IF(err != cudaSuccess, "%s.", cudaGetErrorString(cudaGetLastError()));
+					}
+					else
+					{
+						cudaError_t err = cudaGraphAddKernelNode(&hGraphNode, hGraph, pDependencies, numDependencies, &launchParams);
+
+						NS_ERROR_LOG_IF(err != cudaSuccess, "%s.", cudaGetErrorString(cudaGetLastError()));
+					}
+
+					return hGraphNode;
+				};
+
+				m_paramBinaries.resize(m_paramBinaries.size() + paramBytes);
+
+				std::memcpy(m_paramBinaries.data() + m_paramOffset, paramCache, paramBytes);
+
+				m_nodes.emplace_back(func, depHash, paramBytes, m_depIndicesCache, createFunc);
+
+				m_isTopoChg = true;
+			}
+
+			m_paramOffset += paramBytes;
+
+			return ExecDep(m_ID, m_indicator++);
+		}
 	}
 }
