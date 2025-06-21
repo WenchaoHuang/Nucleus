@@ -90,7 +90,7 @@ namespace NS_NAMESPACE
 		 *	@brief		Return the device properties.
 		 *	@note		Requires CUDA Toolkit.
 		 */
-		const cudaDeviceProp * getDeviceProperties() const { return m_devProp.get(); }
+		const cudaDeviceProp * getProperties() const { return m_devProp.get(); }
 
 
 		/**

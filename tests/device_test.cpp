@@ -32,7 +32,7 @@ void test_device()
 	auto device = ns::Context::getInstance()->getDevice(0);
 
 	device->init();
-	device->getDeviceProperties();
+	device->getProperties();
 	device->getFreeMemorySize();
 	device->sync();
 }
