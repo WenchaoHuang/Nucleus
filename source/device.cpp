@@ -74,6 +74,31 @@ size_t Device::getFreeMemorySize() const
 }
 
 
+int Device::OccupancyMaxActiveBlocksPerMultiprocessor(const void * func, int blockSize, size_t dynamicSMemSize)
+{
+	int numBlocks = 0;
+
+	cudaError_t err = cudaOccupancyMaxActiveBlocksPerMultiprocessor(&numBlocks, func, blockSize, dynamicSMemSize);
+
+	if (err != cudaSuccess)
+	{
+		NS_ERROR_LOG("%s.", cudaGetErrorString(err));
+
+		cudaGetLastError();
+	}
+
+	return numBlocks;
+}
+
+
+int Device::OccupancyMaxActiveBlocks(const void * func, int blockSize, size_t dynamicSMemSize)
+{
+	int numBlocks = this->OccupancyMaxActiveBlocksPerMultiprocessor(func, blockSize, dynamicSMemSize);
+
+	return numBlocks * m_devProp->multiProcessorCount;
+}
+
+
 void Device::sync() const
 {
 	this->setCurrent();

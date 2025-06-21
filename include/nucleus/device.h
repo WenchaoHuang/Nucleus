@@ -98,6 +98,15 @@ namespace NS_NAMESPACE
 		 */
 		std::shared_ptr<DeviceAllocator> getDefaultAllocator() { return m_defaultAlloc; }
 
+		/**
+		 *	@brief		Returns occupancy for a device function.
+		 *	@param[in]	func - Kernel function for which occupancy is calculated
+		 *	@param[in]	blockSize - Block size the kernel is intended to be launched with
+		 *	@param[in]	dynamicSMemSize - Per-block dynamic shared memory usage intended, in bytes.
+		 */
+		int OccupancyMaxActiveBlocksPerMultiprocessor(const void * func, int blockSize, size_t dynamicSMemSize = 0);
+		int OccupancyMaxActiveBlocks(const void * func, int blockSize, size_t dynamicSMemSize = 0);
+
 	private:
 
 		const int									m_deviceID;
