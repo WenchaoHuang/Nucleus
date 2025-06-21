@@ -91,7 +91,7 @@ int main()
 
 	auto device = ns::Context::getInstance()->getDevice(0);
 	auto allocator = device->getDefaultAllocator();
-	auto stream = device->getDefaultStream();
+	auto & stream = device->getDefaultStream();
 	
 	std::vector<ColorRGB>	h_pixels(width * height);
 	ns::Array<ColorRGB>		d_pixels(allocator, width * height);
@@ -114,9 +114,9 @@ int main()
 		float t = i * 0.03f;
 		constexpr int blockSize = 256;
 
-		stream->launch(paint_kernel, ns::ceil_div(num_pixels, blockSize), blockSize)(d_pixels, width, 1.0f / height, t, num_pixels);
-		stream->memcpy(h_pixels.data(), d_pixels.data(), d_pixels.size());
-		stream->sync();
+		stream.launch(paint_kernel, ns::ceil_div(num_pixels, blockSize), blockSize)(d_pixels, width, 1.0f / height, t, num_pixels);
+		stream.memcpy(h_pixels.data(), d_pixels.data(), d_pixels.size());
+		stream.sync();
 
 		window.updateImage(h_pixels);
 

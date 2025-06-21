@@ -200,7 +200,7 @@ int main()
 
 	auto device = ns::Context::getInstance()->getDevice(0);
 	auto allocator = device->getDefaultAllocator();
-	auto stream = device->getDefaultStream();
+	auto & stream = device->getDefaultStream();
 	
 	auto image = std::make_shared<ns::Image2D<unsigned char>>(allocator, width, height, true);
 
@@ -229,10 +229,10 @@ int main()
 		float t = i * 0.005f;
 		constexpr int blockSize = 16;
 
-		stream->launch(paint_kernel, { ns::ceil_div(width, blockSize), ns::ceil_div(height, blockSize) }, { blockSize, blockSize })(surface, width, 1.0f / height, t, num_pixels);
-		stream->launch(ray_tracing_kernel, { ns::ceil_div(width, blockSize), ns::ceil_div(height, blockSize) }, { blockSize, blockSize })(d_pixels, texture, t * 0.2f);
-		stream->memcpy(h_pixels.data(), d_pixels.data(), d_pixels.size());
-		stream->sync();
+		stream.launch(paint_kernel, { ns::ceil_div(width, blockSize), ns::ceil_div(height, blockSize) }, { blockSize, blockSize })(surface, width, 1.0f / height, t, num_pixels);
+		stream.launch(ray_tracing_kernel, { ns::ceil_div(width, blockSize), ns::ceil_div(height, blockSize) }, { blockSize, blockSize })(d_pixels, texture, t * 0.2f);
+		stream.memcpy(h_pixels.data(), d_pixels.data(), d_pixels.size());
+		stream.sync();
 
 		window.updateImage(h_pixels);
 

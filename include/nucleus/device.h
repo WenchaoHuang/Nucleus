@@ -81,6 +81,12 @@ namespace NS_NAMESPACE
 
 
 		/**
+		 *	@brief		Return reference of the default stream.
+		 */
+		Stream & getDefaultStream() { return *m_defaultStream.get(); }
+
+
+		/**
 		 *	@brief		Return the device properties.
 		 *	@note		Requires CUDA Toolkit.
 		 */
@@ -88,12 +94,9 @@ namespace NS_NAMESPACE
 
 
 		/**
-		 *	@brief		Return the default allocator.
+		 *	@brief		Return shared pointer to the default allocator.
 		 */
 		std::shared_ptr<DeviceAllocator> getDefaultAllocator() { return m_defaultAlloc; }
-
-
-		std::shared_ptr<Stream> getDefaultStream() { return m_defaultStream; }
 
 	private:
 

@@ -33,17 +33,17 @@
 void test_event()
 {
 	auto device = ns::Context::getInstance()->getDevice(0);
-	auto stream = device->getDefaultStream();
+	auto & stream = device->getDefaultStream();
 
 	ns::Event		event0(device);
 	ns::TimedEvent	event1(device);
 	ns::TimedEvent	event2(device);
 	ns::ScopedTimer	timer(stream, [](float us) { printf("ScopedTime: %fus\n", us); });
 
-	stream->recordEvent(event0);
-	stream->recordEvent(event1);
-	stream->recordEvent(event2);
-	stream->waitEvent(event1).sync();
+	stream.recordEvent(event0);
+	stream.recordEvent(event1);
+	stream.recordEvent(event2);
+	stream.waitEvent(event1).sync();
 
 	auto time = ns::TimedEvent::getElapsedTime(event1, event2);
 

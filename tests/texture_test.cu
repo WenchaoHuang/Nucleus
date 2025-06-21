@@ -112,7 +112,7 @@ void test_texture()
 {
 	auto device = ns::Context::getInstance()->getDevice(0);
 	auto allocator = device->getDefaultAllocator();
-	auto stream = device->getDefaultStream();
+	auto & stream = device->getDefaultStream();
 
 	//	1D
 	ns::Texture1D<int>	texture0;
@@ -175,9 +175,9 @@ void test_texture()
 	texture13.bind(std::make_shared<ns::ImageCubeLayeredLod<int>>(allocator, 10, 2, 2));
 	assert(texture13.getImage() != nullptr);
 
-	stream->launch(test_device_texture, 1, 1)(texture0, texture1, texture2, texture3,
-											  texture4, texture5, texture6, texture7,
-											  texture8, texture9,
-											  texture10, texture11, texture12, texture13);
-	stream->sync();
+	stream.launch(test_device_texture, 1, 1)(texture0, texture1, texture2, texture3,
+											 texture4, texture5, texture6, texture7,
+											 texture8, texture9,
+											 texture10, texture11, texture12, texture13);
+	stream.sync();
 }
