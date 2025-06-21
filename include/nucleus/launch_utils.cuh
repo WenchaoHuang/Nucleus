@@ -23,6 +23,7 @@
 
 #include "graph.h"
 #include "stream.h"
+#include "logger.h"
 #include <device_launch_parameters.h>
 
 #ifndef __CUDACC__
