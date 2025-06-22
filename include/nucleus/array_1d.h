@@ -151,6 +151,20 @@ namespace NS_NAMESPACE
 			}
 		}
 
+
+		/**
+		 *	@brief		Return constant version of device pointer.
+		 *	@note		Provides an explicit method to get device pointer. 
+		 */
+		dev::Ptr<const Type> ptr() const { return *this; }
+
+
+		/**
+		 *	@brief		Returns device pointer.
+		 *	@note		Provides an explicit method to get device pointer. 
+		 */
+		dev::Ptr<Type> ptr() { return *this; }
+
 	private:
 
 		std::shared_ptr<Buffer>		m_buffer;

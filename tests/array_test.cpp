@@ -69,6 +69,7 @@ void test_array()
 		array11.resize(300);
 		array11.resize(300);
 		array11.clear();
+		array11.ptr();
 		assert(array11.data() == nullptr);
 	}
 
@@ -87,6 +88,7 @@ void test_array()
 		array33.reshape(100, 800);
 		array33.resize(400, 200);
 		array33.clear();
+		array33.ptr();
 		assert(array33.data() == nullptr);
 	}
 
@@ -106,6 +108,7 @@ void test_array()
 		array55.resize(500, 200, 300);
 		array55.clear();
 		array55.data();
+		array55.ptr();
 		assert(array5.data() == nullptr);
 	}
 
