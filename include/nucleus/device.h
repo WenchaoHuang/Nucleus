@@ -46,12 +46,17 @@ namespace NS_NAMESPACE
 
 	public:
 
-
 		/**
 		 *	@brief		Trigger initialization of the CUDA context.
 		 *	@retval		cudaSuccess - If device's context was initialized successfully.
 		 */
 		cudaError_t init() noexcept;
+
+
+		/**
+		 *	@brief		Return CUDA device ID.
+		 */
+		int getID() const { return m_deviceID; }
 
 
 		/**
