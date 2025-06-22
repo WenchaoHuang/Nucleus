@@ -21,8 +21,8 @@
  */
 #pragma once
 
-#include "macros.h"
 #include <memory>
+#include "macros.h"
 
 /*************************************************************************
 ***********************    Forward Declarations    ***********************
@@ -56,10 +56,10 @@ namespace NS_NAMESPACE
 	class TimedEvent;
 	class ScopedTimer;
 	class HostAllocator;
-	class MemoryResource;
 	class DeviceAllocator;
 
 	struct Version;
+	struct Sampler;
 	enum class Format;
 	enum class Result;
 	enum class FilterMode;
@@ -144,10 +144,15 @@ namespace NS_NAMESPACE
 
 	template<typename Type> struct ImageAccessor;
 	template<typename... Args> using KernelFunc = void(*)(Args...);
+
+	using BufferPtr			= std::shared_ptr<Buffer>;
+	using AllocPtr			= std::shared_ptr<Allocator>;
+	using HostAllocPtr		= std::shared_ptr<HostAllocator>;
+	using DevAllocPtr		= std::shared_ptr<DeviceAllocator>;
 }
 
 /*************************************************************************
-***************************    Typedefines    ****************************
+****************************    Type Alias    ****************************
 *************************************************************************/
 
 using NsEvent											= NS_NAMESPACE::Event;
@@ -156,20 +161,21 @@ using NsBuffer											= NS_NAMESPACE::Buffer;
 using NsStream											= NS_NAMESPACE::Stream;
 using NsDevice											= NS_NAMESPACE::Device;
 using NsFormat											= NS_NAMESPACE::Format;
+using NsSampler											= NS_NAMESPACE::Sampler;
 using NsContext											= NS_NAMESPACE::Context;
 using NsVersion											= NS_NAMESPACE::Version;
-using NsTimedEvent										= NS_NAMESPACE::TimedEvent;
 using NsFilterMode										= NS_NAMESPACE::FilterMode;
+using NsTimedEvent										= NS_NAMESPACE::TimedEvent;
 using NsScopedTimer										= NS_NAMESPACE::ScopedTimer;
 using NsAddressMode										= NS_NAMESPACE::AddressMode;
 using NsHostAlloc										= NS_NAMESPACE::HostAllocator;
 using NsDevAlloc										= NS_NAMESPACE::DeviceAllocator;
-using NsMemRes											= NS_NAMESPACE::MemoryResource;
 using NsAlloc											= NS_NAMESPACE::Allocator;
 
-template<typename Type> using NsDevPtr					= NS_NAMESPACE::dev::Ptr<Type>;
-template<typename Type> using NsDevPtr2					= NS_NAMESPACE::dev::Ptr2<Type>;
-template<typename Type> using NsDevPtr3					= NS_NAMESPACE::dev::Ptr3<Type>;
+using NsBufferPtr										= NS_NAMESPACE::BufferPtr;
+using NsHostAllocPtr									= NS_NAMESPACE::HostAllocPtr;
+using NsDevAllocPtr										= NS_NAMESPACE::DevAllocPtr;
+using NsAllocPtr										= NS_NAMESPACE::AllocPtr;
 
 template<typename Type> using NsArray					= NS_NAMESPACE::Array<Type>;
 template<typename Type> using NsArray2D					= NS_NAMESPACE::Array2D<Type>;
