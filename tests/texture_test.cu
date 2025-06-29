@@ -175,6 +175,13 @@ void test_texture()
 	texture13.bind(std::make_shared<ns::ImageCubeLayeredLod<int>>(allocator, 10, 2, 2));
 	assert(texture13.getImage() != nullptr);
 
+	// Read mode: normalized float
+	ns::Texture2D<float>	texture14;
+	texture14.bind(std::make_shared<ns::Image2D<char>>(allocator, 10, 10));
+	texture14.bind(std::make_shared<ns::Image2D<short>>(allocator, 10, 10));
+	texture14.bind(std::make_shared<ns::Image2D<unsigned char>>(allocator, 10, 10));
+	texture14.bind(std::make_shared<ns::Image2D<unsigned short>>(allocator, 10, 10));
+
 	stream.launch(test_device_texture, 1, 1)(texture0, texture1, texture2, texture3,
 											 texture4, texture5, texture6, texture7,
 											 texture8, texture9,

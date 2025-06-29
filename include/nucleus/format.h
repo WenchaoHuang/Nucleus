@@ -48,42 +48,18 @@ namespace NS_NAMESPACE
 	};
 
 	/*********************************************************************
-	*****************    TypeMapping / FormatMapping    ******************
+	*****************    FormatTraits / FormatMapping    *****************
 	*********************************************************************/
 
 	namespace details
 	{
-		template<Format format> struct TypeMapping;
+	#ifdef __CUDACC__		//	skip stupid nvcc bug
+		template<Format format> struct FormatTraits;
 		template<typename Type> struct FormatMapping;
-
-		//	Maps Format enum values to CUDA internal types.
-		template<> struct TypeMapping<Format::Int>  { using type = int; };
-		template<> struct TypeMapping<Format::Int2> { using type = int2; };
-		template<> struct TypeMapping<Format::Int4> { using type = int4; };
-
-		template<> struct TypeMapping<Format::Uint>  { using type = uint; };
-		template<> struct TypeMapping<Format::Uint2> { using type = uint2; };
-		template<> struct TypeMapping<Format::Uint4> { using type = uint4; };
-
-		template<> struct TypeMapping<Format::Char>  { using type = char; };
-		template<> struct TypeMapping<Format::Char2> { using type = char2; };
-		template<> struct TypeMapping<Format::Char4> { using type = char4; };
-
-		template<> struct TypeMapping<Format::Uchar>  { using type = uchar; };
-		template<> struct TypeMapping<Format::Uchar2> { using type = uchar2; };
-		template<> struct TypeMapping<Format::Uchar4> { using type = uchar4; };
-
-		template<> struct TypeMapping<Format::Short>  { using type = short; };
-		template<> struct TypeMapping<Format::Short2> { using type = short2; };
-		template<> struct TypeMapping<Format::Short4> { using type = short4; };
-
-		template<> struct TypeMapping<Format::Ushort>  { using type = ushort; };
-		template<> struct TypeMapping<Format::Ushort2> { using type = ushort2; };
-		template<> struct TypeMapping<Format::Ushort4> { using type = ushort4; };
-
-		template<> struct TypeMapping<Format::Float>  { using type = float; };
-		template<> struct TypeMapping<Format::Float2> { using type = float2; };
-		template<> struct TypeMapping<Format::Float4> { using type = float4; };
+	#else
+		template<Format format> struct FormatTraits	 { static_assert(false, "Invalid format!"); };
+		template<typename Type> struct FormatMapping { static_assert(false, "No FormatMapping specialization found for this type!"); };
+	#endif
 
 		//	Maps C++ types to corresponding Format enum values.
 		template<> struct FormatMapping<int>  { static constexpr Format value = Format::Int; };
@@ -113,6 +89,35 @@ namespace NS_NAMESPACE
 		template<> struct FormatMapping<float>  { static constexpr Format value = Format::Float; };
 		template<> struct FormatMapping<float2> { static constexpr Format value = Format::Float2; };
 		template<> struct FormatMapping<float4> { static constexpr Format value = Format::Float4; };
+
+		//	Type traits for Format
+		template<> struct FormatTraits<Format::Int>		{ using type = int;		using component_type = int;		static constexpr int component_count = 1; };
+		template<> struct FormatTraits<Format::Int2>	{ using type = int2;	using component_type = int;		static constexpr int component_count = 2; };
+		template<> struct FormatTraits<Format::Int4>	{ using type = int4;	using component_type = int;		static constexpr int component_count = 4; };
+
+		template<> struct FormatTraits<Format::Uint>	{ using type = uint;	using component_type = uint;	static constexpr int component_count = 1; };
+		template<> struct FormatTraits<Format::Uint2>	{ using type = uint2;	using component_type = uint;	static constexpr int component_count = 2; };
+		template<> struct FormatTraits<Format::Uint4>	{ using type = uint4;	using component_type = uint;	static constexpr int component_count = 4; };
+
+		template<> struct FormatTraits<Format::Char>	{ using type = char;	using component_type = char;	static constexpr int component_count = 1; };
+		template<> struct FormatTraits<Format::Char2>	{ using type = char2;	using component_type = char;	static constexpr int component_count = 2; };
+		template<> struct FormatTraits<Format::Char4>	{ using type = char4;	using component_type = char;	static constexpr int component_count = 4; };
+
+		template<> struct FormatTraits<Format::Uchar>	{ using type = uchar;	using component_type = uchar;	static constexpr int component_count = 1; };
+		template<> struct FormatTraits<Format::Uchar2>	{ using type = uchar2;	using component_type = uchar;	static constexpr int component_count = 2; };
+		template<> struct FormatTraits<Format::Uchar4>	{ using type = uchar4;	using component_type = uchar;	static constexpr int component_count = 4; };
+
+		template<> struct FormatTraits<Format::Short>	{ using type = short;	using component_type = short;	static constexpr int component_count = 1; };
+		template<> struct FormatTraits<Format::Short2>	{ using type = short2;	using component_type = short;	static constexpr int component_count = 2; };
+		template<> struct FormatTraits<Format::Short4>	{ using type = short4;	using component_type = short;	static constexpr int component_count = 4; };
+
+		template<> struct FormatTraits<Format::Ushort>	{ using type = ushort;	using component_type = ushort;	static constexpr int component_count = 1; };
+		template<> struct FormatTraits<Format::Ushort2>	{ using type = ushort2;	using component_type = ushort;	static constexpr int component_count = 2; };
+		template<> struct FormatTraits<Format::Ushort4>	{ using type = ushort4;	using component_type = ushort;	static constexpr int component_count = 4; };
+
+		template<> struct FormatTraits<Format::Float>	{ using type = float;	using component_type = float;	static constexpr int component_count = 1; };
+		template<> struct FormatTraits<Format::Float2>	{ using type = float2;	using component_type = float;	static constexpr int component_count = 2; };
+		template<> struct FormatTraits<Format::Float4>	{ using type = float4;	using component_type = float;	static constexpr int component_count = 4; };
 	}
 
 	/*********************************************************************
@@ -130,7 +135,7 @@ namespace NS_NAMESPACE
 	};
 
 	//	Defines the internal CUDA-compatible value type for a given C++ type.
-	template<typename Type> using InternalValueType = typename details::TypeMapping<FormatMapping<std::remove_const_t<Type>>::value>::type;
+	template<typename Type> using InternalValueType = typename details::FormatTraits<FormatMapping<std::remove_const_t<Type>>::value>::type;
 
 	/*********************************************************************
 	*********************    IsValidFormatMapping    *********************
@@ -144,7 +149,7 @@ namespace NS_NAMESPACE
 	 */
 	template<typename Type> struct CheckFormatMapping
 	{
-		using underlying_type = typename details::TypeMapping<FormatMapping<Type>::value>::type;
+		using underlying_type = typename details::FormatTraits<FormatMapping<Type>::value>::type;
 
 		static_assert(sizeof(Type) == sizeof(underlying_type), "Size mismatch in format mapping!");
 		static_assert(alignof(Type) == alignof(underlying_type), "Alignment mismatch in format mapping!");
