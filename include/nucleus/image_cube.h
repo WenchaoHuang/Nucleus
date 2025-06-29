@@ -90,6 +90,9 @@ namespace NS_NAMESPACE
 
 		//	Returns accessor to the data.
 		ImageAccessor<Type> data() const { return ImageAccessor<Type>{ m_hImage }; }
+
+		//	Return the texel format of the image at compile time.
+		static constexpr Format format() { return FormatMapping<Type>::value; }
 	};
 
 	/*********************************************************************
@@ -163,6 +166,9 @@ namespace NS_NAMESPACE
 
 		//	Returns accessor to the data.
 		ImageAccessor<Type> data() const { return ImageAccessor<Type>{ m_hImage }; }
+
+		//	Return the texel format of the image at compile time.
+		static constexpr Format format() { return FormatMapping<Type>::value; }
 	};
 
 	/*********************************************************************
@@ -226,6 +232,12 @@ namespace NS_NAMESPACE
 		 *	@warning	`level` should be in the range [0, numLevel).
 		 */
 		ImageCube<Type> & getLevel(size_t level) { return reinterpret_cast<ImageCube<Type>&>(ImageCubeLod<void>::getLevel(level)); }
+
+
+		/**
+		 *	@return		Texel format of the image at compile time.
+		 */
+		static constexpr Format format() { return FormatMapping<Type>::value; }
 	};
 
 	/*********************************************************************
@@ -297,5 +309,11 @@ namespace NS_NAMESPACE
 		 *	@warning	`level` should be in the range [0, numLevel).
 		 */
 		ImageCubeLayered<Type> & getLevel(size_t level) { return reinterpret_cast<ImageCubeLayered<Type>&>(ImageCubeLayeredLod<void>::getLevel(level)); }
+
+
+		/**
+		 *	@return		Texel format of the image at compile time.
+		 */
+		static constexpr Format format() { return FormatMapping<Type>::value; }
 	};
 }
