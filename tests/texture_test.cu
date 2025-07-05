@@ -184,7 +184,7 @@ void test_texture()
 
 	stream.launch(test_device_texture, 1, 1)(texture0, texture1, texture2, texture3,
 											 texture4, texture5, texture6, texture7,
-											 texture8, texture9,
+											 texture8.accessor(), texture9.accessor(),
 											 texture10, texture11, texture12, texture13);
 	stream.sync();
 }

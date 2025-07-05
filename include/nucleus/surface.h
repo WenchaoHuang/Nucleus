@@ -98,6 +98,15 @@ namespace NS_NAMESPACE
 
 		//	Converts to a device surface object for kernal access.
 		operator dev::Surf1D<Type>() { return m_image ? dev::Surf1D<Type>(m_hSurface, m_image->width()) : nullptr; }
+
+		//	Converts to a device surface object for kernal access (constant version).
+		operator dev::Surf1D<const Type>() const { return *this; }
+
+		//	Returns read-only device accessor explicitly.
+		dev::Surf1D<const Type> accessor() const { return *this; }
+
+		//	Returns device accessor explicitly.
+		dev::Surf1D<Type> accessor() { return *this; }
 	};
 
 	/*********************************************************************
@@ -126,6 +135,15 @@ namespace NS_NAMESPACE
 
 		//	Converts to a device surface object for kernal access.
 		operator dev::Surf2D<Type>() { return m_image ? dev::Surf2D<Type>(m_hSurface, getImage()->width(), getImage()->height()) : nullptr; }
+
+		//	Converts to a device surface object for kernal access (constant version).
+		operator dev::Surf2D<const Type>() const { return *this; }
+
+		//	Returns read-only device accessor explicitly.
+		dev::Surf2D<const Type> accessor() const { return *this; }
+
+		//	Returns device accessor explicitly.
+		dev::Surf2D<Type> accessor() { return *this; }
 	};
 
 	/*********************************************************************
@@ -154,6 +172,15 @@ namespace NS_NAMESPACE
 
 		//	Converts to a device surface object for kernal access.
 		operator dev::Surf3D<Type>() { return m_image ? dev::Surf3D<Type>(m_hSurface, getImage()->width(), getImage()->height(), getImage()->depth()) : nullptr; }
+
+		//	Converts to a device surface object for kernal access (constant version).
+		operator dev::Surf3D<const Type>() const { return *this; }
+
+		//	Returns read-only device accessor explicitly.
+		dev::Surf3D<const Type> accessor() const { return *this; }
+
+		//	Returns device accessor explicitly.
+		dev::Surf3D<Type> accessor() { return *this; }
 	};
 
 	/*********************************************************************
@@ -182,6 +209,15 @@ namespace NS_NAMESPACE
 
 		//	Converts to a device surface object for kernal access.
 		operator dev::Surf1DLayered<Type>() { return m_image ? dev::Surf1DLayered<Type>(m_hSurface, getImage()->width(), getImage()->numLayers()) : nullptr; }
+
+		//	Converts to a device surface object for kernal access (constant version).
+		operator dev::Surf1DLayered<const Type>() const { return *this; }
+
+		//	Returns read-only device accessor explicitly.
+		dev::Surf1DLayered<const Type> accessor() const { return *this; }
+
+		//	Returns device accessor explicitly.
+		dev::Surf1DLayered<Type> accessor() { return *this; }
 	};
 
 	/*********************************************************************
@@ -210,6 +246,15 @@ namespace NS_NAMESPACE
 
 		//	Converts to a device surface object for kernal access.
 		operator dev::Surf2DLayered<Type>() { return m_image ? dev::Surf2DLayered<Type>(m_hSurface, getImage()->width(), getImage()->height(), getImage()->numLayers()) : nullptr; }
+
+		//	Converts to a device surface object for kernal access (constant version).
+		operator dev::Surf2DLayered<const Type>() const { return *this; }
+
+		//	Returns read-only device accessor explicitly.
+		dev::Surf2DLayered<const Type> accessor() const { return *this; }
+
+		//	Returns device accessor explicitly.
+		dev::Surf2DLayered<Type> accessor() { return *this; }
 	};
 
 	/*********************************************************************
@@ -238,6 +283,15 @@ namespace NS_NAMESPACE
 
 		//	Converts to a device surface object for kernal access.
 		operator dev::SurfCube<Type>() { return m_image ? dev::SurfCube<Type>(m_hSurface, getImage()->width()) : nullptr; }
+
+		//	Converts to a device surface object for kernal access (constant version).
+		operator dev::SurfCube<const Type>() const { return *this; }
+
+		//	Returns read-only device accessor explicitly.
+		dev::SurfCube<const Type> accessor() const { return *this; }
+
+		//	Returns device accessor explicitly.
+		dev::SurfCube<Type> accessor() { return *this; }
 	};
 
 	/*********************************************************************
@@ -266,5 +320,14 @@ namespace NS_NAMESPACE
 
 		//	Converts to a device surface object for kernal access.
 		operator dev::SurfCubeLayered<Type>() { return m_image ? dev::SurfCubeLayered<Type>(m_hSurface, getImage()->width(), getImage()->numLayers()) : nullptr; }
+
+		//	Converts to a device surface object for kernal access (constant version).
+		operator dev::SurfCubeLayered<const Type>() const { return *this; }
+
+		//	Returns read-only device accessor explicitly.
+		dev::SurfCubeLayered<const Type> accessor() const { return *this; }
+
+		//	Returns device accessor explicitly.
+		dev::SurfCubeLayered<Type> accessor() { return *this; }
 	};
 }

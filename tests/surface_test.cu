@@ -151,36 +151,43 @@ void test_surface()
 	ns::Surface1D<int>	surface0(std::make_shared<ns::Image1D<int>>(allocator, 128, true));
 	surface0.empty();
 	surface0.getImage();
+	surface0.accessor();
 	surface0.getHandle();
 
 	ns::Surface2D<short>	surface1(std::make_shared<ns::Image2D<short>>(allocator, 128, 128, true));
 	surface1.empty();
 	surface1.getImage();
+	surface1.accessor();
 	surface1.getHandle();
 
 	ns::Surface3D<float>	surface2(std::make_shared<ns::Image3D<float>>(allocator, 128, 128, 128, true));
 	surface2.empty();
 	surface2.getImage();
+	surface2.accessor();
 	surface2.getHandle();
 
 	ns::SurfaceCube<ns::float2>	surface3(std::make_shared<ns::ImageCube<ns::float2>>(allocator, 128, true));
 	surface3.empty();
 	surface3.getImage();
+	surface3.accessor();
 	surface3.getHandle();
 
 	ns::Surface1DLayered<float>	surface4(std::make_shared<ns::Image1DLayered<float>>(allocator, 128, 8, true));
 	surface4.empty();
 	surface4.getImage();
+	surface4.accessor();
 	surface4.getHandle();
 	
 	ns::Surface2DLayered<float>	surface5(std::make_shared<ns::Image2DLayered<float>>(allocator, 128, 128, 8, true));
 	surface5.empty();
 	surface5.getImage();
+	surface5.accessor();
 	surface5.getHandle();
 
 	ns::SurfaceCubeLayered<int>	surface6(std::make_shared<ns::ImageCubeLayered<int>>(allocator, 128, 8, true));
 	surface6.empty();
 	surface6.getImage();
+	surface6.accessor();
 	surface6.getHandle();
 
 	test_device_surface << <1, 1 >> > (surface0, surface0,

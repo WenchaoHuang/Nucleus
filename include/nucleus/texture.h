@@ -132,6 +132,9 @@ namespace NS_NAMESPACE
 
 			//	Converts to a device texture object for kernal access.
 			operator devTexTemplate<Type>() const { return devTexTemplate<Type>(m_hTexture); }
+
+			//	Returns device accessor explicitly.
+			devTexTemplate<Type> accessor() const { return devTexTemplate<Type>(m_hTexture); }
 		};
 	}
 
