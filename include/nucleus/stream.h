@@ -266,15 +266,14 @@ namespace NS_NAMESPACE
 		 *	@brief		Copies data between linear memory and image.
 		 *	@param[in]	dst - Destination memory address.
 		 *	@param[in]	dstPitch - Pitch of destination memory.
-		 *	@param[in]	dstHeight - Height of destination memory.
 		 *	@param[in]	srcImg - Accessor to the source image.
 		 *	@param[in]	width - Width of matrix transfer (columns).
 		 *	@param[in]	height - Height of matrix transfer (rows).
 		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 */
-		template<typename Type> Stream & memcpy2D(Type * dst, size_t dstPitch, size_t dstHeight, ImageAccessor<Type> srcImg, size_t width, size_t height)
+		template<typename Type> Stream & memcpy2D(Type * dst, size_t dstPitch, ImageAccessor<Type> srcImg, size_t width, size_t height)
 		{
-			return this->memcpyLinearImage(dst, dstPitch, dstHeight, srcImg, width, height, 1);
+			return this->memcpyLinearImage(dst, dstPitch, 0, srcImg, width, height, 1);
 		}
 
 
@@ -283,14 +282,13 @@ namespace NS_NAMESPACE
 		 *	@param[in]	dstImg - Accessor to the destination image.
 		 *	@param[in]	src - Source memory address.
 		 *	@param[in]	srcPitch - Pitch of source memory.
-		 *	@param[in]	srcHeight - Height of source memory.
 		 *	@param[in]	width - Width of matrix transfer (columns).
 		 *	@param[in]	height - Height of matrix transfer (rows).
 		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 */
-		template<typename Type> Stream & memcpy2D(ImageAccessor<Type> dstImg, const Type * src, size_t srcPitch, size_t srcHeight, size_t width, size_t height)
+		template<typename Type> Stream & memcpy2D(ImageAccessor<Type> dstImg, const Type * src, size_t srcPitch, size_t width, size_t height)
 		{
-			return this->memcpyImageLinear(dstImg, src, srcPitch, srcHeight, width, height, 1);
+			return this->memcpyImageLinear(dstImg, src, srcPitch, 0, width, height, 1);
 		}
 
 

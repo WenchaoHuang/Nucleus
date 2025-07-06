@@ -106,8 +106,8 @@ void test_stream()
 	}
 
 	stream.memset(dev_data2.data(), 5, dev_data2.size());
-	stream.memcpy2D(dev_data5.data(), dev_data2.data(), dev_data2.pitch(), dev_data2.height(), dev_data2.width(), dev_data2.height());
-	stream.memcpy2D(host_data.data(), dev_data2.pitch(), dev_data2.height(), dev_data5.data(), dev_data2.width(), dev_data2.height());
+	stream.memcpy2D(dev_data5.data(), dev_data2.data(), dev_data2.pitch(), dev_data2.width(), dev_data2.height());
+	stream.memcpy2D(host_data.data(), dev_data2.pitch(), dev_data5.data(), dev_data2.width(), dev_data2.height());
 
 	for (size_t i = 0; i < host_data.size(); i++)
 	{
