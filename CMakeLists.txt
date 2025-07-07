@@ -47,8 +47,8 @@ set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 file(GLOB_RECURSE NUCLEUS_SOURCES 
     "${PROJECT_SOURCE_DIR}/include/nucleus/*.h"
     "${PROJECT_SOURCE_DIR}/include/nucleus/*.cuh"
-    "${PROJECT_SOURCE_DIR}/source/*.cpp"
-    "${PROJECT_SOURCE_DIR}/source/*.cu"
+    "${PROJECT_SOURCE_DIR}/src/*.cpp"
+    "${PROJECT_SOURCE_DIR}/src/*.cu"
 )
 
 # Create the static library
