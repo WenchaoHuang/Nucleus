@@ -128,7 +128,7 @@ NS_CUDA_CALLABLE void test(dev::Ptr<int> arr0, dev::Ptr<const int> arr1,
 }
 
 
-void test_dev_ptr()
+void dev_ptr_test()
 {
 	dev::Ptr<int> devPtr0;
 	dev::Ptr<int> devPtr1 = nullptr;

@@ -31,7 +31,7 @@
 ****************************    image_test    ****************************
 *************************************************************************/
 
-void test_image()
+void image_test()
 {
 	auto device = ns::Context::getInstance()->getDevice(0);
 	auto allocator = device->getDefaultAllocator();

@@ -48,7 +48,7 @@ __global__ void test_kernel()
 }
 
 
-void test_stream()
+void stream_test()
 {
 	auto device = ns::Context::getInstance()->getDevice(0);
 	auto allocator = device->getDefaultAllocator();

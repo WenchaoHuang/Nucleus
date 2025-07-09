@@ -26,35 +26,35 @@
 *******************************    main    *******************************
 *************************************************************************/
 
-extern void test_event();
-extern void test_array();
-extern void test_image();
-extern void test_logger();
-extern void test_device();
-extern void test_buffer();
-extern void test_stream();
-extern void test_context();
-extern void test_dev_ptr();
-extern void test_surface();
-extern void test_texture();
-extern void test_allocator();
-extern void test_buffer_view();
+extern void event_test();
+extern void array_test();
+extern void image_test();
+extern void logger_test();
+extern void device_test();
+extern void buffer_test();
+extern void stream_test();
+extern void context_test();
+extern void dev_ptr_test();
+extern void surface_test();
+extern void texture_test();
+extern void allocator_test();
+extern void buffer_view_test();
 
 int main()
 {
-	test_context();
-	test_device();
-	test_event();
-	test_allocator();
-	test_buffer();
-	test_dev_ptr();
-	test_array();
-	test_image();
-	test_stream();
-	test_surface();
-	test_texture();
-	test_buffer_view();
-	test_logger();
+	context_test();
+	device_test();
+	event_test();
+	allocator_test();
+	buffer_test();
+	dev_ptr_test();
+	array_test();
+	image_test();
+	stream_test();
+	surface_test();
+	texture_test();
+	buffer_view_test();
+	logger_test();
 
 	system("pause");
 

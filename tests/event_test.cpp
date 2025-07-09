@@ -27,10 +27,10 @@
 #include <nucleus/scoped_timer.h>
 
 /*************************************************************************
-****************************    test_event    ****************************
+****************************    event_test    ****************************
 *************************************************************************/
 
-void test_event()
+void event_test()
 {
 	auto device = ns::Context::getInstance()->getDevice(0);
 	auto & stream = device->getDefaultStream();

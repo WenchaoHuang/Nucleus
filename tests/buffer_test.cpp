@@ -25,10 +25,10 @@
 #include <nucleus/context.h>
 
 /*************************************************************************
-***************************    test_buffer    ****************************
+***************************    buffer_test    ****************************
 *************************************************************************/
 
-void test_buffer()
+void buffer_test()
 {
 	auto device = ns::Context::getInstance()->getDevice(0);
 	auto allocator = device->getDefaultAllocator();

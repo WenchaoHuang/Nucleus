@@ -25,10 +25,10 @@
 #include <nucleus/buffer_view.h>
 
  /*************************************************************************
- *************************    test_buffer_view    *************************
+ *************************    buffer_view_test    *************************
  *************************************************************************/
 
-void test_buffer_view()
+void buffer_view_test()
 {
 	auto device = ns::Context::getInstance()->getDevice(0);
 	auto allocator = device->getDefaultAllocator();

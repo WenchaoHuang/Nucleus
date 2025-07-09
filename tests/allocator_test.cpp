@@ -27,7 +27,7 @@
 #include <nucleus/allocator.h>
 
 /*************************************************************************
-**************************    test_allocator    **************************
+**************************    allocator_test    **************************
 *************************************************************************/
 
 class MyHostAllocator : public ns::HostAllocator
@@ -47,7 +47,7 @@ class MyHostAllocator : public ns::HostAllocator
 };
 
 
-void test_allocator()
+void allocator_test()
 {
 	auto device = ns::Context::getInstance()->getDevice(0);
 
