@@ -1,4 +1,4 @@
-# Copyright (c) 2025 Wenchao Huang <physhuangwenchao@gmail.com>
+﻿# Copyright (c) 2025 Wenchao Huang <physhuangwenchao@gmail.com>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -39,9 +39,10 @@ if(MSVC)
     target_compile_options(${TARGET_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:/MP /W3 /WX>)
 endif()
 
-# NVCC settings
+# CMake properties
 set_target_properties(${TARGET_NAME} PROPERTIES
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_ARCHITECTURES "75"
+    FOLDER "Tests"
 )
