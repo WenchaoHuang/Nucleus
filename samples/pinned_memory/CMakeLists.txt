@@ -27,13 +27,10 @@ project(${TARGET_NAME} LANGUAGES CXX CUDA)
 # Create the executable target
 add_executable(${TARGET_NAME} main.cpp)
 
-# Include directories
-target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
-
 # Link directories
 target_link_libraries(${TARGET_NAME} PRIVATE nucleus cudart_static)
 
-# 设置CUDA编译属性
+# NVCC settings
 set_target_properties(${TARGET_NAME} PROPERTIES
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
     CUDA_SEPARABLE_COMPILATION ON

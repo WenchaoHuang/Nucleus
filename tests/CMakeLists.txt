@@ -31,18 +31,15 @@ file(GLOB TEST_CUDA_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.cu"
 # Create the executable target
 add_executable(${TARGET_NAME} ${TEST_CPP_SOURCES} ${TEST_CUDA_SOURCES})
 
-# Include directories
-target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
-
 # Link directories
 target_link_libraries(${TARGET_NAME} PRIVATE nucleus cudart_static)
 
 # MSVC settings
 if(MSVC)
-    target_compile_options(${TARGET_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:/MP>)      # nvcc does not support '/MP' flag 
+    target_compile_options(${TARGET_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:/MP /W3 /WX>)
 endif()
 
-# 设置CUDA编译属性
+# NVCC settings
 set_target_properties(${TARGET_NAME} PROPERTIES
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
     CUDA_SEPARABLE_COMPILATION ON
