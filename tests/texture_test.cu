@@ -30,9 +30,9 @@
 #include <nucleus/image_cube.h>
 #include <nucleus/launch_utils.cuh>
 
-/*************************************************************************
-***************************    texture_test    ***************************
-*************************************************************************/
+/*********************************************************************************
+*******************************    texture_test    *******************************
+*********************************************************************************/
 
 __global__ void test_device_texture(dev::Tex1D<int> tex0, dev::Tex1DLod<int> tex1, dev::Tex1DLayered<int> tex2, dev::Tex1DLayeredLod<int> tex3,
 									dev::Tex2D<float> tex4, dev::Tex2DLod<int> tex5, dev::Tex2DLayered<int> tex6, dev::Tex2DLayeredLod<int> tex7,
