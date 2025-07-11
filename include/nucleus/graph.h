@@ -114,9 +114,8 @@ namespace NS_NAMESPACE
 		 */
 		template<typename Type> ExecDep memcpy(Type * dst, const Type * src, size_t count, std::initializer_list<ExecDep> dependencies = {})
 		{
-			return this->memcpy<void>(dst, src, sizeof(Type) * count, dependencies);
+			return this->memcpy_void(dst, src, sizeof(Type) * count, dependencies);
 		}
-		template<> ExecDep memcpy(void * dst, const void * src, size_t bytes, std::initializer_list<ExecDep> dependencies);
 
 
 		/**
@@ -156,6 +155,8 @@ namespace NS_NAMESPACE
 	private:
 
 		uint64_t cacheDependencies(std::initializer_list<ExecDep> dependencies);
+		
+		ExecDep memcpy_void(void * dst, const void * src, size_t bytes, std::initializer_list<ExecDep> dependencies);
 
 	private:
 
