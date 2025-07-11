@@ -82,7 +82,7 @@ ExecDep Graph::barrier(std::initializer_list<ExecDep> dependencies)
 }
 
 
-template<> ExecDep Graph::memcpy<void>(void * dst, const void * src, size_t bytes, std::initializer_list<ExecDep> dependencies)
+ExecDep Graph::memcpy_void(void * dst, const void * src, size_t bytes, std::initializer_list<ExecDep> dependencies)
 {
 	if (m_pImmediateLaunchStream != nullptr)	//	in immediate launch mode
 	{
