@@ -29,6 +29,7 @@
 extern void event_test();
 extern void array_test();
 extern void image_test();
+extern void graph_test();
 extern void logger_test();
 extern void device_test();
 extern void buffer_test();
@@ -45,6 +46,7 @@ int main()
 	context_test();
 	device_test();
 	event_test();
+	graph_test();
 	allocator_test();
 	buffer_test();
 	dev_ptr_test();

@@ -147,7 +147,7 @@ namespace NS_NAMESPACE
 		{
 			m_pImmediateLaunchStream->launch(func, gridDim, blockDim, sharedMem)(args...);
 
-			return ExecDep(m_ID, -1);
+			return ExecDep{ m_ID, -1 };
 		}
 		else if (gridDim.x * gridDim.y * gridDim.z * blockDim.x * blockDim.y * blockDim.z == 0)
 		{
@@ -248,7 +248,7 @@ namespace NS_NAMESPACE
 
 			m_paramOffset += paramBytes;
 
-			return ExecDep(m_ID, m_indicator++);
+			return ExecDep{ m_ID, m_indicator++ };
 		}
 	}
 }
