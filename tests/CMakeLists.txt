@@ -36,7 +36,7 @@ target_link_libraries(${TARGET_NAME} PRIVATE nucleus cudart_static)
 
 # MSVC settings
 if(MSVC)
-    target_compile_options(${TARGET_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:/MP /W3 /WX>)
+    target_compile_options(${TARGET_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:/MP /W3 /WX /utf-8>)
 endif()
 
 # CMake properties
