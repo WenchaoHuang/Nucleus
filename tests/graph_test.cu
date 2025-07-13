@@ -35,7 +35,7 @@ __global__ void Test(unsigned int num, unsigned int num2)
 	CUDA_for(i, num);
 }
 
-__global__ void Test0(int a)
+__global__ void Test0()
 {
 	CUDA_for(i, 1);
 }
@@ -55,7 +55,7 @@ void graph_test()
 	auto d3 = graph.launch(Test, d2, 1, 128)(2, 10);
 	auto d4 = graph.launch(Test, d2, 1, 128)(2, 20);
 	auto d5 = graph.launch(Test, d3, 1, 128)(2, 30);
-	auto d6 = graph.launch(Test0, { d2, d3 }, 1, 128)(0);
+	auto d6 = graph.launch(Test0, { d2, d3 }, 1, 128)();
 	auto d7 = graph.memcpy(output.data(), input.data(), 1, { d6, d5 });
 
 	graph.execute(stream);
@@ -70,7 +70,7 @@ void graph_test()
 	d3 = graph.launch(Test, d2, 1, 128)(2, 22);
 	d4 = graph.launch(Test, d2, 1, 128)(2, 20);
 	d5 = graph.launch(Test, d3, 1, 128)(2, 30);
-	d6 = graph.launch(Test0, { d2, d3 }, 1, 128)(0);
+	d6 = graph.launch(Test0, { d2, d3 }, 1, 128)();
 	d7 = graph.memcpy(output.data(), input.data(), 1, d5);
 	graph.execute(stream);
 
