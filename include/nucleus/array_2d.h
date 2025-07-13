@@ -63,7 +63,7 @@ namespace NS_NAMESPACE
 		{
 			NS_ASSERT_LOG_IF(allocator == nullptr, "Empty allocator!");
 
-			if ((this->getAllocator() != allocator) || (this->size() != width * height))
+			if ((this->allocator() != allocator) || (this->size() != width * height))
 			{
 				m_buffer = std::make_shared<Buffer>(allocator, sizeof(Type) * width * height);
 
@@ -92,7 +92,7 @@ namespace NS_NAMESPACE
 		{
 			NS_ASSERT_LOG_IF(m_buffer == nullptr, "Empty allocator!");
 
-			this->resize(m_buffer->getAllocator(), width, height);
+			this->resize(m_buffer->allocator(), width, height);
 		}
 
 
@@ -117,9 +117,9 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Gets the allocator associated with.
 		 */
-		std::shared_ptr<Allocator> getAllocator() const
+		std::shared_ptr<Allocator> allocator() const
 		{
-			return m_buffer ? m_buffer->getAllocator() : nullptr;
+			return m_buffer ? m_buffer->allocator() : nullptr;
 		}
 
 

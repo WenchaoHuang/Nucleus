@@ -123,7 +123,7 @@ namespace NS_NAMESPACE
 		explicit DeviceAllocator(Device * pDevice);
 
 		//!	@brief		Return pointer to the device associated with.
-		Device * getDevice() const { return m_device; }
+		Device * device() const { return m_device; }
 
 	public:
 

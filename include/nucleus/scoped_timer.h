@@ -55,7 +55,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	callback - Function to receive timing results.
 		 */
 		explicit ScopedTimer(Stream & stream, const CallbackFunc & callback) : m_stream(stream),
-			m_callback(callback), m_startEvent(stream.getDevice()), m_endEvent(stream.getDevice())
+			m_callback(callback), m_startEvent(stream.device()), m_endEvent(stream.device())
 		{
 			m_stream.recordEvent(m_startEvent);
 		}

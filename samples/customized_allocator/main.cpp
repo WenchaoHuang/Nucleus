@@ -74,7 +74,7 @@ private:
 
 int main()
 {
-	auto device = ns::Context::getInstance()->getDevice(0);
+	auto device = ns::Context::getInstance()->device(0);
 	auto devAlloc = std::make_shared<MyAllocator>(device);
 
 	printf("\n");

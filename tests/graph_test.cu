@@ -42,8 +42,8 @@ __global__ void Test0(int a)
 
 void graph_test()
 {
-	auto device = ns::Context::getInstance()->getDevice(0);
-	auto stream = &device->getDefaultStream();
+	auto device = ns::Context::getInstance()->device(0);
+	auto stream = &device->defaultStream();
 
 	std::vector<int>	input(100, 5);
 	std::vector<int>	output(100);

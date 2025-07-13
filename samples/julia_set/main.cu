@@ -89,9 +89,9 @@ int main()
 
 	/////////////////////////////////////////////////////////////////
 
-	auto device = ns::Context::getInstance()->getDevice(0);
-	auto allocator = device->getDefaultAllocator();
-	auto & stream = device->getDefaultStream();
+	auto device = ns::Context::getInstance()->device(0);
+	auto allocator = device->defaultAllocator();
+	auto & stream = device->defaultStream();
 	
 	std::vector<ColorRGB>	h_pixels(width * height);
 	ns::Array<ColorRGB>		d_pixels(allocator, width * height);

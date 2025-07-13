@@ -44,7 +44,7 @@ namespace NS_NAMESPACE
 		BufferView1D(std::nullptr_t) : dev::Ptr<Type>(nullptr), m_buffer(nullptr), m_offset(0) {}
 
 		//	Copy constructor, initializes from another BufferView1D of the same type.
-		BufferView1D(const BufferView1D<std::remove_cv_t<Type>> & rhs) : dev::Ptr<Type>(rhs.data(), rhs.width()), m_buffer(rhs.getBuffer()), m_offset(rhs.offset()) {}
+		BufferView1D(const BufferView1D<std::remove_cv_t<Type>> & rhs) : dev::Ptr<Type>(rhs.data(), rhs.width()), m_buffer(rhs.buffer()), m_offset(rhs.offset()) {}
 
 		//	Construct with a given Buffer.
 		explicit BufferView1D(std::shared_ptr<Buffer> buffer) : dev::Ptr<Type>(static_cast<Type*>(buffer->data()), buffer->capacity() / sizeof(Type)), m_buffer(buffer), m_offset(0) { NS_ASSERT(buffer != nullptr); }
@@ -66,7 +66,7 @@ namespace NS_NAMESPACE
 	public:
 
 		//	Returns pointer to the associated Buffer.
-		std::shared_ptr<class Buffer> getBuffer() const { return m_buffer; }
+		std::shared_ptr<class Buffer> buffer() const { return m_buffer; }
 
 		//	Returns device pointer to the underlying array, explicitly.
 		const dev::Ptr<Type> & ptr() const { return *this; }
@@ -97,10 +97,10 @@ namespace NS_NAMESPACE
 		BufferView2D(std::nullptr_t) : dev::Ptr2<Type>(nullptr), m_buffer(nullptr), m_offset(0) {}
 
 		//	Copy constructor, initializes from another BufferView2D of the same type.
-		BufferView2D(const BufferView2D<std::remove_cv_t<Type>> & rhs) : dev::Ptr2<Type>(rhs.data(), rhs.width(), rhs.height()), m_buffer(rhs.getBuffer()), m_offset(rhs.offset()) {}
+		BufferView2D(const BufferView2D<std::remove_cv_t<Type>> & rhs) : dev::Ptr2<Type>(rhs.data(), rhs.width(), rhs.height()), m_buffer(rhs.buffer()), m_offset(rhs.offset()) {}
 
 		//	Copy constructor, construct with a given BufferView1D.
-		explicit BufferView2D(const BufferView1D<std::remove_cv_t<Type>> & rhs) : dev::Ptr2<Type>(rhs.data(), rhs.width(), 1), m_buffer(rhs.getBuffer()), m_offset(rhs.offset()) {}
+		explicit BufferView2D(const BufferView1D<std::remove_cv_t<Type>> & rhs) : dev::Ptr2<Type>(rhs.data(), rhs.width(), 1), m_buffer(rhs.buffer()), m_offset(rhs.offset()) {}
 
 		/**
 		 *	@brief		Constructor to initialize with a shared buffer, offset, width, and height.
@@ -120,7 +120,7 @@ namespace NS_NAMESPACE
 	public:
 
 		//	Returns pointer to the associated Buffer.
-		std::shared_ptr<Buffer> getBuffer() const { return m_buffer; }
+		std::shared_ptr<Buffer> buffer() const { return m_buffer; }
 
 		//	Returns device pointer to the underlying array, explicitly.
 		const dev::Ptr2<Type> & ptr() const { return *this; }
@@ -151,13 +151,13 @@ namespace NS_NAMESPACE
 		BufferView3D(std::nullptr_t) : dev::Ptr3<Type>(nullptr), m_buffer(nullptr), m_offset(0) {}
 
 		//	Copy constructor, initializes from another BufferView3D of the same type.
-		BufferView3D(const BufferView3D<std::remove_cv_t<Type>> & rhs) : dev::Ptr3<Type>(rhs.data(), rhs.width(), rhs.height(), rhs.depth()), m_buffer(rhs.getBuffer()), m_offset(rhs.offset()) {}
+		BufferView3D(const BufferView3D<std::remove_cv_t<Type>> & rhs) : dev::Ptr3<Type>(rhs.data(), rhs.width(), rhs.height(), rhs.depth()), m_buffer(rhs.buffer()), m_offset(rhs.offset()) {}
 
 		//	Copy constructor, construct with a given BufferView2D.
-		explicit BufferView3D(const BufferView2D<std::remove_cv_t<Type>> & rhs) : dev::Ptr3<Type>(rhs.data(), rhs.width(), rhs.height(), 1), m_buffer(rhs.getBuffer()), m_offset(rhs.offset()) {}
+		explicit BufferView3D(const BufferView2D<std::remove_cv_t<Type>> & rhs) : dev::Ptr3<Type>(rhs.data(), rhs.width(), rhs.height(), 1), m_buffer(rhs.buffer()), m_offset(rhs.offset()) {}
 
 		//	Copy constructor, construct with a given BufferView1D.
-		explicit BufferView3D(const BufferView1D<std::remove_cv_t<Type>> & rhs) : dev::Ptr3<Type>(rhs.data(), rhs.Width(), 1, 1), m_buffer(rhs.getBuffer()), m_offset(rhs.offset()) {}
+		explicit BufferView3D(const BufferView1D<std::remove_cv_t<Type>> & rhs) : dev::Ptr3<Type>(rhs.data(), rhs.Width(), 1, 1), m_buffer(rhs.buffer()), m_offset(rhs.offset()) {}
 
 		/**
 		 *	@brief		Constructor to initialize with a shared buffer, offset, width, height and depth.
@@ -178,7 +178,7 @@ namespace NS_NAMESPACE
 	public:
 
 		//	Returns pointer to the associated Buffer.
-		std::shared_ptr<Buffer> getBuffer() const { return m_buffer; }
+		std::shared_ptr<Buffer> buffer() const { return m_buffer; }
 
 		//	Returns device pointer to the underlying array, explicitly.
 		const dev::Ptr3<Type> & ptr() const { return *this; }

@@ -29,10 +29,10 @@
 
 void device_test()
 {
-	auto device = ns::Context::getInstance()->getDevice(0);
+	auto device = ns::Context::getInstance()->device(0);
 
 	device->init();
-	device->getProperties();
-	device->getFreeMemorySize();
+	device->properties();
+	device->freeMemorySize();
 	device->sync();
 }

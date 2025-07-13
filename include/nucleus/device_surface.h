@@ -55,7 +55,7 @@ namespace NS_NAMESPACE::dev
 		NS_CUDA_CALLABLE explicit Surface(cudaSurfaceObject_t hSurface) : m_hSurface(hSurface) {}
 
 		//	Return CUDA type of this object for compatibility.
-		NS_CUDA_CALLABLE cudaSurfaceObject_t getHandle() const { return m_hSurface; }
+		NS_CUDA_CALLABLE cudaSurfaceObject_t handle() const { return m_hSurface; }
 
 		//	Bool conversion operator.
 		NS_CUDA_CALLABLE operator bool() const { return m_hSurface != 0; }

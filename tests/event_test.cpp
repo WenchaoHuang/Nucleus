@@ -32,8 +32,8 @@
 
 void event_test()
 {
-	auto device = ns::Context::getInstance()->getDevice(0);
-	auto & stream = device->getDefaultStream();
+	auto device = ns::Context::getInstance()->device(0);
+	auto & stream = device->defaultStream();
 
 	ns::Event		event0(device);
 	ns::TimedEvent	event1(device);
@@ -50,7 +50,7 @@ void event_test()
 	if (event1.query())
 	{
 		event1.sync();
-		event1.getDevice();
-		event1.getHandle();
+		event1.device();
+		event1.handle();
 	}
 }

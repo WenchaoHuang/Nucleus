@@ -56,7 +56,7 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Return CUDA device ID.
 		 */
-		int getID() const { return m_deviceID; }
+		int id() const { return m_deviceID; }
 
 
 		/**
@@ -82,26 +82,26 @@ namespace NS_NAMESPACE
 		 *	@brief		query the size of free device memory.
 		 *	@return		The free amount of memory available for allocation by the device in bytes.
 		 */
-		size_t getFreeMemorySize() const;
+		size_t freeMemorySize() const;
 
 
 		/**
 		 *	@brief		Return reference of the default stream.
 		 */
-		Stream & getDefaultStream() { return *m_defaultStream.get(); }
+		Stream & defaultStream() { return *m_defaultStream.get(); }
 
 
 		/**
 		 *	@brief		Return the device properties.
 		 *	@note		Requires CUDA Toolkit.
 		 */
-		const cudaDeviceProp * getProperties() const { return m_devProp.get(); }
+		const cudaDeviceProp * properties() const { return m_devProp.get(); }
 
 
 		/**
 		 *	@brief		Return shared pointer to the default allocator.
 		 */
-		std::shared_ptr<DeviceAllocator> getDefaultAllocator() { return m_defaultAlloc; }
+		std::shared_ptr<DeviceAllocator> defaultAllocator() { return m_defaultAlloc; }
 
 		/**
 		 *	@brief		Returns occupancy for a device function.

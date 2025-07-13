@@ -47,9 +47,9 @@ template<typename Type> std::string to_string_aligned(Type value, int align)
 
 int main()
 {
-	auto device = ns::Context::getInstance()->getDevice(0);
+	auto device = ns::Context::getInstance()->device(0);
 	auto hostAlloc = std::make_shared<ns::HostAllocator>();
-	auto devAlloc = device->getDefaultAllocator();
+	auto devAlloc = device->defaultAllocator();
 
 	size_t samples = 10;
 	size_t count = 1024 * 1024 * 128;

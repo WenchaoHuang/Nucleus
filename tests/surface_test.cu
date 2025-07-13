@@ -43,13 +43,13 @@ __global__ void test_device_surface(dev::Surf1D<int> surface0, dev::Surf1D<const
 	surface0.width();
 	surface0.read(10);
 	surface0.write(10, 50);
-	surface0.getHandle();
+	surface0.handle();
 
 	surface1.empty();
 	surface1.width();
 	surface1.read(10);
 //	surface1.write(10, 50);
-	surface1.getHandle();
+	surface1.handle();
 
 	//==	2D	  ==
 	surface2.empty();
@@ -57,14 +57,14 @@ __global__ void test_device_surface(dev::Surf1D<int> surface0, dev::Surf1D<const
 	surface2.height();
 	surface2.read(10, 10);
 	surface2.write(10, 50, 20);
-	surface2.getHandle();
+	surface2.handle();
 
 	surface3.empty();
 	surface3.width();
 	surface3.height();
 	surface3.read(10, 10);
 //	surface3.write(10, 50, 20);
-	surface3.getHandle();
+	surface3.handle();
 
 	//==	3D	  ==
 	surface4.empty();
@@ -73,7 +73,7 @@ __global__ void test_device_surface(dev::Surf1D<int> surface0, dev::Surf1D<const
 	surface4.height();
 	surface4.read(10, 10, 10);
 	surface4.write(10.0f, 50, 20, 30);
-	surface4.getHandle();
+	surface4.handle();
 
 	surface5.empty();
 	surface5.width();
@@ -81,20 +81,20 @@ __global__ void test_device_surface(dev::Surf1D<int> surface0, dev::Surf1D<const
 	surface5.height();
 	surface5.read(10, 10, 10);
 //	surface5.write(10.0f, 50, 20, 30);
-	surface5.getHandle();
+	surface5.handle();
 
 	//==	Cube	==
 	surface6.empty();
 	surface6.width();
 	surface6.read(10, 10, 5);
 	surface6.write({ 1.0f, 2.0f }, 50, 20, 2);
-	surface6.getHandle();
+	surface6.handle();
 
 	surface7.empty();
 	surface7.width();
 	surface7.read(10, 10, 5);
 //	surface7.write({ 10.0f, 2.0f }, 50, 20, 30);
-	surface7.getHandle();
+	surface7.handle();
 
 	//==	1D Layered	  ==
 	surface8.empty();
@@ -102,14 +102,14 @@ __global__ void test_device_surface(dev::Surf1D<int> surface0, dev::Surf1D<const
 	surface8.numLayers();
 	surface8.read(10, 2);
 	surface8.write(10.0f, 50, 0);
-	surface8.getHandle();
+	surface8.handle();
 
 	surface9.empty();
 	surface9.width();
 	surface9.numLayers();
 	surface9.read(10, 2);
 //	surface9.write(10.0f, 50, 0);
-	surface9.getHandle();
+	surface9.handle();
 
 	//==	2D Layered	  ==
 	surface10.empty();
@@ -118,7 +118,7 @@ __global__ void test_device_surface(dev::Surf1D<int> surface0, dev::Surf1D<const
 	surface10.numLayers();
 	surface10.read(10, 2, 0);
 	surface10.write(10.0f, 50, 2, 0);
-	surface10.getHandle();
+	surface10.handle();
 
 	surface11.empty();
 	surface11.width();
@@ -126,69 +126,69 @@ __global__ void test_device_surface(dev::Surf1D<int> surface0, dev::Surf1D<const
 	surface11.numLayers();
 	surface11.read(10, 2, 0);
 //	surface11.write(10.0f, 50, 2, 0);
-	surface11.getHandle();
+	surface11.handle();
 
 	//==	Cube Layered	==
 	surface12.empty();
 	surface12.width();
 	surface12.read(10, 10, 5, 0);
 	surface12.write(3, 50, 20, 2, 0);
-	surface12.getHandle();
+	surface12.handle();
 
 	surface13.empty();
 	surface13.width();
 	surface13.read(10, 10, 5, 0);
 //	surface13.write(3, 50, 20, 2, 0);
-	surface13.getHandle();
+	surface13.handle();
 }
 
 
 void surface_test()
 {
-	auto device = ns::Context::getInstance()->getDevice(0);
-	auto allocator = device->getDefaultAllocator();
+	auto device = ns::Context::getInstance()->device(0);
+	auto allocator = device->defaultAllocator();
 
 	ns::Surface1D<int>	surface0(std::make_shared<ns::Image1D<int>>(allocator, 128, true));
 	surface0.empty();
-	surface0.getImage();
+	surface0.image();
 	surface0.accessor();
-	surface0.getHandle();
+	surface0.handle();
 
 	ns::Surface2D<short>	surface1(std::make_shared<ns::Image2D<short>>(allocator, 128, 128, true));
 	surface1.empty();
-	surface1.getImage();
+	surface1.image();
 	surface1.accessor();
-	surface1.getHandle();
+	surface1.handle();
 
 	ns::Surface3D<float>	surface2(std::make_shared<ns::Image3D<float>>(allocator, 128, 128, 128, true));
 	surface2.empty();
-	surface2.getImage();
+	surface2.image();
 	surface2.accessor();
-	surface2.getHandle();
+	surface2.handle();
 
 	ns::SurfaceCube<ns::float2>	surface3(std::make_shared<ns::ImageCube<ns::float2>>(allocator, 128, true));
 	surface3.empty();
-	surface3.getImage();
+	surface3.image();
 	surface3.accessor();
-	surface3.getHandle();
+	surface3.handle();
 
 	ns::Surface1DLayered<float>	surface4(std::make_shared<ns::Image1DLayered<float>>(allocator, 128, 8, true));
 	surface4.empty();
-	surface4.getImage();
+	surface4.image();
 	surface4.accessor();
-	surface4.getHandle();
+	surface4.handle();
 	
 	ns::Surface2DLayered<float>	surface5(std::make_shared<ns::Image2DLayered<float>>(allocator, 128, 128, 8, true));
 	surface5.empty();
-	surface5.getImage();
+	surface5.image();
 	surface5.accessor();
-	surface5.getHandle();
+	surface5.handle();
 
 	ns::SurfaceCubeLayered<int>	surface6(std::make_shared<ns::ImageCubeLayered<int>>(allocator, 128, 8, true));
 	surface6.empty();
-	surface6.getImage();
+	surface6.image();
 	surface6.accessor();
-	surface6.getHandle();
+	surface6.handle();
 
 	test_device_surface << <1, 1 >> > (surface0, surface0,
 									   surface1, surface1,

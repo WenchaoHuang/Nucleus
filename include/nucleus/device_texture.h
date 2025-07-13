@@ -46,7 +46,7 @@ namespace NS_NAMESPACE::dev
 		NS_CUDA_CALLABLE explicit Texture(cudaTextureObject_t hTexture) : m_hTexture(hTexture) {}
 
 		//	Return CUDA type of this object for compatibility.
-		NS_CUDA_CALLABLE cudaTextureObject_t getHandle() const { return m_hTexture; }
+		NS_CUDA_CALLABLE cudaTextureObject_t handle() const { return m_hTexture; }
 
 		//	Bool conversion operator.
 		NS_CUDA_CALLABLE operator bool() const { return m_hTexture != 0; }

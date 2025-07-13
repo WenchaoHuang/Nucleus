@@ -56,7 +56,7 @@ cudaError_t Device::init() noexcept
 }
 
 
-size_t Device::getFreeMemorySize() const
+size_t Device::freeMemorySize() const
 {
 	this->setCurrent();
 

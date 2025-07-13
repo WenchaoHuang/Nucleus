@@ -107,7 +107,7 @@ std::chrono::nanoseconds TimedEvent::getElapsedTime(TimedEvent & eventStart, Tim
 {
 	float elapsedTime = 0.0f;
 
-	cudaError_t err = cudaEventElapsedTime(&elapsedTime, eventStart.getHandle(), eventEnd.getHandle());
+	cudaError_t err = cudaEventElapsedTime(&elapsedTime, eventStart.handle(), eventEnd.handle());
 
 	if (err != cudaSuccess)
 	{

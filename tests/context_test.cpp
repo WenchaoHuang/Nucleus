@@ -35,8 +35,8 @@ void context_test()
 	assert(ns::Version(10, 5) <= ns::Version(10, 5));
 
 	auto context = ns::Context::getInstance();
-	auto driverVersion = context->getDriverVersion();
-	auto runtimVersion = context->getRuntimeVersion();
+	auto driverVersion = context->driverVersion();
+	auto runtimVersion = context->runtimeVersion();
 	auto devices = context->getDevices();
-	auto device = context->getDevice(0);
+	auto device = context->device(0);
 }

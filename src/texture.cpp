@@ -81,7 +81,7 @@ void Texture::bindImage(std::shared_ptr<ImageBase> image, Sampler sampler, Forma
 			format = pImageLod->format();
 
 			resDesc.resType = cudaResourceTypeMipmappedArray;
-			resDesc.res.mipmap.mipmap = pImageLod->getHandle();
+			resDesc.res.mipmap.mipmap = pImageLod->handle();
 
 			if (!std::dynamic_pointer_cast<ImageCubeLod<void>>(pImageLod) &&
 				!std::dynamic_pointer_cast<ImageCubeLayeredLod<void>>(pImageLod))

@@ -84,7 +84,7 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Return pointer to the device associated with.
 		 */
-		Device * getDevice() { return m_device; }
+		Device * device() { return m_device; }
 
 
 		/**
@@ -97,7 +97,7 @@ namespace NS_NAMESPACE
 		 *	@brief		Return CUDA stream type of this object.
 		 *	@warning	Only for CUDA-based project.
 		 */
-		cudaStream_t getHandle() noexcept { return m_hStream; }
+		cudaStream_t handle() noexcept { return m_hStream; }
 
 	public:
 

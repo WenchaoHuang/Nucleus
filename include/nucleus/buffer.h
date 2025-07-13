@@ -101,7 +101,7 @@ namespace NS_NAMESPACE
 		 *	@brief		Gets the associated memory allocator.
 		 *	@return		Shared pointer to the Allocator instance.
 		 */
-		const std::shared_ptr<Allocator> & getAllocator() const { return m_allocator; }
+		const std::shared_ptr<Allocator> & allocator() const { return m_allocator; }
 
 
 		/**

@@ -49,7 +49,7 @@ class MyHostAllocator : public ns::HostAllocator
 
 void allocator_test()
 {
-	auto device = ns::Context::getInstance()->getDevice(0);
+	auto device = ns::Context::getInstance()->device(0);
 
 	MyHostAllocator hostAlloc;
 	auto hostPtr = hostAlloc.allocateMemory(110);
@@ -59,7 +59,7 @@ void allocator_test()
 	auto Ptr = devAlloc.allocateMemory(128);
 	devAlloc.deallocateMemory(Ptr);
 
-	auto pAlloc = device->getDefaultAllocator();
+	auto pAlloc = device->defaultAllocator();
 	auto texMem = pAlloc->allocateTextureMemory(ns::Format::Float, 100, 100, 100);
 	devAlloc.deallocateTextureMemory(texMem);
 

@@ -50,14 +50,14 @@ __global__ void test_kernel()
 
 void stream_test()
 {
-	auto device = ns::Context::getInstance()->getDevice(0);
-	auto allocator = device->getDefaultAllocator();
-	auto & stream = device->getDefaultStream();
+	auto device = ns::Context::getInstance()->device(0);
+	auto allocator = device->defaultAllocator();
+	auto & stream = device->defaultStream();
 
 	stream.sync();
 	stream.query();
-	assert(stream.getDevice() == device);
-	assert(stream.getHandle() == nullptr);
+	assert(stream.device() == device);
+	assert(stream.handle() == nullptr);
 
 	int a;
 	auto pfnTask = [](int*) { printf("host: Happy Nucleus!\n"); };

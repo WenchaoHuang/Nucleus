@@ -38,8 +38,8 @@ static void test(dev::Ptr<int> a, dev::Ptr2<const float> b, dev::Ptr3<float> c)
 
 void array_test()
 {
-	auto device = ns::Context::getInstance()->getDevice(0);
-	auto allocator = device->getDefaultAllocator();
+	auto device = ns::Context::getInstance()->device(0);
+	auto allocator = device->defaultAllocator();
 
 	ns::Array<int>		array0;
 	ns::Array<int>		array1(allocator, 100);
@@ -63,8 +63,8 @@ void array_test()
 		assert(array11.width() == 100);
 		assert(array11.bytes() == 100 * sizeof(int));
 		assert(array11.pitch() == 100 * sizeof(int));
-		assert(array11.getAllocator() == allocator);
 		assert(array11.releaseBuffer() != nullptr);
+		assert(array11.allocator() == nullptr);
 		array11.resize(allocator, 200);
 		array11.resize(300);
 		array11.resize(300);
@@ -82,7 +82,7 @@ void array_test()
 		assert(array33.width() == 100);
 		assert(array33.pitch() == 100 * sizeof(float));
 		assert(array33.height() == 100);
-		assert(array33.getAllocator() == allocator);
+		assert(array33.allocator() == allocator);
 		assert(array33.releaseBuffer() != nullptr);
 		array33.resize(allocator, 200, 400);
 		array33.reshape(100, 800);
@@ -102,7 +102,7 @@ void array_test()
 		assert(array55.pitch() == 100 * sizeof(float));
 		assert(array55.depth() == 100);
 		assert(array55.height() == 100);
-		assert(array55.getAllocator() == allocator);
+		assert(array55.allocator() == allocator);
 		array55.resize(allocator, 200, 400, 500);
 		array55.reshape(200, 500, 400);
 		array55.resize(500, 200, 300);

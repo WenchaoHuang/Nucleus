@@ -76,14 +76,14 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Return pointer to the device associated with.
 		 */
-		Device * getDevice() const { return m_device; }
+		Device * device() const { return m_device; }
 
 
 		/**
 		 *	@brief		Return CUDA event type of this object.
 		 *	@warning	Only for CUDA-based project use.
 		 */
-		cudaEvent_t getHandle() noexcept { return m_hEvent; }
+		cudaEvent_t handle() noexcept { return m_hEvent; }
 
 
 		/**

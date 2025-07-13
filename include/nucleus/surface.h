@@ -53,8 +53,8 @@ namespace NS_NAMESPACE
 		//	Checks if the surface is empty.
 		bool empty() const { return m_hSurface == 0; }
 
-		//	Return CUDA stream type of this object.
-		cudaSurfaceObject_t getHandle() const { return m_hSurface; }
+		//	Return CUDA type of this object.
+		cudaSurfaceObject_t handle() const { return m_hSurface; }
 
 	protected:
 
@@ -94,7 +94,7 @@ namespace NS_NAMESPACE
 		void bind(std::shared_ptr<Image1D<Type>> image) { this->bindImage(image); }
 
 		//	Returns shared pointer to the binded texture memory.
-		std::shared_ptr<Image1D<Type>> getImage() const { return std::dynamic_pointer_cast<Image1D<Type>>(m_image); }
+		std::shared_ptr<Image1D<Type>> image() const { return std::dynamic_pointer_cast<Image1D<Type>>(m_image); }
 
 		//	Converts to a device surface object for kernal access.
 		operator dev::Surf1D<Type>() { return m_image ? dev::Surf1D<Type>(m_hSurface, m_image->width()) : nullptr; }
@@ -131,10 +131,10 @@ namespace NS_NAMESPACE
 		void bind(std::shared_ptr<Image2D<Type>> image) { this->bindImage(image); }
 
 		//	Returns shared pointer to the binded texture memory.
-		std::shared_ptr<Image2D<Type>> getImage() const { return std::dynamic_pointer_cast<Image2D<Type>>(m_image); }
+		std::shared_ptr<Image2D<Type>> image() const { return std::dynamic_pointer_cast<Image2D<Type>>(m_image); }
 
 		//	Converts to a device surface object for kernal access.
-		operator dev::Surf2D<Type>() { return m_image ? dev::Surf2D<Type>(m_hSurface, getImage()->width(), getImage()->height()) : nullptr; }
+		operator dev::Surf2D<Type>() { return m_image ? dev::Surf2D<Type>(m_hSurface, image()->width(), image()->height()) : nullptr; }
 
 		//	Converts to a device surface object for kernal access (constant version).
 		operator dev::Surf2D<const Type>() const { return *this; }
@@ -168,10 +168,10 @@ namespace NS_NAMESPACE
 		void bind(std::shared_ptr<Image3D<Type>> image) { this->bindImage(image); }
 
 		//	Returns shared pointer to the binded texture memory.
-		std::shared_ptr<Image3D<Type>> getImage() const { return std::dynamic_pointer_cast<Image3D<Type>>(m_image); }
+		std::shared_ptr<Image3D<Type>> image() const { return std::dynamic_pointer_cast<Image3D<Type>>(m_image); }
 
 		//	Converts to a device surface object for kernal access.
-		operator dev::Surf3D<Type>() { return m_image ? dev::Surf3D<Type>(m_hSurface, getImage()->width(), getImage()->height(), getImage()->depth()) : nullptr; }
+		operator dev::Surf3D<Type>() { return m_image ? dev::Surf3D<Type>(m_hSurface, image()->width(), image()->height(), image()->depth()) : nullptr; }
 
 		//	Converts to a device surface object for kernal access (constant version).
 		operator dev::Surf3D<const Type>() const { return *this; }
@@ -205,10 +205,10 @@ namespace NS_NAMESPACE
 		void bind(std::shared_ptr<Image1DLayered<Type>> image) { this->bindImage(image); }
 
 		//	Returns shared pointer to the binded texture memory.
-		std::shared_ptr<Image1DLayered<Type>> getImage() const { return std::dynamic_pointer_cast<Image1DLayered<Type>>(m_image); }
+		std::shared_ptr<Image1DLayered<Type>> image() const { return std::dynamic_pointer_cast<Image1DLayered<Type>>(m_image); }
 
 		//	Converts to a device surface object for kernal access.
-		operator dev::Surf1DLayered<Type>() { return m_image ? dev::Surf1DLayered<Type>(m_hSurface, getImage()->width(), getImage()->numLayers()) : nullptr; }
+		operator dev::Surf1DLayered<Type>() { return m_image ? dev::Surf1DLayered<Type>(m_hSurface, image()->width(), image()->numLayers()) : nullptr; }
 
 		//	Converts to a device surface object for kernal access (constant version).
 		operator dev::Surf1DLayered<const Type>() const { return *this; }
@@ -242,10 +242,10 @@ namespace NS_NAMESPACE
 		void bind(std::shared_ptr<Image2DLayered<Type>> image) { this->bindImage(image); }
 
 		//	Returns shared pointer to the binded texture memory.
-		std::shared_ptr<Image2DLayered<Type>> getImage() const { return std::dynamic_pointer_cast<Image2DLayered<Type>>(m_image); }
+		std::shared_ptr<Image2DLayered<Type>> image() const { return std::dynamic_pointer_cast<Image2DLayered<Type>>(m_image); }
 
 		//	Converts to a device surface object for kernal access.
-		operator dev::Surf2DLayered<Type>() { return m_image ? dev::Surf2DLayered<Type>(m_hSurface, getImage()->width(), getImage()->height(), getImage()->numLayers()) : nullptr; }
+		operator dev::Surf2DLayered<Type>() { return m_image ? dev::Surf2DLayered<Type>(m_hSurface, image()->width(), image()->height(), image()->numLayers()) : nullptr; }
 
 		//	Converts to a device surface object for kernal access (constant version).
 		operator dev::Surf2DLayered<const Type>() const { return *this; }
@@ -279,10 +279,10 @@ namespace NS_NAMESPACE
 		void bind(std::shared_ptr<ImageCube<Type>> image) { this->bindImage(image); }
 
 		//	Returns shared pointer to the binded texture memory.
-		std::shared_ptr<ImageCube<Type>> getImage() const { return std::dynamic_pointer_cast<ImageCube<Type>>(m_image); }
+		std::shared_ptr<ImageCube<Type>> image() const { return std::dynamic_pointer_cast<ImageCube<Type>>(m_image); }
 
 		//	Converts to a device surface object for kernal access.
-		operator dev::SurfCube<Type>() { return m_image ? dev::SurfCube<Type>(m_hSurface, getImage()->width()) : nullptr; }
+		operator dev::SurfCube<Type>() { return m_image ? dev::SurfCube<Type>(m_hSurface, image()->width()) : nullptr; }
 
 		//	Converts to a device surface object for kernal access (constant version).
 		operator dev::SurfCube<const Type>() const { return *this; }
@@ -316,10 +316,10 @@ namespace NS_NAMESPACE
 		void bind(std::shared_ptr<ImageCubeLayered<Type>> image) { this->bindImage(image); }
 
 		//	Returns shared pointer to the binded texture memory.
-		std::shared_ptr<ImageCubeLayered<Type>> getImage() const { return std::dynamic_pointer_cast<ImageCubeLayered<Type>>(m_image); }
+		std::shared_ptr<ImageCubeLayered<Type>> image() const { return std::dynamic_pointer_cast<ImageCubeLayered<Type>>(m_image); }
 
 		//	Converts to a device surface object for kernal access.
-		operator dev::SurfCubeLayered<Type>() { return m_image ? dev::SurfCubeLayered<Type>(m_hSurface, getImage()->width(), getImage()->numLayers()) : nullptr; }
+		operator dev::SurfCubeLayered<Type>() { return m_image ? dev::SurfCubeLayered<Type>(m_hSurface, image()->width(), image()->numLayers()) : nullptr; }
 
 		//	Converts to a device surface object for kernal access (constant version).
 		operator dev::SurfCubeLayered<const Type>() const { return *this; }

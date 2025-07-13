@@ -64,7 +64,7 @@ Stream & Stream::recordEvent(Event & event)
 {
 	this->acquireDeviceContext();
 
-	cudaError_t err = cudaEventRecord(event.getHandle(), m_hStream);
+	cudaError_t err = cudaEventRecord(event.handle(), m_hStream);
 
 	if (err != cudaSuccess)
 	{
@@ -81,7 +81,7 @@ Stream & Stream::waitEvent(Event & event)
 {
 	this->acquireDeviceContext();
 
-	cudaError_t err = cudaStreamWaitEvent(m_hStream, event.getHandle(), cudaEventWaitDefault);
+	cudaError_t err = cudaStreamWaitEvent(m_hStream, event.handle(), cudaEventWaitDefault);
 
 	if (err != cudaSuccess)
 	{

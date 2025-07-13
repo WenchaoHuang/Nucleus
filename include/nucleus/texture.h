@@ -128,7 +128,7 @@ namespace NS_NAMESPACE
 		public:
 
 			//	Returns shared pointer to the binded texture memory.
-			std::shared_ptr<ImageTemplate<void>> getImage() const { return std::dynamic_pointer_cast<ImageTemplate<void>>(m_image); }
+			std::shared_ptr<ImageTemplate<void>> image() const { return std::dynamic_pointer_cast<ImageTemplate<void>>(m_image); }
 
 			//	Converts to a device texture object for kernal access.
 			operator devTexTemplate<Type>() const { return devTexTemplate<Type>(m_hTexture); }

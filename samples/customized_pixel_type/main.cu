@@ -79,10 +79,10 @@ __global__ void pixel_assign(dev::Surf2D<MyPixelType1> out1, dev::Surf2D<MyPixel
 
 int main()
 {
-	auto device = ns::Context::getInstance()->getDevice(0);
+	auto device = ns::Context::getInstance()->device(0);
 	auto hostAlloc = std::make_shared<ns::HostAllocator>();
-	auto allocator = device->getDefaultAllocator();
-	auto & stream = device->getDefaultStream();
+	auto allocator = device->defaultAllocator();
+	auto & stream = device->defaultStream();
 	
 	auto image1 = std::make_shared<ns::Image2D<MyPixelType1>>(allocator, 16, 16);
 	auto image2 = std::make_shared<ns::Image2D<MyPixelType2>>(allocator, 16, 16);

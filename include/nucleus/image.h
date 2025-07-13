@@ -66,7 +66,7 @@ namespace NS_NAMESPACE
 		uint32_t width() const { return m_width; }
 
 		//	Returns pointer to the allocator associated with.
-		std::shared_ptr<DeviceAllocator> getAllocator() const { return m_allocator; }
+		std::shared_ptr<DeviceAllocator> allocator() const { return m_allocator; }
 
 	protected:
 
@@ -171,7 +171,7 @@ namespace NS_NAMESPACE
 	public:
 
 		//	Returns CUDA type of this object.
-		cudaMipmappedArray_t getHandle() const { return m_hImageLod; }
+		cudaMipmappedArray_t handle() const { return m_hImageLod; }
 
 		//	Returns the number of mipmap levels.
 		unsigned int numLevels() const { return m_numLevels; }

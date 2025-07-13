@@ -86,19 +86,19 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Return the latest version of CUDA supported by the driver.
 		 */
-		Version getDriverVersion() const { return m_driverVersion; }
+		Version driverVersion() const { return m_driverVersion; }
 
 
 		/**
 		 *	@brief		Return the version number of the current CUDA Runtime instance.
 		 */
-		Version getRuntimeVersion() const { return m_runtimeVersion; }
+		Version runtimeVersion() const { return m_runtimeVersion; }
 
 
 		/**
 		 *	@brief		Return pointer to physical device.
 		 */
-		Device * getDevice(size_t index) const { return m_pNvidiaDevices[index]; }
+		Device * device(size_t index) const { return m_pNvidiaDevices[index]; }
 
 
 		/**

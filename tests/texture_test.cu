@@ -42,138 +42,138 @@ __global__ void test_device_texture(dev::Tex1D<int> tex0, dev::Tex1DLod<int> tex
 	//	1D
 	tex0.empty();
 	tex0.fetch(0.5f);
-	tex0.getHandle();
+	tex0.handle();
 
 	tex1.empty();
 	tex1.fetch(0.5f, 0);
 	tex1.Grad(0.0f, 1.0f, 2.0f);
-	tex1.getHandle();
+	tex1.handle();
 
 	tex2.empty();
 	tex2.fetch(0.5f, 0);
-	tex2.getHandle();
+	tex2.handle();
 	
 	tex3.empty();
 	tex3.fetch(0.5f, 0, 0.5f);
 	tex3.Grad(0.0f, 1, 1.0f, 2.0f);
-	tex3.getHandle();
+	tex3.handle();
 
 	//	2D
 	tex4.empty();
 	tex4.fetch(0.5f, 0.5f);
-	tex4.getHandle();
+	tex4.handle();
 
 	tex5.empty();
 	tex5.fetch(0.5f, 0.2f, 0);
 	tex5.Grad(0.0f, 1.0f, { 2.0f, 1.0f }, { 1.0f, 2.0f });
-	tex5.getHandle();
+	tex5.handle();
 
 	tex6.empty();
 	tex6.fetch(0.5f, 0.0f, 0);
-	tex6.getHandle();
+	tex6.handle();
 
 	tex7.empty();
 	tex7.fetch(0.5f, 1.0f, 0, 0.5f);
 	tex7.Grad(0.0f, 2.0f, 1, { 1.0f, 1.0f }, { 2.0f, 2.0f });
-	tex7.getHandle();
+	tex7.handle();
 
 	//	3D
 	tex8.empty();
 	tex8.fetch(0.5f, 0.5f, 2.0f);
-	tex8.getHandle();
+	tex8.handle();
 
 	tex9.empty();
 	tex9.fetch(0.5f, 0.2f, 1.0f, 0);
 	tex9.Grad(0.0f, 1.0f, 2.0f, { 2.0f, 1.0f, 2.0f, 2.0f }, { 1.0f, 2.0f, 2.0f, 3.0f });
-	tex9.getHandle();
+	tex9.handle();
 
 	//	Cube
 	tex10.empty();
 	tex10.fetch(0.5f, 0.2f, 0.3f);
-	tex10.getHandle();
+	tex10.handle();
 
 	tex11.empty();
 	tex11.fetch(0.5f, 0.6f, 0.8f, 0);
 	tex11.Grad(0.0f, 1.0f, 2.0f, { 2.0f, 1.0f, 2.0f, 2.0f }, { 1.0f, 2.0f, 2.0f, 3.0f });
-	tex11.getHandle();
+	tex11.handle();
 
 	tex12.empty();
 	tex12.fetch(0.5f, 2.0f, 3.0f, 0);
-	tex12.getHandle();
+	tex12.handle();
 
 	tex13.empty();
 	tex13.fetch(0.5f, 0.3f, 0.1f, 0, 0.5f);
 	tex13.Grad(0.5f, 0.3f, 0.1f, 1, { 2.0f, 1.0f, 2.0f, 2.0f }, { 1.0f, 2.0f, 2.0f, 3.0f });
-	tex13.getHandle();
+	tex13.handle();
 }
 
 
 void texture_test()
 {
-	auto device = ns::Context::getInstance()->getDevice(0);
-	auto allocator = device->getDefaultAllocator();
-	auto & stream = device->getDefaultStream();
+	auto device = ns::Context::getInstance()->device(0);
+	auto allocator = device->defaultAllocator();
+	auto & stream = device->defaultStream();
 
 	//	1D
 	ns::Texture1D<int>	texture0;
 	texture0.bind(std::make_shared<ns::Image1D<int>>(allocator, 10));
-	assert(texture0.getImage() != nullptr);
+	assert(texture0.image() != nullptr);
 	
 	ns::Texture1DLod<int>	texture1;
 	texture1.bind(std::make_shared<ns::Image1DLod<int>>(allocator, 10, 2));
-	assert(texture1.getImage() != nullptr);
+	assert(texture1.image() != nullptr);
 
 	ns::Texture1DLayered<int>	texture2;
 	texture2.bind(std::make_shared<ns::Image1DLayered<int>>(allocator, 10, 2));
-	assert(texture2.getImage() != nullptr);
+	assert(texture2.image() != nullptr);
 
 	ns::Texture1DLayeredLod<int>	texture3;
 	texture3.bind(std::make_shared<ns::Image1DLayeredLod<int>>(allocator, 10, 2, 2));
-	assert(texture3.getImage() != nullptr);
+	assert(texture3.image() != nullptr);
 
 	//	2D
 	ns::Texture2D<float>	texture4;
 	texture4.bind(std::make_shared<ns::Image2D<char>>(allocator, 10, 10));
 	texture4.bind(std::make_shared<ns::Image2D<float>>(allocator, 10, 10));
-	assert(texture4.getImage() != nullptr);
+	assert(texture4.image() != nullptr);
 
 	ns::Texture2DLod<int>	texture5;
 	texture5.bind(std::make_shared<ns::Image2DLod<int>>(allocator, 10, 10, 2));
-	assert(texture5.getImage() != nullptr);
+	assert(texture5.image() != nullptr);
 
 	ns::Texture2DLayered<int>	texture6;
 	texture6.bind(std::make_shared<ns::Image2DLayered<int>>(allocator, 10, 10, 2));
-	assert(texture6.getImage() != nullptr);
+	assert(texture6.image() != nullptr);
 
 	ns::Texture2DLayeredLod<int>	texture7;
 	texture7.bind(std::make_shared<ns::Image2DLayeredLod<int>>(allocator, 10, 10, 2, 2));
-	assert(texture7.getImage() != nullptr);
+	assert(texture7.image() != nullptr);
 
 	//	3D
 	ns::Texture3D<int>	texture8;
 	texture8.bind(std::make_shared<ns::Image3D<int>>(allocator, 10, 10, 10));
-	assert(texture8.getImage() != nullptr);
+	assert(texture8.image() != nullptr);
 
 	ns::Texture3DLod<int>	texture9;
 	texture9.bind(std::make_shared<ns::Image3DLod<int>>(allocator, 10, 10, 10, 2));
-	assert(texture9.getImage() != nullptr);
+	assert(texture9.image() != nullptr);
 
 	//	Cube
 	ns::TextureCube<int>	texture10;
 	texture10.bind(std::make_shared<ns::ImageCube<int>>(allocator, 10));
-	assert(texture10.getImage() != nullptr);
+	assert(texture10.image() != nullptr);
 
 	ns::TextureCubeLod<int>	texture11;
 	texture11.bind(std::make_shared<ns::ImageCubeLod<int>>(allocator, 10, 2));
-	assert(texture11.getImage() != nullptr);
+	assert(texture11.image() != nullptr);
 
 	ns::TextureCubeLayered<int>	texture12;
 	texture12.bind(std::make_shared<ns::ImageCubeLayered<int>>(allocator, 10, 2));
-	assert(texture12.getImage() != nullptr);
+	assert(texture12.image() != nullptr);
 
 	ns::TextureCubeLayeredLod<int>	texture13;
 	texture13.bind(std::make_shared<ns::ImageCubeLayeredLod<int>>(allocator, 10, 2, 2));
-	assert(texture13.getImage() != nullptr);
+	assert(texture13.image() != nullptr);
 
 	// Read mode: normalized float
 	ns::Texture2D<float>	texture14;

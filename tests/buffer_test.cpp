@@ -30,8 +30,8 @@
 
 void buffer_test()
 {
-	auto device = ns::Context::getInstance()->getDevice(0);
-	auto allocator = device->getDefaultAllocator();
+	auto device = ns::Context::getInstance()->device(0);
+	auto allocator = device->defaultAllocator();
 
 	ns::Buffer buffer0;
 	ns::Buffer buffer1(allocator, 1024);
@@ -41,7 +41,7 @@ void buffer_test()
 	uniqueBuffer = nullptr;
 	sharedBuffer = nullptr;
 
-	buffer1.getAllocator();
+	buffer1.allocator();
 	buffer1.capacity();
 	buffer1.empty();
 	buffer1.data();
