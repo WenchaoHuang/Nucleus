@@ -41,7 +41,7 @@ Graph::Graph() : m_ID(std::hash<void*>{}(this)), m_hGraph(nullptr), m_hGraphExec
 }
 
 
-ExecDep Graph::barrier(std::initializer_list<ExecDep> dependencies)
+ExecDep Graph::barrier(ArrayProxy<ExecDep> dependencies)
 {
 	if (m_pImmediateLaunchStream != nullptr)	//	in immediate launch mode
 	{
@@ -82,7 +82,7 @@ ExecDep Graph::barrier(std::initializer_list<ExecDep> dependencies)
 }
 
 
-ExecDep Graph::memcpy_void(void * dst, const void * src, size_t bytes, std::initializer_list<ExecDep> dependencies)
+ExecDep Graph::memcpy_void(void * dst, const void * src, size_t bytes, ArrayProxy<ExecDep> dependencies)
 {
 	if (m_pImmediateLaunchStream != nullptr)	//	in immediate launch mode
 	{
@@ -145,20 +145,20 @@ ExecDep Graph::memcpy_void(void * dst, const void * src, size_t bytes, std::init
 }
 
 
-uint64_t Graph::cacheDependencies(std::initializer_list<ExecDep> dependencies)
+uint64_t Graph::cacheDependencies(ArrayProxy<ExecDep> dependencies)
 {
 	m_depIndicesCache.clear();
 
 	for (size_t i = 0; i < dependencies.size(); i++)
 	{
-		if ((dependencies.begin() + i)->Index == -1)	continue;	//	skip ExecDep(x, -1) for convenience
+		if (dependencies[i].Index == -1)	continue;	//	skip ExecDep(x, -1) for convenience
 
-		NS_ASSERT_LOG_IF((dependencies.begin() + i)->ID != m_ID, "Invalid dependency!");
-		NS_ASSERT_LOG_IF((dependencies.begin() + i)->Index >= m_indicator, "Invalid dependency!");
+		NS_ASSERT_LOG_IF(dependencies[i].ID != m_ID, "Invalid dependency!");
+		NS_ASSERT_LOG_IF(dependencies[i].Index >= m_indicator, "Invalid dependency!");
 
-		if (((dependencies.begin() + i)->ID == m_ID) && ((dependencies.begin() + i)->Index < m_indicator))	//	dependency index should always smaller than current index
+		if ((dependencies[i].ID == m_ID) && (dependencies[i].Index < m_indicator))	//	dependency index should always smaller than current index
 		{
-			m_depIndicesCache.emplace((dependencies.begin() + i)->Index);
+			m_depIndicesCache.emplace(dependencies[i].Index);
 		}
 	}
 

@@ -20,47 +20,65 @@
  *	SOFTWARE.
  */
 
-#include <stdlib.h>
+#include <nucleus/array_proxy.h>
 
 /*********************************************************************************
-***********************************    main    ***********************************
+*****************************    array_proxy_test    *****************************
 *********************************************************************************/
 
-extern void event_test();
-extern void array_test();
-extern void image_test();
-extern void graph_test();
-extern void logger_test();
-extern void device_test();
-extern void buffer_test();
-extern void stream_test();
-extern void context_test();
-extern void dev_ptr_test();
-extern void surface_test();
-extern void texture_test();
-extern void allocator_test();
-extern void array_proxy_test();
-extern void buffer_view_test();
-
-int main()
+void array_proxy_test()
 {
-	context_test();
-	device_test();
-	event_test();
-	graph_test();
-	allocator_test();
-	buffer_test();
-	dev_ptr_test();
-	array_test();
-	image_test();
-	stream_test();
-	surface_test();
-	texture_test();
-	buffer_view_test();
-	array_proxy_test();
-	logger_test();
+	int a[3] = { 1, 2, 3 };
+	std::array<int, 5> b = { 0,1,2,3,4 };
+	std::vector<int> c = { 0,1 };
 
-	system("pause");
+	ns::ArrayProxy<int> x0(a);
+	ns::ArrayProxy<int> x1(b);
+	ns::ArrayProxy<int> x2(c);
+	ns::ArrayProxy<int> x3 = nullptr;
+	ns::ArrayProxy<int> x4({ 1,2,3 });
 
-	return 0;
+	assert(x0[0] == a[0]);
+	assert(x0[1] == a[1]);
+	assert(x0[2] == a[2]);
+	assert(x0.data() == a);
+	assert(x0.size() == 3);
+	assert(x0.empty() == false);
+
+	assert(x1[0] == b[0]);
+	assert(x1[1] == b[1]);
+	assert(x1[2] == b[2]);
+	assert(x1[3] == b[3]);
+	assert(x1[4] == b[4]);
+	assert(x1.data() == b.data());
+	assert(x1.size() == b.size());
+	assert(x1.empty() == false);
+
+	assert(x2[0] == c[0]);
+	assert(x2[1] == c[1]);
+	assert(x2.data() == c.data());
+	assert(x2.size() == c.size());
+	assert(x2.empty() == false);
+
+	assert(x3.size() == 0);
+	assert(x3.data() == nullptr);
+	assert(x3.empty() == true);
+
+	if (!x4.empty())
+	{
+		auto x5 = x4.end();
+		auto x6 = x4.data();
+		auto x7 = x4.begin();
+		auto x8 = x4.front();
+		auto x9 = x4.back();
+		assert(x4.size() == 3);
+		assert(x4[0] == 1);
+		assert(x4[1] == 2);
+		assert(x4[2] == 3);
+	}
+
+	for (auto val : x4)
+	{
+
+	}
 }
