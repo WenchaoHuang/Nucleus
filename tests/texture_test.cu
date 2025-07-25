@@ -46,7 +46,7 @@ __global__ void test_device_texture(dev::Tex1D<int> tex0, dev::Tex1DLod<int> tex
 
 	tex1.empty();
 	tex1.fetch(0.5f, 0);
-	tex1.Grad(0.0f, 1.0f, 2.0f);
+	tex1.grad(0.0f, 1.0f, 2.0f);
 	tex1.handle();
 
 	tex2.empty();
@@ -55,7 +55,7 @@ __global__ void test_device_texture(dev::Tex1D<int> tex0, dev::Tex1DLod<int> tex
 	
 	tex3.empty();
 	tex3.fetch(0.5f, 0, 0.5f);
-	tex3.Grad(0.0f, 1, 1.0f, 2.0f);
+	tex3.grad(0.0f, 1, 1.0f, 2.0f);
 	tex3.handle();
 
 	//	2D
@@ -65,7 +65,7 @@ __global__ void test_device_texture(dev::Tex1D<int> tex0, dev::Tex1DLod<int> tex
 
 	tex5.empty();
 	tex5.fetch(0.5f, 0.2f, 0);
-	tex5.Grad(0.0f, 1.0f, { 2.0f, 1.0f }, { 1.0f, 2.0f });
+	tex5.grad(0.0f, 1.0f, { 2.0f, 1.0f }, { 1.0f, 2.0f });
 	tex5.handle();
 
 	tex6.empty();
@@ -74,7 +74,7 @@ __global__ void test_device_texture(dev::Tex1D<int> tex0, dev::Tex1DLod<int> tex
 
 	tex7.empty();
 	tex7.fetch(0.5f, 1.0f, 0, 0.5f);
-	tex7.Grad(0.0f, 2.0f, 1, { 1.0f, 1.0f }, { 2.0f, 2.0f });
+	tex7.grad(0.0f, 2.0f, 1, { 1.0f, 1.0f }, { 2.0f, 2.0f });
 	tex7.handle();
 
 	//	3D
@@ -84,7 +84,7 @@ __global__ void test_device_texture(dev::Tex1D<int> tex0, dev::Tex1DLod<int> tex
 
 	tex9.empty();
 	tex9.fetch(0.5f, 0.2f, 1.0f, 0);
-	tex9.Grad(0.0f, 1.0f, 2.0f, { 2.0f, 1.0f, 2.0f, 2.0f }, { 1.0f, 2.0f, 2.0f, 3.0f });
+	tex9.grad(0.0f, 1.0f, 2.0f, { 2.0f, 1.0f, 2.0f, 2.0f }, { 1.0f, 2.0f, 2.0f, 3.0f });
 	tex9.handle();
 
 	//	Cube
@@ -94,7 +94,7 @@ __global__ void test_device_texture(dev::Tex1D<int> tex0, dev::Tex1DLod<int> tex
 
 	tex11.empty();
 	tex11.fetch(0.5f, 0.6f, 0.8f, 0);
-	tex11.Grad(0.0f, 1.0f, 2.0f, { 2.0f, 1.0f, 2.0f, 2.0f }, { 1.0f, 2.0f, 2.0f, 3.0f });
+	tex11.grad(0.0f, 1.0f, 2.0f, { 2.0f, 1.0f, 2.0f, 2.0f }, { 1.0f, 2.0f, 2.0f, 3.0f });
 	tex11.handle();
 
 	tex12.empty();
@@ -103,7 +103,7 @@ __global__ void test_device_texture(dev::Tex1D<int> tex0, dev::Tex1DLod<int> tex
 
 	tex13.empty();
 	tex13.fetch(0.5f, 0.3f, 0.1f, 0, 0.5f);
-	tex13.Grad(0.5f, 0.3f, 0.1f, 1, { 2.0f, 1.0f, 2.0f, 2.0f }, { 1.0f, 2.0f, 2.0f, 3.0f });
+	tex13.grad(0.5f, 0.3f, 0.1f, 1, { 2.0f, 1.0f, 2.0f, 2.0f }, { 1.0f, 2.0f, 2.0f, 3.0f });
 	tex13.handle();
 }
 
