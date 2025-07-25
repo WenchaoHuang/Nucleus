@@ -73,7 +73,7 @@ void Texture::bindImage(std::shared_ptr<ImageBase> image, Sampler sampler, Forma
 			if (!std::dynamic_pointer_cast<ImageCube<void>>(pImage) &&
 				!std::dynamic_pointer_cast<ImageCubeLayered<void>>(pImage))
 			{
-				sampler.seamlessCubemap = 0;	//	avoid error
+				sampler.seamlessCubemap = false;	//	avoid error
 			}
 		}
 		else if (pImageLod != nullptr)
@@ -86,7 +86,7 @@ void Texture::bindImage(std::shared_ptr<ImageBase> image, Sampler sampler, Forma
 			if (!std::dynamic_pointer_cast<ImageCubeLod<void>>(pImageLod) &&
 				!std::dynamic_pointer_cast<ImageCubeLayeredLod<void>>(pImageLod))
 			{
-				sampler.seamlessCubemap = 0;	//	avoid error
+				sampler.seamlessCubemap = false;	//	avoid error
 			}
 		}
 

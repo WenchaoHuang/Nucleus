@@ -67,10 +67,9 @@ namespace NS_NAMESPACE
 
 
 		/**
-		 *	@brief		Specifies whether sRGB to linear conversion should be performed during texture fetch.
-		 *	@note		This applies only to 8-bit and 16-bit unsigned integer formats.
+		 *	@brief		Specifies the filter mode when the calculated mipmap level lies between two defined mipmap levels.
 		 */
-		int sRGB = 1;
+		FilterMode mipmapFilterMode = FilterMode::Linear;
 
 
 		/**
@@ -82,22 +81,10 @@ namespace NS_NAMESPACE
 
 
 		/**
-		 *	@brief		Specifies whether the texture coordinates will be normalized or not.
-		 */
-		int normalizedCoords = 1;
-
-
-		/**
 		 *	@brief		Specifies the maximum anistropy ratio to be used when doing anisotropic filtering.
 		 *	@note		This value will be clamped to the range [1,16].
 		 */
 		unsigned int maxAnisotropy = 1;
-
-
-		/**
-		 *	@brief		Specifies the filter mode when the calculated mipmap level lies between two defined mipmap levels.
-		 */
-		FilterMode mipmapFilterMode = FilterMode::Linear;
 
 
 		/**
@@ -119,9 +106,22 @@ namespace NS_NAMESPACE
 
 
 		/**
+		 *	@brief		Specifies whether sRGB to linear conversion should be performed during texture fetch.
+		 *	@note		This applies only to 8-bit and 16-bit unsigned integer formats.
+		 */
+		bool sRGB = true;
+
+
+		/**
+		 *	@brief		Specifies whether the texture coordinates will be normalized or not.
+		 */
+		bool normalizedCoords = true;
+
+
+		/**
 		 *	@brief		Specifies whether the trilinear filtering optimizations will be disabled.
 		 */
-		int disableTrilinearOptimization = 0;
+		bool disableTrilinearOptimization = false;
 
 
 		/**
@@ -131,6 +131,6 @@ namespace NS_NAMESPACE
 		 *	@note		Instead, if the Sampler::filterMode is set to FilterMode::eNearest the address mode AddressMode::eClamp will be applied for all dimensions.
 		 *	@note		If the Sampler::filterMode is set to FilterMode::eLinear seamless cube map filtering will be performed when sampling along the cube face borders.
 		 */
-		int seamlessCubemap = 1;
+		bool seamlessCubemap = true;
 	};
 }
