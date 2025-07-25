@@ -136,9 +136,9 @@ namespace NS_NAMESPACE::dev
 
 		//	Read method for CUDA texture object.
 	#ifndef __CUDACC__
-		__device__ value_type Grad(float x, float dx, float dy) const;
+		__device__ value_type grad(float x, float dx, float dy) const;
 	#else
-		__device__ value_type Grad(float x, float dx, float dy) const
+		__device__ value_type grad(float x, float dx, float dy) const
 		{
 			InternalValueType<Type> value;
 
@@ -226,9 +226,9 @@ namespace NS_NAMESPACE::dev
 
 		//	Read method for CUDA texture object.
 	#ifndef __CUDACC__
-		__device__ value_type Grad(float x, int layer, float dx, float dy) const;
+		__device__ value_type grad(float x, int layer, float dx, float dy) const;
 	#else
-		__device__ value_type Grad(float x, int layer, float dx, float dy) const
+		__device__ value_type grad(float x, int layer, float dx, float dy) const
 		{
 			InternalValueType<Type> value;
 
@@ -316,9 +316,9 @@ namespace NS_NAMESPACE::dev
 
 		//	Read method for CUDA texture object.
 	#ifndef __CUDACC__
-		__device__ value_type Grad(float x, float y, NS_NAMESPACE::float2 dPdx, NS_NAMESPACE::float2 dPdy) const;
+		__device__ value_type grad(float x, float y, NS_NAMESPACE::float2 dPdx, NS_NAMESPACE::float2 dPdy) const;
 	#else
-		__device__ value_type Grad(float x, float y, NS_NAMESPACE::float2 dPdx, NS_NAMESPACE::float2 dPdy) const
+		__device__ value_type grad(float x, float y, NS_NAMESPACE::float2 dPdx, NS_NAMESPACE::float2 dPdy) const
 		{
 			InternalValueType<Type> value;
 
@@ -406,9 +406,9 @@ namespace NS_NAMESPACE::dev
 
 		//	Read method for CUDA texture object.
 	#ifndef __CUDACC__
-		__device__ value_type Grad(float x, float y, int layer, NS_NAMESPACE::float2 dPdx, NS_NAMESPACE::float2 dPdy) const;
+		__device__ value_type grad(float x, float y, int layer, NS_NAMESPACE::float2 dPdx, NS_NAMESPACE::float2 dPdy) const;
 	#else
-		__device__ value_type Grad(float x, float y, int layer, NS_NAMESPACE::float2 dPdx, NS_NAMESPACE::float2 dPdy) const
+		__device__ value_type grad(float x, float y, int layer, NS_NAMESPACE::float2 dPdx, NS_NAMESPACE::float2 dPdy) const
 		{
 			InternalValueType<Type> value;
 
@@ -496,9 +496,9 @@ namespace NS_NAMESPACE::dev
 
 		//	Read method for CUDA texture object.
 	#ifndef __CUDACC__
-		__device__ value_type Grad(float x, float y, float z, NS_NAMESPACE::float4 dPdx, NS_NAMESPACE::float4 dPdy) const;
+		__device__ value_type grad(float x, float y, float z, NS_NAMESPACE::float4 dPdx, NS_NAMESPACE::float4 dPdy) const;
 	#else
-		__device__ value_type Grad(float x, float y, float z, NS_NAMESPACE::float4 dPdx, NS_NAMESPACE::float4 dPdy) const
+		__device__ value_type grad(float x, float y, float z, NS_NAMESPACE::float4 dPdx, NS_NAMESPACE::float4 dPdy) const
 		{
 			InternalValueType<Type> value;
 
@@ -586,9 +586,9 @@ namespace NS_NAMESPACE::dev
 
 		//	Read method for CUDA texture object.
 	#ifndef __CUDACC__
-		__device__ value_type Grad(float x, float y, float z, NS_NAMESPACE::float4 dPdx, NS_NAMESPACE::float4 dPdy) const;
+		__device__ value_type grad(float x, float y, float z, NS_NAMESPACE::float4 dPdx, NS_NAMESPACE::float4 dPdy) const;
 	#else
-		__device__ value_type Grad(float x, float y, float z, NS_NAMESPACE::float4 dPdx, NS_NAMESPACE::float4 dPdy) const
+		__device__ value_type grad(float x, float y, float z, NS_NAMESPACE::float4 dPdx, NS_NAMESPACE::float4 dPdy) const
 		{
 			InternalValueType<Type> value;
 
@@ -676,9 +676,9 @@ namespace NS_NAMESPACE::dev
 
 		//	Read method for CUDA texture object.
 	#ifndef __CUDACC__
-		__device__ Type Grad(float x, float y, float z, int layer, NS_NAMESPACE::float4 dPdx, NS_NAMESPACE::float4 dPdy) const;
+		__device__ Type grad(float x, float y, float z, int layer, NS_NAMESPACE::float4 dPdx, NS_NAMESPACE::float4 dPdy) const;
 	#else
-		__device__ Type Grad(float x, float y, float z, int layer, NS_NAMESPACE::float4 dPdx, NS_NAMESPACE::float4 dPdy) const
+		__device__ Type grad(float x, float y, float z, int layer, NS_NAMESPACE::float4 dPdx, NS_NAMESPACE::float4 dPdy) const
 		{
 			InternalValueType<Type> value;
 
