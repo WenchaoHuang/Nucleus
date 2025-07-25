@@ -77,11 +77,11 @@ DeviceAllocator::DeviceAllocator(class Device * pDevice) : m_device(pDevice)
 }
 
 
-static cudaChannelFormatDesc CreateChannelDesc(Format eFormat)
+static cudaChannelFormatDesc createChannelDesc(Format format)
 {
 	cudaChannelFormatDesc channelDesc = {};
 
-	switch (eFormat)
+	switch (format)
 	{
 		case Format::Int:		{ channelDesc = cudaCreateChannelDesc<::int1>();		break; }
 		case Format::Int2:		{ channelDesc = cudaCreateChannelDesc<::int2>();		break; }
@@ -111,13 +111,13 @@ static cudaChannelFormatDesc CreateChannelDesc(Format eFormat)
 }
 
 
-cudaArray_t DeviceAllocator::allocateTextureMemory(Format eFormat, size_t width, size_t height, size_t depth, int flags)
+cudaArray_t DeviceAllocator::allocateTextureMemory(Format format, size_t width, size_t height, size_t depth, int flags)
 {
 	m_device->setCurrent();
 
 	cudaArray_t hArray = nullptr;
 
-	cudaChannelFormatDesc channelDesc = CreateChannelDesc(eFormat);
+	cudaChannelFormatDesc channelDesc = createChannelDesc(format);
 
 	cudaError_t err = cudaMalloc3DArray(&hArray, &channelDesc, make_cudaExtent(width, height, depth), flags);
 
@@ -134,13 +134,13 @@ cudaArray_t DeviceAllocator::allocateTextureMemory(Format eFormat, size_t width,
 }
 
 
-cudaMipmappedArray_t DeviceAllocator::allocateMipmapTextureMemory(Format eFormat, size_t width, size_t height, size_t depth, unsigned int numLevels, int flags)
+cudaMipmappedArray_t DeviceAllocator::allocateMipmapTextureMemory(Format format, size_t width, size_t height, size_t depth, unsigned int numLevels, int flags)
 {
 	m_device->setCurrent();
 
 	cudaMipmappedArray_t hMipmapedArray = nullptr;
 
-	cudaChannelFormatDesc channelDesc = CreateChannelDesc(eFormat);
+	cudaChannelFormatDesc channelDesc = createChannelDesc(format);
 
 	cudaError_t err = cudaMallocMipmappedArray(&hMipmapedArray, &channelDesc, make_cudaExtent(width, height, depth), numLevels, flags);
 
