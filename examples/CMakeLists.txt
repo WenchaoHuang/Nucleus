@@ -1,4 +1,4 @@
-﻿# Copyright (c) 2025 Wenchao Huang <physhuangwenchao@gmail.com>
+# Copyright (c) 2025 Wenchao Huang <physhuangwenchao@gmail.com>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,20 +20,18 @@
 
 cmake_minimum_required(VERSION 3.18)
 
-# Target name
-set(TARGET_NAME pinned_memory)
-project(${TARGET_NAME} LANGUAGES CXX CUDA)
+# Project name
+project(Nucleus-Examples)
 
-# Create the executable target
-add_executable(${TARGET_NAME} main.cpp)
+# Organize targets into folders
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-# Link directories
-target_link_libraries(${TARGET_NAME} PRIVATE nucleus cudart_static)
+# Add samples
+add_subdirectory(pinned_memory)
+add_subdirectory(customized_allocator)
+add_subdirectory(customized_pixel_type)
 
-# CMake properties
-set_target_properties(${TARGET_NAME} PROPERTIES
-    CUDA_RESOLVE_DEVICE_SYMBOLS ON
-    CUDA_SEPARABLE_COMPILATION ON
-    CUDA_ARCHITECTURES "75"
-    FOLDER "Samples"
-)
+if(MSVC)
+	add_subdirectory(julia_set)
+	add_subdirectory(dynamic_texture)
+endif()
