@@ -27,8 +27,8 @@ project(Nucleus LANGUAGES CXX CUDA)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Library options
-option(NUCLEUS_BUILD_TESTS "Build tests for nucleus library" OFF)
-option(NUCLEUS_BUILD_SAMPLES "Build samples for nucleus library" OFF)
+option(NUCLEUS_BUILD_TESTS "Build tests for Nucleus library" OFF)
+option(NUCLEUS_BUILD_EXAMPLES "Build examples for Nucleus library" OFF)
 
 # C++ standard options (adjust as needed)
 set(NUCLEUS_CPP_STANDARD "17" CACHE STRING "C++ standard (17/20)")
@@ -60,7 +60,7 @@ target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/in
 
 # MSVC settings
 if(MSVC)
-    target_compile_options(${TARGET_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:/MP /W4 /WX /utf-8>)      
+    target_compile_options(${TARGET_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:/MP /W4 /WX /utf-8>)
 endif()
 
 # Optional: Add tests if enabled
@@ -68,7 +68,7 @@ if(NUCLEUS_BUILD_TESTS)
     add_subdirectory(tests)
 endif()
 
-# Optional: Add samples if enabled
-if(NUCLEUS_BUILD_SAMPLES)
-    add_subdirectory(samples)
+# Optional: Add examples if enabled
+if(NUCLEUS_BUILD_EXAMPLES)
+    add_subdirectory(examples)
 endif()

@@ -21,7 +21,7 @@
 cmake_minimum_required(VERSION 3.18)
 
 # Target name
-set(TARGET_NAME customized_allocator)
+set(TARGET_NAME pinned_memory)
 project(${TARGET_NAME} LANGUAGES CXX CUDA)
 
 # Create the executable target
@@ -35,5 +35,5 @@ set_target_properties(${TARGET_NAME} PROPERTIES
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_ARCHITECTURES "75"
-    FOLDER "Samples"
+    FOLDER "Examples"
 )
