@@ -41,10 +41,19 @@ namespace NS_NAMESPACE
 
 	/**
 	 *	@brief		Computes the ceiling of integer division (x/y)
-	 *	@example	stream.launch(kernel, ns::ceil_div(count, 256), 256)(...)
+	 *	@example	stream.launch(kernel, ns::ceil_div(count, 256), 256)(...);
 	 *	@note		Safe for unsigned integer arithmetic.
 	 */
 	constexpr uint32_t ceil_div(size_t x, size_t y) { return static_cast<uint32_t>((x + y - 1) / y); }
+
+
+	/**
+	 *	@brief		Rounds up a value to the nearest multiple of the given alignment.
+	 *	@example	size_t pitch = align_up(width, 16);
+	 *	@note		Useful for memory alignment, thread/block sizing, or buffer strides.
+	 *				Alignment must be a non-zero positive integer.
+	 */
+	constexpr size_t align_up(size_t x, size_t alignment) { return ceil_div(x, alignment) * alignment; }
 
 
 	/**
