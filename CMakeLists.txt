@@ -31,8 +31,8 @@ option(NUCLEUS_BUILD_TESTS "Build tests for Nucleus library" OFF)
 option(NUCLEUS_BUILD_EXAMPLES "Build examples for Nucleus library" OFF)
 
 # C++ standard options (adjust as needed)
-set(NUCLEUS_CPP_STANDARD "17" CACHE STRING "C++ standard (17/20)")
-set_property(CACHE NUCLEUS_CPP_STANDARD PROPERTY STRINGS 17 20)
+set(NUCLEUS_CPP_STANDARD "17" CACHE STRING "C++ standard (17/20/23/26)")
+set_property(CACHE NUCLEUS_CPP_STANDARD PROPERTY STRINGS 17 20 23 26)
 
 # Target name
 set(TARGET_NAME nucleus)
