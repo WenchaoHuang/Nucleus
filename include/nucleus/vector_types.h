@@ -40,55 +40,60 @@ namespace NS_NAMESPACE
 	 *	This approach avoids exposing CUDA headers in the interface, allowing the
 	 *	header to be included in non-CUDA projects.
 	 */
+	template<typename Type, int Align> struct Vec2 { Type x, y; };
+	template<typename Type, int Align> struct Vec3 { Type x, y, z; };
+	template<typename Type, int Align> struct Vec4 { Type x, y, z, w; };
 #ifndef __CUDACC__
-	template<typename Type> struct Vec3 { Type x, y, z; };
-	template<typename Type> struct NS_ALIGN(NS_MIN(alignof(Type) * 2, 16)) Vec2 { Type x, y; };
-	template<typename Type> struct NS_ALIGN(NS_MIN(alignof(Type) * 4, 16)) Vec4 { Type x, y, z, w; };
+	using int2 = Vec2<int, 8>;
+	using int3 = Vec3<int, 4>;
+	using int4 = Vec4<int, 16>;
 
-	using int2 = Vec2<int>;
-	using int3 = Vec3<int>;
-	using int4 = Vec4<int>;
+	using char2 = Vec2<char, 2>;
+	using char3 = Vec3<char, 1>;
+	using char4 = Vec4<char, 4>;
 
-	using char2 = Vec2<char>;
-	using char3 = Vec3<char>;
-	using char4 = Vec4<char>;
+	using short2 = Vec2<short, 4>;
+	using short3 = Vec3<short, 2>;
+	using short4 = Vec4<short, 8>;
 
-	using short2 = Vec2<short>;
-	using short3 = Vec3<short>;
-	using short4 = Vec4<short>;
+	using float2 = Vec2<float, 8>;
+	using float3 = Vec3<float, 4>;
+	using float4 = Vec4<float, 16>;
 
-	using float2 = Vec2<float>;
-	using float3 = Vec3<float>;
-	using float4 = Vec4<float>;
-
-	using double2 = Vec2<double>;
-	using double3 = Vec3<double>;
-	using double4 = Vec4<double>;
+	using double2 = Vec2<double, 16>;
+	using double3 = Vec3<double,  8>;
+	using double4 = Vec4<double, 16>;
+	using double4_16a = Vec4<double, 16>;
+	using double4_32a = Vec4<double, 32>;
 
 	using uint = unsigned int;
-	using uint2 = Vec2<unsigned int>;
-	using uint3 = Vec3<unsigned int>;
-	using uint4 = Vec4<unsigned int>;
+	using uint2 = Vec2<unsigned int, 8>;
+	using uint3 = Vec3<unsigned int, 4>;
+	using uint4 = Vec4<unsigned int, 16>;
 
 	using longlong = long long;
-	using longlong2 = Vec2<long long>;
-	using longlong3 = Vec3<long long>;
-	using longlong4 = Vec4<long long>;
+	using longlong2 = Vec2<long long, 16>;
+	using longlong3 = Vec3<long long,  8>;
+	using longlong4 = Vec4<long long, 16>;
+	using longlong4_16a = Vec4<long long, 16>;
+	using longlong4_32a = Vec4<long long, 32>;
 
 	using uchar = unsigned char;
-	using uchar2 = Vec2<unsigned char>;
-	using uchar3 = Vec3<unsigned char>;
-	using uchar4 = Vec4<unsigned char>;
+	using uchar2 = Vec2<unsigned char, 2>;
+	using uchar3 = Vec3<unsigned char, 1>;
+	using uchar4 = Vec4<unsigned char, 4>;
 
 	using ushort = unsigned short;
-	using ushort2 = Vec2<unsigned short>;
-	using ushort3 = Vec3<unsigned short>;
-	using ushort4 = Vec4<unsigned short>;
+	using ushort2 = Vec2<unsigned short, 4>;
+	using ushort3 = Vec3<unsigned short, 2>;
+	using ushort4 = Vec4<unsigned short, 8>;
 
 	using ulonglong = unsigned long long;
-	using ulonglong2 = Vec2<unsigned long long>;
-	using ulonglong3 = Vec3<unsigned long long>;
-	using ulonglong4 = Vec4<unsigned long long>;
+	using ulonglong2 = Vec2<unsigned long long, 16>;
+	using ulonglong3 = Vec3<unsigned long long,  8>;
+	using ulonglong4 = Vec4<unsigned long long, 16>;
+	using ulonglong4_16a = Vec4<unsigned long long, 16>;
+	using ulonglong4_32a = Vec4<unsigned long long, 32>;
 #else
 	using int2 = ::int2;
 	using int3 = ::int3;
@@ -118,7 +123,15 @@ namespace NS_NAMESPACE
 
 	using double2 = ::double2;
 	using double3 = ::double3;
+#if __CUDACC_VER_MAJOR__ >= 13
+	using double4 = ::double4_16a;
+	using double4_16a = ::double4_16a;
+	using double4_32a = ::double4_32a;
+#else
 	using double4 = ::double4;
+	using double4_16a = ::double4;
+	using double4_32a = Vec4<double, 32>;
+#endif
 
 	using ushort = unsigned short;
 	using ushort2 = ::ushort2;
@@ -128,11 +141,27 @@ namespace NS_NAMESPACE
 	using longlong = long long;
 	using longlong2 = ::longlong2;
 	using longlong3 = ::longlong3;
+#if __CUDACC_VER_MAJOR__ >= 13
+	using longlong4 = ::longlong4_16a;
+	using longlong4_16a = ::longlong4_16a;
+	using longlong4_32a = ::longlong4_32a;
+#else
 	using longlong4 = ::longlong4;
+	using longlong4_16a = ::longlong4;
+	using longlong4_32a = Vec4<long long, 32>;
+#endif
 
 	using ulonglong = unsigned long long;
 	using ulonglong2 = ::ulonglong2;
 	using ulonglong3 = ::ulonglong3;
+#if __CUDACC_VER_MAJOR__ >= 13
+	using ulonglong4 = ::ulonglong4_16a;
+	using ulonglong4_16a = ::ulonglong4_16a;
+	using ulonglong4_32a = ::ulonglong4_32a;
+#else
 	using ulonglong4 = ::ulonglong4;
+	using ulonglong4_16a = ::ulonglong4;
+	using ulonglong4_32a = Vec4<unsigned long long, 32>;
+#endif
 #endif
 }
