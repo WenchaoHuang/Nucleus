@@ -33,7 +33,7 @@ namespace NS_NAMESPACE
 	 *	@brief		An abstract interface to an unbounded set of classes
 	 *				encapsulating memory resources accessible to the device.
 	 */
-	class NS_NOVTABLE Allocator
+	class NS_API NS_NOVTABLE Allocator
 	{
 		NS_NONCOPYABLE(Allocator)
 
@@ -82,7 +82,7 @@ namespace NS_NAMESPACE
 	 *				it can be read or written with much higher bandwidth than pageable memory.
 	 *	@note		Page-locked memory is best used sparingly to allocate staging areas for data exchange between host and device.
 	 */
-	class HostAllocator : public Allocator
+	class NS_API HostAllocator : public Allocator
 	{
 
 	protected:
@@ -114,7 +114,7 @@ namespace NS_NAMESPACE
 	/**
 	 *	@brief		Device memory allocator.
 	 */
-	class DeviceAllocator : public Allocator
+	class NS_API DeviceAllocator : public Allocator
 	{
 
 	public:

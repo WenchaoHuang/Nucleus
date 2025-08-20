@@ -35,7 +35,7 @@ namespace NS_NAMESPACE
 	/**
 	 *	@brief		Wrapper for CUDA stream object.
 	 */
-	class Stream
+	class NS_API Stream
 	{
 		NS_NONCOPYABLE(Stream)
 

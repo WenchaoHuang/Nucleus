@@ -41,17 +41,17 @@ namespace NS_NAMESPACE
 	private:
 
 		//!	@brief		Create CUDA context wrapper.
-		Context();
+		NS_API Context();
 
 		//!	@brief		Destroy CUDA context wrapper.
-		~Context();
+		NS_API ~Context();
 
 	public:
 
 		/**
 		 *	@brief		Return a raw pointer to the CUDA context wrapper (singleton).
 		 */
-		static Context * getInstance()
+		NS_API static Context * getInstance()
 		{
 			static Context s_instance;
 
@@ -65,21 +65,21 @@ namespace NS_NAMESPACE
 		 *	@note		Return the last error that has been produced by any of the runtime calls
 		 *				in the same host thread and reset it to Error::eSuccess.
 		 */
-		static cudaError_t getLastError() noexcept;
+		NS_API static cudaError_t getLastError() noexcept;
 
 
 		/**
 		 *	@brief		Return a string containing the name of an error code in the enum.
 		 *	@note		If the error code is not recognized, "unrecognized error code" is returned.
 		 */
-		static const char * getErrorName(cudaError_t eValue) noexcept;
+		NS_API static const char * getErrorName(cudaError_t eValue) noexcept;
 
 
 		/**
 		 *	@brief		Return the description string for an error code.
 		 *	@note		If the error code is not recognized, "unrecognized error code" is returned.
 		 */
-		static const char * getErrorString(cudaError_t eValue) noexcept;
+		NS_API static const char * getErrorString(cudaError_t eValue) noexcept;
 
 	public:
 

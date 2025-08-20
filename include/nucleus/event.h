@@ -33,7 +33,7 @@ namespace NS_NAMESPACE
 	/**
 	 *	@brief		RAII wrapper for CUDA event object.
 	 */
-	class Event
+	class NS_API Event
 	{
 		NS_NONCOPYABLE(Event)
 
@@ -113,7 +113,7 @@ namespace NS_NAMESPACE
 	/**
 	 *	@brief		RAII wrapper for timed CUDA event object.
 	 */
-	class TimedEvent : public Event
+	class NS_API TimedEvent : public Event
 	{
 
 	public:

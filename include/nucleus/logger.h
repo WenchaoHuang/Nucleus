@@ -64,7 +64,7 @@ namespace NS_NAMESPACE
 		 *	@brief		Return the singleton instance.
 		 *	@warning	Be cautious when multiple dynamic libraries call this function (no longer a singleton in that case).
 		 */
-		static Logger * getInstance()
+		NS_API static Logger * getInstance()
 		{
 			static Logger s_instance;
 
@@ -87,7 +87,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	funcName - Which function invokes this functin.
 		 *	@param[in]	level - Log level of this message.
 		 */
-		void log(const char * fileName, int line, const char * funcName, Level level, const char * format, ...);
+		NS_API void log(const char * fileName, int line, const char * funcName, Level level, const char * format, ...);
 
 	private:
 
