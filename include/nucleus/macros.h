@@ -23,6 +23,7 @@
 
 #include <cstdio>
 #include <assert.h>
+#include "nucleus_export.h"
 
 #pragma warning(disable: 4201)		//!	Nonstandard extension used: nameless struct/union.
 

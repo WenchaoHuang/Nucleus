@@ -48,7 +48,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	device - Device associated with.
 		 *	@note		Invoked for class Device only.
 		 */
-		explicit Stream(Device * device, std::nullptr_t);
+		NS_API explicit Stream(Device * device, std::nullptr_t);
 
 	public:
 
@@ -57,13 +57,13 @@ namespace NS_NAMESPACE
 		 *	@param[in]	device - Device associated with.
 		 *	@param[in]	priority - Stream priority.
 		 */
-		explicit Stream(Device * device, int priority = 0);
+		NS_API explicit Stream(Device * device, int priority = 0);
 
 
 		/**
 		 *	@brief		Destroy CUDA stream object.
 		 */
-		~Stream() noexcept;
+		NS_API ~Stream() noexcept;
 
 	public:
 
@@ -71,14 +71,14 @@ namespace NS_NAMESPACE
 		 *	@brief		Wait for stream tasks to complete.
 		 *	@note		Wait until this stream has completed all operations.
 		 */
-		void sync() const;
+		NS_API void sync() const;
 
 
 		/**
 		 *	@brief		query an asynchronous stream for completion status.
 		 *	@retval		True - If all operations in this stream have completed.
 		 */
-		bool query() const;
+		NS_API bool query() const;
 
 
 		/**
@@ -88,7 +88,7 @@ namespace NS_NAMESPACE
 		 *	@note		This interface is intended for debugging and troubleshooting during development only.
 		 *	@warning	It should NOT be used in production code.
 		 */
-		void forceSync(bool enable);
+		NS_API void forceSync(bool enable);
 
 
 		/**
@@ -118,7 +118,7 @@ namespace NS_NAMESPACE
 		 *	@note		Can be called multiple times on the same event and will overwrite the previously captured state.
 		 *	@warning	Event and stream must be on the same device.
 		 */
-		Stream & recordEvent(Event & event);
+		NS_API Stream & recordEvent(Event & event);
 
 
 		/**
@@ -128,7 +128,7 @@ namespace NS_NAMESPACE
 		 *	@note		Make all future work submitted to this stream wait for all work captured in event.
 		 *	@note		Event may be from a different device than this stream.
 		 */
-		Stream & waitEvent(Event & event);
+		NS_API Stream & waitEvent(Event & event);
 
 	public:
 
@@ -141,7 +141,7 @@ namespace NS_NAMESPACE
 		 *	@example	stream.launchGraph(hGraph).sync()
 		 *	@example	stream.launchGraph(hGraph).launchGraph(hGraph)
 		 */
-		Stream & launchGraph(cudaGraphExec_t hGraphExec);
+		NS_API Stream & launchGraph(cudaGraphExec_t hGraphExec);
 
 
 		/**
@@ -158,7 +158,7 @@ namespace NS_NAMESPACE
 		{
 			return this->launchHostFunc(reinterpret_cast<HostFunc<void>>(func), userData);
 		}
-		Stream & launchHostFunc(HostFunc<void> func, void * userData);
+		NS_API Stream & launchHostFunc(HostFunc<void> func, void * userData);
 
 
 		/**
@@ -450,7 +450,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	bytes - Size in bytes to set.
 		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 */
-		Stream & memsetZero(void * address, size_t bytes);
+		NS_API Stream & memsetZero(void * address, size_t bytes);
 		
 	private:
 
@@ -468,7 +468,7 @@ namespace NS_NAMESPACE
 		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 *	@warning	The memory areas may not overlap. \p width must not exceed either \p dstPitch or \p srcPitch.
 		 */
-		Stream & memcpyLinear(void * dst, size_t dstPitch, size_t dstHeight, const void * src, size_t srcPitch, size_t srcHeight, size_t width, size_t height, size_t depth);
+		NS_API Stream & memcpyLinear(void * dst, size_t dstPitch, size_t dstHeight, const void * src, size_t srcPitch, size_t srcHeight, size_t width, size_t height, size_t depth);
 
 
 		/**
@@ -482,7 +482,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	depth - Depth of matrix transfer (layers).
 		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 */
-		Stream & memcpyLinearImage(void * dst, size_t dstPitch, size_t dstHeight, ImageAccessor<void> srcImg, size_t width, size_t height, size_t depth);
+		NS_API Stream & memcpyLinearImage(void * dst, size_t dstPitch, size_t dstHeight, ImageAccessor<void> srcImg, size_t width, size_t height, size_t depth);
 
 
 		/**
@@ -496,7 +496,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	depth - Depth of matrix transfer (layers).
 		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 */
-		Stream & memcpyImageLinear(ImageAccessor<void> dstImg, const void * src, size_t srcPitch, size_t srcHeight, size_t width, size_t height, size_t depth);
+		NS_API Stream & memcpyImageLinear(ImageAccessor<void> dstImg, const void * src, size_t srcPitch, size_t srcHeight, size_t width, size_t height, size_t depth);
 
 
 		/**
@@ -507,7 +507,7 @@ namespace NS_NAMESPACE
 		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 *	@warning	The memory areas may not overlap.
 		 */
-		Stream & memcpyImage(ImageAccessor<void> dstImg, ImageAccessor<void> srcImg, size_t width, size_t height, size_t depth);
+		NS_API Stream & memcpyImage(ImageAccessor<void> dstImg, ImageAccessor<void> srcImg, size_t width, size_t height, size_t depth);
 
 
 		/**
@@ -518,7 +518,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	count - Element count to copy in bytes.
 		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 */
-		Stream & memcpyFromSymbol_void(void * dst, const void * symbol, size_t offset, size_t count);
+		NS_API Stream & memcpyFromSymbol_void(void * dst, const void * symbol, size_t offset, size_t count);
 
 
 		/**
@@ -529,7 +529,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	count - Element count to copy in bytes.
 		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 */
-		Stream & memcpyToSymbol_void(void * symbol, size_t offset, const void * src, size_t count);
+		NS_API Stream & memcpyToSymbol_void(void * symbol, size_t offset, const void * src, size_t count);
 
 
 		/**
@@ -548,7 +548,7 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Acquires the device context for this stream.
 		 */
-		void acquireDeviceContext() const;
+		NS_API void acquireDeviceContext() const;
 
 	private:
 

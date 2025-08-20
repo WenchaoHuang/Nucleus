@@ -46,7 +46,7 @@ namespace NS_NAMESPACE
 		 * 	@param[in]	bSurfaceLoadStore - Boolean flag indicating whether the buffer should support surface load/store operations.
 		 *	@throw		cudaError_t - In case of failure.
 		 */
-		explicit ImageCube(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, bool bSurfaceLoadStore = false);
+		NS_API explicit ImageCube(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, bool bSurfaceLoadStore = false);
 
 	private:
 
@@ -117,7 +117,7 @@ namespace NS_NAMESPACE
 		 * 	@param[in]	bSurfaceLoadStore - Boolean flag indicating whether the buffer should support surface load/store operations.
 		 *	@throw		cudaError_t - In case of failure.
 		 */
-		explicit ImageCubeLayered(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t numLayers, bool bSurfaceLoadStore = false);
+		NS_API explicit ImageCubeLayered(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t numLayers, bool bSurfaceLoadStore = false);
 
 	private:
 
@@ -191,7 +191,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	numLevels - Number of mipmap levels to allocated, is clamped to the range [1, 1 + floor(log2(width))].
 		 *	@throw		cudaError_t - In case of failure.
 		 */
-		ImageCubeLod(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, unsigned int numLevels);
+		NS_API ImageCubeLod(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, unsigned int numLevels);
 
 
 		/**
@@ -261,7 +261,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	numLevels - Number of mipmap levels to allocated, is clamped to the range [1, 1 + floor(log2(width))].
 		 *	@throw		cudaError_t - In case of failure.
 		 */
-		ImageCubeLayeredLod(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t numLayers, unsigned int numLevels);
+		NS_API ImageCubeLayeredLod(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t numLayers, unsigned int numLevels);
 
 
 		/**

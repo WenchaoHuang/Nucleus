@@ -39,10 +39,10 @@ namespace NS_NAMESPACE
 	private:
 
 		//!	@brief		Create device object.
-		Device(int, const cudaDeviceProp&);
+		NS_API Device(int, const cudaDeviceProp&);
 
 		//!	@brief		Destroy device object.
-		~Device() noexcept;
+		NS_API ~Device() noexcept;
 
 	public:
 
@@ -50,7 +50,7 @@ namespace NS_NAMESPACE
 		 *	@brief		Trigger initialization of the CUDA context.
 		 *	@retval		cudaSuccess - If device's context was initialized successfully.
 		 */
-		cudaError_t init() noexcept;
+		NS_API cudaError_t init() noexcept;
 
 
 		/**
@@ -63,7 +63,7 @@ namespace NS_NAMESPACE
 		 *	@brief		Wait for compute device to finish.
 		 *	@note		Block until the device has completed all preceding requested tasks.
 		 */
-		void sync() const;
+		NS_API void sync() const;
 
 
 		/**
@@ -75,14 +75,14 @@ namespace NS_NAMESPACE
 		 *				or new device, and should be considered a very low overhead call.
 		 *	@warning	Callling ::cudaSetDevice() in other place is not allowed!
 		 */
-		void setCurrent() const;
+		NS_API void setCurrent() const;
 
 
 		/**
 		 *	@brief		query the size of free device memory.
 		 *	@return		The free amount of memory available for allocation by the device in bytes.
 		 */
-		size_t freeMemorySize() const;
+		NS_API size_t freeMemorySize() const;
 
 
 		/**
@@ -103,6 +103,7 @@ namespace NS_NAMESPACE
 		 */
 		std::shared_ptr<DeviceAllocator> defaultAllocator() { return m_defaultAlloc; }
 
+
 		/**
 		 *	@brief		Returns occupancy for a device function.
 		 *	@param[in]	func - Kernel function for which occupancy is calculated
@@ -110,7 +111,6 @@ namespace NS_NAMESPACE
 		 *	@param[in]	dynamicSMemSize - Per-block dynamic shared memory usage intended, in bytes.
 		 */
 		int OccupancyMaxActiveBlocksPerMultiprocessor(const void * func, int blockSize, size_t dynamicSMemSize = 0);
-		int OccupancyMaxActiveBlocks(const void * func, int blockSize, size_t dynamicSMemSize = 0);
 
 	private:
 

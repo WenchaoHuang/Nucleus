@@ -23,7 +23,9 @@
 
 #include "graph.h"
 #include "stream.h"
+#include "device.h"
 #include "logger.h"
+#include <cuda_runtime.h>
 #include <device_launch_parameters.h>
 
 #ifndef __CUDACC__
@@ -76,6 +78,32 @@ namespace NS_NAMESPACE
 	#define CUDA_for(i, num_threads)			NS_BOUNDS_CHECK(i, num_threads)
 
 	/*****************************************************************************
+	********************************    Device    ********************************
+	*****************************************************************************/
+
+	/**
+	 *	@brief		Returns occupancy for a device function.
+	 *	@param[in]	func - Kernel function for which occupancy is calculated
+	 *	@param[in]	blockSize - Block size the kernel is intended to be launched with
+	 *	@param[in]	dynamicSMemSize - Per-block dynamic shared memory usage intended, in bytes.
+	 */
+	inline int Device::OccupancyMaxActiveBlocksPerMultiprocessor(const void * func, int blockSize, size_t dynamicSMemSize)
+	{
+		int numBlocks = 0;
+
+		cudaError_t err = cudaOccupancyMaxActiveBlocksPerMultiprocessor(&numBlocks, func, blockSize, dynamicSMemSize);
+
+		if (err != cudaSuccess)
+		{
+			NS_ERROR_LOG("%s.", cudaGetErrorString(err));
+
+			cudaGetLastError();
+		}
+
+		return numBlocks;
+	}
+
+	/*****************************************************************************
 	********************************    kernel    ********************************
 	*****************************************************************************/
 
@@ -90,6 +118,42 @@ namespace NS_NAMESPACE
 	/*****************************************************************************
 	********************************    Stream    ********************************
 	*****************************************************************************/
+
+	/**
+	 *	@brief		Launches a device function
+	 *	@param[in]	func - Device function symbol.
+	 *	@param[in]	gridDim - Grid dimensions.
+	 *	@param[in]	blockDim - Block dimensions.
+	 *	@param[in]	sharedMemBytes - Number of bytes for shared memory.
+	 *	@param[in]	args - Pointers to kernel arguments.
+	 *	@retval		Stream - Reference to this stream (enables method chaining).
+	 *	@warning	Only available in *.cu files.
+	 */
+	inline Stream & Stream::launchKernel(const void * func, const dim3 & gridDim, const dim3 & blockDim, size_t sharedMem, void ** args)
+	{
+		if (gridDim.x * gridDim.y * gridDim.z * blockDim.x * blockDim.y * blockDim.z != 0)
+		{
+			this->acquireDeviceContext();
+
+			cudaError_t err = cudaLaunchKernel(func, gridDim, blockDim, args, sharedMem, m_hStream);
+
+			if (err != cudaSuccess)
+			{
+				NS_ERROR_LOG("%s.", cudaGetErrorString(err));
+
+				cudaGetLastError();
+
+				throw err;
+			}
+			else if (m_forceSync)
+			{
+				this->sync();
+			}
+		}
+
+		return *this;
+	}
+
 
 	/**
 	 *	@brief		Prepares to launch a CUDA kernel with specified parameters and dependencies.

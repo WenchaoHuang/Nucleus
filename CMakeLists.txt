@@ -29,6 +29,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # Library options
 option(NUCLEUS_BUILD_TESTS "Build tests for Nucleus library" OFF)
 option(NUCLEUS_BUILD_EXAMPLES "Build examples for Nucleus library" OFF)
+option(NUCLEUS_BUILD_SHARED_LIB "Build Nucleus as shared library" ON)
 
 # C++ standard options (adjust as needed)
 set(NUCLEUS_CPP_STANDARD "17" CACHE STRING "C++ standard (17/20/23/26)")
@@ -51,13 +52,37 @@ file(GLOB NUCLEUS_SOURCES CONFIGURE_DEPENDS
     "${PROJECT_SOURCE_DIR}/src/*.cu"
 )
 
-# Create the static library
-add_library(${TARGET_NAME} STATIC ${NUCLEUS_SOURCES})
+# Build library
+if (NUCLEUS_BUILD_SHARED_LIB)
+    # Create the shared library
+    add_library(${TARGET_NAME} SHARED ${NUCLEUS_SOURCES})
 
-# Link CUDA-Runtime library
-target_link_libraries(${TARGET_NAME} PUBLIC cudart_static)
+    # Link directories
+    target_link_libraries(${TARGET_NAME} PUBLIC cudart)
+
+    # Export macro
+    target_compile_definitions(${TARGET_NAME} PRIVATE NS_API_BUILD)
+
+    # Export header
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${TARGET_NAME}_export_shared.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}_export.h
+        COPYONLY
+    )
+else()
+    # Create the static library
+    add_library(${TARGET_NAME} STATIC ${NUCLEUS_SOURCES})
+
+    # Export header
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${TARGET_NAME}_export_static.h
+        ${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}_export.h
+        COPYONLY
+    )
+endif()
 
 # Include directories
+target_include_directories(${TARGET_NAME} PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 target_include_directories(${TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus)
 

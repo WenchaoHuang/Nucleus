@@ -40,15 +40,15 @@ namespace NS_NAMESPACE
 	public:
 
 		//	Default constructor
-		Surface();
+		NS_API Surface();
 
 		//	Destructor
-		~Surface();
+		NS_API ~Surface();
 
 	public:
 
 		//	Unbinds the current surface resource.
-		void unbind();
+		NS_API void unbind();
 
 		//	Checks if the surface is empty.
 		bool empty() const { return m_hSurface == 0; }
@@ -63,7 +63,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	image - Shared pointer to the memory object.
 		 *	@throw		cudaError_t - In case of failure.
 		 */
-		void bindImage(std::shared_ptr<Image> image);
+		NS_API void bindImage(std::shared_ptr<Image> image);
 
 	protected:
 

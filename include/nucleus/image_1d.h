@@ -45,7 +45,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	width - Width of the image.
 		 *	@param[in]	bSurfaceLoadStore - Boolean flag indicating whether the buffer should support surface load/store operations.
 		 */
-		explicit Image1D(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, bool bSurfaceLoadStore = false);
+		NS_API explicit Image1D(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, bool bSurfaceLoadStore = false);
 
 	private:
 
@@ -113,7 +113,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	numLayers - Layers of the image, is clamped down to 1.
 		 *	@param[in]	bSurfaceLoadStore - Boolean flag indicating whether the buffer should support surface load/store operations.
 		 */
-		explicit Image1DLayered(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t numLayers, bool bSurfaceLoadStore = false);
+		NS_API explicit Image1DLayered(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t numLayers, bool bSurfaceLoadStore = false);
 
 	private:
 
@@ -186,7 +186,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	numLevels - Number of mipmap levels to allocated, is clamped to the range [1, 1 + floor(log2(width))].
 		 *	@throw		cudaError_t - In case of failure.
 		 */
-		Image1DLod(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, unsigned int numLevels);
+		NS_API Image1DLod(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, unsigned int numLevels);
 
 
 		/**
@@ -256,7 +256,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	numLevels - Number of mipmap levels to allocated, is clamped to the range [1, 1 + floor(log2(width))].
 		 *	@throw		cudaError_t - In case of failure.
 		 */
-		Image1DLayeredLod(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t numLayers, unsigned int numLevels);
+		NS_API Image1DLayeredLod(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t numLayers, unsigned int numLevels);
 
 
 		/**

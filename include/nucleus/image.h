@@ -49,7 +49,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	depth - Depth of the image.
 		 *	@param[in]	flags - Flags for image creation (interanl use).
 		 */
-		explicit ImageBase(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t height, size_t depth, int flags);
+		NS_API explicit ImageBase(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t height, size_t depth, int flags);
 
 
 		/**
@@ -102,7 +102,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	flags - Flags for image creation (interanl use).
 		 *	@throw		cudaError_t - In case of failure.
 		 */
-		explicit Image(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t height, size_t depth, int flags);
+		NS_API explicit Image(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t height, size_t depth, int flags);
 
 
 		/**
@@ -114,13 +114,13 @@ namespace NS_NAMESPACE
 		 *	@param[in]	depth - Depth of the image.
 		 *	@param[in]	flags - Flags for image creation (interanl use).
 		 */
-		explicit Image(cudaArray_t hImage, Format format, size_t width, size_t height, size_t depth, int flags);
+		NS_API explicit Image(cudaArray_t hImage, Format format, size_t width, size_t height, size_t depth, int flags);
 
 
 		/**
 		 *	@brief		Virtual destructor.
 		 */
-		virtual ~Image() noexcept;
+		NS_API virtual ~Image() noexcept;
 
 	public:
 
@@ -128,7 +128,7 @@ namespace NS_NAMESPACE
 		ImageAccessor<void> data() const { return ImageAccessor<void>{ m_hImage }; }
 
 		//	Checks if the buffer supports surface load/store operations.
-		bool isSurfaceLoadStoreSupported() const;
+		NS_API bool isSurfaceLoadStoreSupported() const;
 
 	protected:
         
@@ -160,13 +160,13 @@ namespace NS_NAMESPACE
 		 *	@param[in]	flags - Flags for image creation (interanl use).
 		 *	@throw		cudaError_t - In case of failure.
 		 */
-		explicit ImageLod(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t height, size_t depth, unsigned int numLevels, int flags);
+		NS_API explicit ImageLod(std::shared_ptr<DeviceAllocator> allocator, Format format, size_t width, size_t height, size_t depth, unsigned int numLevels, int flags);
 
 
 		/**
 		 *	@brief		Virtual destructor.
 		 */
-		virtual ~ImageLod() noexcept;
+		NS_API virtual ~ImageLod() noexcept;
 
 	public:
 
