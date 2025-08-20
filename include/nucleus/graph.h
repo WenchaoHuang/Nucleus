@@ -48,10 +48,10 @@ namespace NS_NAMESPACE
 	public:
 
 		//!	@brief		Create graph object.
-		Graph();
+		NS_API Graph();
 
 		//!	@brief		Destroy graph object.
-		~Graph();
+		NS_API ~Graph();
 
 	public:
 
@@ -67,7 +67,7 @@ namespace NS_NAMESPACE
 		 *              reconstruct or reinitialize the graph. The transition to immediate launch mode provides instant
 		 *              operation execution on the provided stream, beneficial in scenarios where minimal latency is critical.
 		 */
-		void restart(Stream * pImmediateLaunchStream = nullptr);
+		NS_API void restart(Stream * pImmediateLaunchStream = nullptr);
 
 
 		/**
@@ -83,7 +83,7 @@ namespace NS_NAMESPACE
 		 *	@note		Ideal for scenarios where periodic updates to the graph's configuration are necessary before execution,
 		 *              such as updating data inputs or operation parameters.
 		 */
-		void execute(Stream * pStream);
+		NS_API void execute(Stream * pStream);
 
 
 		/**
@@ -91,7 +91,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	dependencies - An array of dependencies that must complete before proceeding.
 		 *	@return		ExecDep representing the dependency handle for the launched kernel.
 		 */
-		ExecDep barrier(ArrayProxy<ExecDep> dependencies = {});
+		NS_API ExecDep barrier(ArrayProxy<ExecDep> dependencies = {});
 
 
 		/**
@@ -155,9 +155,9 @@ namespace NS_NAMESPACE
 
 	private:
 
-		uint64_t cacheDependencies(ArrayProxy<ExecDep> dependencies);
+		NS_API uint64_t cacheDependencies(ArrayProxy<ExecDep> dependencies);
 		
-		ExecDep memcpy_void(void * dst, const void * src, size_t bytes, ArrayProxy<ExecDep> dependencies);
+		NS_API ExecDep memcpy_void(void * dst, const void * src, size_t bytes, ArrayProxy<ExecDep> dependencies);
 
 	private:
 

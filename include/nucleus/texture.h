@@ -41,15 +41,15 @@ namespace NS_NAMESPACE
 	protected:
 
 		//	Default constructor
-		Texture();
+		NS_API Texture();
 
 		//	Destructor
-		~Texture();
+		NS_API ~Texture();
 
 	public:
 
 		//	Unbinds the current surface resource.
-		void unbind() noexcept;
+		NS_API void unbind() noexcept;
 
 		//	Checks if the surface is empty.
 		bool empty() const { return m_hTexture == 0; }
@@ -66,7 +66,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	viewFormat - View format of texture (internal use).
 		 *	@throws		cudaError_t - In case of failure.
 		 */
-		void bindImage(std::shared_ptr<ImageBase> image, Sampler sampler, Format viewFormat);
+		NS_API void bindImage(std::shared_ptr<ImageBase> image, Sampler sampler, Format viewFormat);
 
 	protected:
 

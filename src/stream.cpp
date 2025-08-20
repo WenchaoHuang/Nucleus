@@ -136,32 +136,6 @@ Stream & Stream::launchHostFunc(HostFunc<void> func, void * userData)
 }
 
 
-Stream & Stream::launchKernel(const void * func, const dim3 & gridDim, const dim3 & blockDim, size_t sharedMem, void ** args)
-{
-	if (gridDim.x * gridDim.y * gridDim.z * blockDim.x * blockDim.y * blockDim.z != 0)
-	{
-		this->acquireDeviceContext();
-
-		cudaError_t err = cudaLaunchKernel(func, gridDim, blockDim, args, sharedMem, m_hStream);
-
-		if (err != cudaSuccess)
-		{
-			NS_ERROR_LOG("%s.", cudaGetErrorString(err));
-
-			cudaGetLastError();
-
-			throw err;
-		}
-		else if (m_forceSync)
-		{
-			this->sync();
-		}
-	}
-
-	return *this;
-}
-
-
 Stream & Stream::memcpyLinear(void * dst, size_t dstPitch, size_t dstHeight, const void * src, size_t srcPitch, size_t srcHeight, size_t width, size_t height, size_t depth)
 {
 	this->acquireDeviceContext();
