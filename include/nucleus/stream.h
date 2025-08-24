@@ -1,4 +1,4 @@
-/**
+﻿/**
  *	Copyright (c) 2025 Wenchao Huang <physhuangwenchao@gmail.com>
  *
  *	Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -79,6 +79,16 @@ namespace NS_NAMESPACE
 		 *	@retval		True - If all operations in this stream have completed.
 		 */
 		bool query() const;
+
+
+		/**
+		 *	@brief		Force synchronization of the CUDA stream for debugging purposes.
+		 *	@param[in]	enable - If true, every subsequent launch and memcpy operation will automatically synchronize
+		 *				(blocking until completion) until this option is disabled. If false, do not forced synchronization.
+		 *	@note		This interface is intended for debugging and troubleshooting during development only.
+		 *	@warning	It should NOT be used in production code.
+		 */
+		void forceSync(bool enable);
 
 
 		/**
@@ -545,6 +555,8 @@ namespace NS_NAMESPACE
 		Device * const				m_device;
 
 		cudaStream_t  				m_hStream;
+
+		bool						m_forceSync;
 
 		int							m_priority;
 	};
