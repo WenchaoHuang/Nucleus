@@ -33,7 +33,7 @@ NS_USING_NAMESPACE
 **********************************    Stream    **********************************
 *********************************************************************************/
 
-Stream::Stream(Device * device, int priority) : m_device(device), m_hStream(nullptr), m_priority(priority)
+Stream::Stream(Device * device, int priority) : m_device(device), m_hStream(nullptr), m_forceSync(false), m_priority(priority)
 {
 	device->setCurrent();
 
@@ -54,7 +54,7 @@ Stream::Stream(Device * device, int priority) : m_device(device), m_hStream(null
 }
 
 
-Stream::Stream(Device * device, std::nullptr_t) : m_device(device), m_hStream(nullptr), m_priority(0)
+Stream::Stream(Device * device, std::nullptr_t) : m_device(device), m_hStream(nullptr), m_forceSync(false), m_priority(0)
 {
 
 }
@@ -71,6 +71,10 @@ Stream & Stream::recordEvent(Event & event)
 		NS_ERROR_LOG("%s.", cudaGetErrorString(err));
 
 		cudaGetLastError();
+	}
+	else if (m_forceSync)
+	{
+		this->sync();
 	}
 
 	return *this;
@@ -89,6 +93,10 @@ Stream & Stream::waitEvent(Event & event)
 
 		cudaGetLastError();
 	}
+	else if (m_forceSync)
+	{
+		this->sync();
+	}
 
 	return *this;
 }
@@ -105,6 +113,10 @@ Stream & Stream::launchGraph(cudaGraphExec_t hGraphExec)
 		NS_ERROR_LOG("%s.", cudaGetErrorString(err));
 
 		cudaGetLastError();
+	}
+	else if (m_forceSync)
+	{
+		this->sync();
 	}
 
 	return *this;
@@ -123,6 +135,10 @@ Stream & Stream::launchHostFunc(HostFunc<void> func, void * userData)
 
 		cudaGetLastError();
 	}
+	else if (m_forceSync)
+	{
+		this->sync();
+	}
 
 	return *this;
 }
@@ -136,10 +152,6 @@ Stream & Stream::launchKernel(const void * func, const dim3 & gridDim, const dim
 
 		cudaError_t err = cudaLaunchKernel(func, gridDim, blockDim, args, sharedMem, m_hStream);
 
-	#ifdef NS_CUDA_MEMORY_CHECK
-		cudaStreamSynchronize(m_hStream);
-	#endif
-
 		if (err != cudaSuccess)
 		{
 			NS_ERROR_LOG("%s.", cudaGetErrorString(err));
@@ -147,6 +159,10 @@ Stream & Stream::launchKernel(const void * func, const dim3 & gridDim, const dim
 			cudaGetLastError();
 
 			throw err;
+		}
+		else if (m_forceSync)
+		{
+			this->sync();
 		}
 	}
 
@@ -172,6 +188,10 @@ Stream & Stream::memcpyLinear(void * dst, size_t dstPitch, size_t dstHeight, con
 
 		cudaGetLastError();
 	}
+	else if (m_forceSync)
+	{
+		this->sync();
+	}
 
 	return *this;
 }
@@ -196,6 +216,10 @@ Stream & Stream::memcpyLinearImage(void * dst, size_t dstPitch, size_t dstHeight
 
 		cudaGetLastError();
 	}
+	else if (m_forceSync)
+	{
+		this->sync();
+	}
 
 	return *this;
 }
@@ -219,6 +243,10 @@ Stream & Stream::memcpyImageLinear(ImageAccessor<void> dstImg, const void * src,
 		NS_ERROR_LOG("%s.", cudaGetErrorString(err));
 
 		cudaGetLastError();
+	}
+	else if (m_forceSync)
+	{
+		this->sync();
 	}
 
 	return *this;
@@ -245,6 +273,10 @@ Stream & Stream::memcpyImage(ImageAccessor<void> dstImg, ImageAccessor<void> src
 
 		cudaGetLastError();
 	}
+	else if (m_forceSync)
+	{
+		this->sync();
+	}
 
 	return *this;
 }
@@ -261,6 +293,10 @@ Stream & Stream::memcpyToSymbol_void(void * symbol, size_t offset, const void * 
 		NS_ERROR_LOG("%s.", cudaGetErrorString(err));
 
 		cudaGetLastError();
+	}
+	else if (m_forceSync)
+	{
+		this->sync();
 	}
 
 	return *this;
@@ -279,6 +315,10 @@ Stream & Stream::memcpyFromSymbol_void(void * dst, const void * symbol, size_t o
 
 		cudaGetLastError();
 	}
+	else if (m_forceSync)
+	{
+		this->sync();
+	}
 
 	return *this;
 }
@@ -296,6 +336,10 @@ Stream & Stream::memsetZero(void * address, size_t bytes)
 
 		cudaGetLastError();
 	}
+	else if (m_forceSync)
+	{
+		this->sync();
+	}
 
 	return *this;
 }
@@ -312,6 +356,19 @@ void Stream::sync() const
 		NS_ERROR_LOG("%s.", cudaGetErrorString(err));
 
 		cudaGetLastError();
+	}
+}
+
+
+void Stream::forceSync(bool enable)
+{
+	if (m_forceSync != enable)
+	{
+		NS_WARNING_LOG_IF(enable, "Force-Sync enabled. This method is intended for debugging only and should NOT be used in production code.");
+
+		NS_INFO_LOG_IF(!enable, "Force-Sync disabled. Stream will not be forced to synchronize.");
+
+		m_forceSync = enable;
 	}
 }
 

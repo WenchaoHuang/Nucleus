@@ -56,6 +56,8 @@ void stream_test()
 
 	stream.sync();
 	stream.query();
+	stream.forceSync(true);
+	stream.forceSync(false);
 	assert(stream.device() == device);
 	assert(stream.handle() == nullptr);
 

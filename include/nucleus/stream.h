@@ -82,6 +82,14 @@ namespace NS_NAMESPACE
 
 
 		/**
+		 *	@brief		Force synchronization of the CUDA stream for debugging purposes.
+		 *	@param[in]	enable - If true, force the stream to wait until all operations are complete; if false, do not force synchronization.
+		 *	@note		This interface is intended for debugging and troubleshooting during development only. It should NOT be used in production code.
+		 */
+		void forceSync(bool enable);
+
+
+		/**
 		 *	@brief		Return pointer to the device associated with.
 		 */
 		Device * device() { return m_device; }
@@ -545,6 +553,8 @@ namespace NS_NAMESPACE
 		Device * const				m_device;
 
 		cudaStream_t  				m_hStream;
+
+		bool						m_forceSync;
 
 		int							m_priority;
 	};
