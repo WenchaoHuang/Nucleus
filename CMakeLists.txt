@@ -54,6 +54,9 @@ file(GLOB_RECURSE NUCLEUS_SOURCES
 # Create the static library
 add_library(${TARGET_NAME} STATIC ${NUCLEUS_SOURCES})
 
+# Link CUDA-Runtime library
+target_link_libraries(${TARGET_NAME} PUBLIC cudart_static)
+
 # Include directories
 target_include_directories(${TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus)

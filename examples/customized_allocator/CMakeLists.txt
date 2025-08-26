@@ -28,7 +28,7 @@ project(${TARGET_NAME} LANGUAGES CXX CUDA)
 add_executable(${TARGET_NAME} main.cpp)
 
 # Link directories
-target_link_libraries(${TARGET_NAME} PRIVATE nucleus cudart_static)
+target_link_libraries(${TARGET_NAME} PRIVATE nucleus)
 
 # CMake properties
 set_target_properties(${TARGET_NAME} PROPERTIES
