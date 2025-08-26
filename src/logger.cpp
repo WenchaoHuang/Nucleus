@@ -47,30 +47,38 @@ void Logger::log(const char * fileName, int line, const char * funcName, Level l
 
 	va_end(argPtr);
 
+	//	ANSI color codes
+	constexpr const char * COLOR_RED = "\033[31m";
+	constexpr const char * COLOR_CYAN = "\033[36m";
+	constexpr const char * COLOR_RESET = "\033[0m";
+	constexpr const char * COLOR_GREEN = "\033[32m";
+	constexpr const char * COLOR_MAGENTA = "\033[35m";
+	constexpr const char * COLOR_ORANGE = "\033[38;2;255;165;0m";
+
 	if (m_pfnCallback != nullptr)
 	{
 		m_pfnCallback(fileName, line, funcName, level, logString.c_str());
 	}
 	else if (level == Level::Assert)
 	{
-		std::cout << " [" << std::this_thread::get_id() << "] Assert: " << funcName << "() => " << logString << std::endl;
+		std::cout << COLOR_MAGENTA << " [" << std::this_thread::get_id() << "] Assert: " << funcName << "() => " << logString << COLOR_RESET << std::endl;
 	}
 	else if (level == Level::Error)
 	{
-		std::cout << " [" << std::this_thread::get_id() << "] Error: " << funcName << "() => " << logString << std::endl;
+		std::cout << COLOR_RED << " [" << std::this_thread::get_id() << "] Error: " << funcName << "() => " << logString << COLOR_RESET << std::endl;
 	}
 	else if (level == Level::Warning)
 	{
-		std::cout << " [" << std::this_thread::get_id() << "] Warning: " << funcName << "() => " << logString << std::endl;
+		std::cout << COLOR_ORANGE << " [" << std::this_thread::get_id() << "] Warning: " << funcName << "() => " << logString << COLOR_RESET << std::endl;
 	}
 	else if (level == Level::Info)
 	{
-		std::cout << " [" << std::this_thread::get_id() << "] Info: " << funcName << "() => " << logString << std::endl;
+		std::cout << COLOR_GREEN << " [" << std::this_thread::get_id() << "] Info: " << funcName << "() => " << logString << COLOR_RESET << std::endl;
 	}
 	else if (level == Level::Debug)
 	{
 	#ifdef NS_DEBUG
-		std::cout << " [" << std::this_thread::get_id() << "] Debug: " << funcName << "() => " << logString << std::endl;
+		std::cout << COLOR_CYAN << " [" << std::this_thread::get_id() << "] Debug: " << funcName << "() => " << logString << COLOR_RESET << std::endl;
 	#endif
 	}
 }

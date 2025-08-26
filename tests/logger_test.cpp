@@ -31,7 +31,7 @@ void logger_test()
 	NS_INFO_LOG("This is info log.");
 	NS_DEBUG_LOG("This is debug log.");
 	NS_ERROR_LOG("This is error log.");
-//	NS_ASSERT_LOG("This is assert log");
+	NS_ASSERT_LOG("This is assert log");
 	NS_WARNING_LOG("This is warning log.");
 
 	ns::Logger::getInstance()->registerCallback([](const char * fileName, int line, const char * funcName, ns::Logger::Level level, const char * logMsg)
