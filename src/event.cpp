@@ -103,11 +103,11 @@ Event::~Event() noexcept
 ********************************    TimedEvent    ********************************
 *********************************************************************************/
 
-std::chrono::nanoseconds TimedEvent::getElapsedTime(TimedEvent & eventStart, TimedEvent & eventEnd)
+std::chrono::nanoseconds TimedEvent::elapsedTime(TimedEvent & eventStart, TimedEvent & eventEnd)
 {
-	float elapsedTime = 0.0f;
+	float milliseconds = 0.0f;
 
-	cudaError_t err = cudaEventElapsedTime(&elapsedTime, eventStart.handle(), eventEnd.handle());
+	cudaError_t err = cudaEventElapsedTime(&milliseconds, eventStart.handle(), eventEnd.handle());
 
 	if (err != cudaSuccess)
 	{
@@ -116,5 +116,5 @@ std::chrono::nanoseconds TimedEvent::getElapsedTime(TimedEvent & eventStart, Tim
 		cudaGetLastError();
 	}
 
-	return std::chrono::nanoseconds(static_cast<long long>(elapsedTime * 1e6));
+	return std::chrono::nanoseconds(static_cast<long long>(milliseconds * 1e6));
 }

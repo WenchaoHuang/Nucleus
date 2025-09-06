@@ -45,7 +45,7 @@ void event_test()
 	stream.recordEvent(event2);
 	stream.waitEvent(event1).sync();
 
-	auto time = ns::TimedEvent::getElapsedTime(event1, event2);
+	auto time = ns::TimedEvent::elapsedTime(event1, event2);
 
 	if (event1.query())
 	{

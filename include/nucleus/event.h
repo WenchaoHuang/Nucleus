@@ -137,6 +137,6 @@ namespace NS_NAMESPACE
 		 *	@warning	eventStart and eventEnd must from the same device.
 		 *	@note		With a resolution of around 0.5 microseconds.
 		 */
-		static std::chrono::nanoseconds getElapsedTime(TimedEvent & eventStart, TimedEvent & eventEnd);
+		static std::chrono::nanoseconds elapsedTime(TimedEvent & eventStart, TimedEvent & eventEnd);
 	};
 }

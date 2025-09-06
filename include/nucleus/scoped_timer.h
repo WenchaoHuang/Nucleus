@@ -33,7 +33,7 @@ namespace NS_NAMESPACE
 	*****************************************************************************/
 
 	/**
-	 *	@brief		RAII-style GPU timer that measures execution duration between stream events
+	 *	@brief		RAII-style GPU timer that measures execution duration between stream events.
 	 *	@details	Automatically records start/end events on construction/destruction and invokes
 	 *				a callback with the measured duration. Designed for CUDA stream timing.
 	 *	@note		Designed specifically for development/debugging purposes to profile CUDA stream operations.
@@ -86,7 +86,7 @@ namespace NS_NAMESPACE
 		{
 			m_stream.recordEvent(m_endEvent).sync();
 
-			auto time = TimedEvent::getElapsedTime(m_startEvent, m_endEvent);
+			auto time = TimedEvent::elapsedTime(m_startEvent, m_endEvent);
 
 			m_callback(static_cast<float>(time.count() * 1e-3f));
 		}
