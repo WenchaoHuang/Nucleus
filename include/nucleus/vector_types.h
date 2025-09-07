@@ -22,12 +22,23 @@
 #pragma once
 
 #include "macros.h"
+#include <type_traits>
 
 #pragma warning(push)
 #pragma warning(disable : 4324)		// structure was padded due to alignment specifier
 
 namespace NS_NAMESPACE
 {
+	/*****************************************************************************
+	**************************    BinaryCompatible     ***************************
+	*****************************************************************************/
+
+	//	Trait to check if two types are binary compatible in terms of size and alignment.
+	template<typename Type1, typename Type2> struct BinaryCompatible
+	{
+		static constexpr bool value = (sizeof(Type1) == sizeof(Type2)) && (alignof(Type1) == alignof(Type2));
+	};
+
 	/*****************************************************************************
 	****************************    Vector Types     *****************************
 	*****************************************************************************/
@@ -101,76 +112,76 @@ namespace NS_NAMESPACE
 	using ulonglong4_16a = Vec4<unsigned long long, 16>;
 	using ulonglong4_32a = Vec4<unsigned long long, 32>;
 #else
-	using int2 = ::int2;
-	using int3 = ::int3;
-	using int4 = ::int4;
-	using int3_16a = Vec3<int, 16>;
+	using int2 = ::int2;									static_assert(BinaryCompatible<Vec2<int, 8>, int2>::value);
+	using int3 = ::int3;									static_assert(BinaryCompatible<Vec3<int, 4>, int3>::value);
+	using int4 = ::int4;									static_assert(BinaryCompatible<Vec4<int, 16>, int4>::value);
+	using int3_16a = Vec3<int, 16>;							static_assert(BinaryCompatible<Vec3<int, 16>, int3_16a>::value);
 
 	using uint = unsigned int;
-	using uint2 = ::uint2;
-	using uint3 = ::uint3;
-	using uint4 = ::uint4;
-	using uint3_16a = Vec3<unsigned int, 16>;
+	using uint2 = ::uint2;									static_assert(BinaryCompatible<Vec2<unsigned int, 8>, uint2>::value);
+	using uint3 = ::uint3;									static_assert(BinaryCompatible<Vec3<unsigned int, 4>, uint3>::value);
+	using uint4 = ::uint4;									static_assert(BinaryCompatible<Vec4<unsigned int, 16>, uint4>::value);
+	using uint3_16a = Vec3<unsigned int, 16>;				static_assert(BinaryCompatible<Vec3<unsigned int, 16>, uint3_16a>::value);
 	
-	using char2 = ::char2;
-	using char3 = ::char3;
-	using char4 = ::char4;
+	using char2 = ::char2;									static_assert(BinaryCompatible<Vec2<char, 2>, char2>::value);
+	using char3 = ::char3;									static_assert(BinaryCompatible<Vec3<char, 1>, char3>::value);
+	using char4 = ::char4;									static_assert(BinaryCompatible<Vec4<char, 4>, char4>::value);
 
 	using uchar = unsigned char;
-	using uchar2 = ::uchar2;
-	using uchar3 = ::uchar3;
-	using uchar4 = ::uchar4;
+	using uchar2 = ::uchar2;								static_assert(BinaryCompatible<Vec2<unsigned char, 2>, uchar2>::value);
+	using uchar3 = ::uchar3;								static_assert(BinaryCompatible<Vec3<unsigned char, 1>, uchar3>::value);
+	using uchar4 = ::uchar4;								static_assert(BinaryCompatible<Vec4<unsigned char, 4>, uchar4>::value);
 
-	using short2 = ::short2;
-	using short3 = ::short3;
-	using short4 = ::short4;
+	using short2 = ::short2;								static_assert(BinaryCompatible<Vec2<short, 4>, short2>::value);
+	using short3 = ::short3;								static_assert(BinaryCompatible<Vec3<short, 2>, short3>::value);
+	using short4 = ::short4;								static_assert(BinaryCompatible<Vec4<short, 8>, short4>::value);
 
-	using float2 = ::float2;
-	using float3 = ::float3;
-	using float4 = ::float4;
-	using float3_16a = Vec3<float, 16>;
+	using float2 = ::float2;								static_assert(BinaryCompatible<Vec2<float, 8>, float2>::value);
+	using float3 = ::float3;								static_assert(BinaryCompatible<Vec3<float, 4>, float3>::value);
+	using float4 = ::float4;								static_assert(BinaryCompatible<Vec4<float, 16>, float4>::value);
+	using float3_16a = Vec3<float, 16>;						static_assert(BinaryCompatible<Vec3<float, 16>, float3_16a>::value);
 
-	using double2 = ::double2;
-	using double3 = ::double3;
+	using double2 = ::double2;								static_assert(BinaryCompatible<Vec2<double, 16>, double2>::value);
+	using double3 = ::double3;								static_assert(BinaryCompatible<Vec3<double,  8>, double3>::value);
 #if __CUDACC_VER_MAJOR__ >= 13
-	using double4 = ::double4_16a;
-	using double4_16a = ::double4_16a;
-	using double4_32a = ::double4_32a;
+	using double4 = ::double4_16a;							static_assert(BinaryCompatible<Vec4<double, 16>, double4>::value);
+	using double4_16a = ::double4_16a;						static_assert(BinaryCompatible<Vec4<double, 16>, double4_16a>::value);
+	using double4_32a = ::double4_32a;						static_assert(BinaryCompatible<Vec4<double, 32>, double4_32a>::value);
 #else
-	using double4 = ::double4;
-	using double4_16a = ::double4;
-	using double4_32a = Vec4<double, 32>;
+	using double4 = ::double4;								static_assert(BinaryCompatible<Vec4<double, 16>, double4>::value);
+	using double4_16a = ::double4;							static_assert(BinaryCompatible<Vec4<double, 16>, double4_16a>::value);
+	using double4_32a = Vec4<double, 32>;					static_assert(BinaryCompatible<Vec4<double, 32>, double4_32a>::value);
 #endif
 
 	using ushort = unsigned short;
-	using ushort2 = ::ushort2;
-	using ushort3 = ::ushort3;
-	using ushort4 = ::ushort4;
+	using ushort2 = ::ushort2;								static_assert(BinaryCompatible<Vec2<unsigned short, 4>, ushort2>::value);
+	using ushort3 = ::ushort3;								static_assert(BinaryCompatible<Vec3<unsigned short, 2>, ushort3>::value);
+	using ushort4 = ::ushort4;								static_assert(BinaryCompatible<Vec4<unsigned short, 8>, ushort4>::value);
 
 	using longlong = long long;
-	using longlong2 = ::longlong2;
-	using longlong3 = ::longlong3;
+	using longlong2 = ::longlong2;							static_assert(BinaryCompatible<Vec2<long long, 16>, longlong2>::value);
+	using longlong3 = ::longlong3;							static_assert(BinaryCompatible<Vec3<long long, 8>, longlong3>::value);
 #if __CUDACC_VER_MAJOR__ >= 13
-	using longlong4 = ::longlong4_16a;
-	using longlong4_16a = ::longlong4_16a;
-	using longlong4_32a = ::longlong4_32a;
+	using longlong4 = ::longlong4_16a;						static_assert(BinaryCompatible<Vec4<long long, 16>, longlong4>::value);
+	using longlong4_16a = ::longlong4_16a;					static_assert(BinaryCompatible<Vec4<long long, 16>, longlong4_16a>::value);
+	using longlong4_32a = ::longlong4_32a;					static_assert(BinaryCompatible<Vec4<long long, 32>, longlong4_32a>::value);
 #else
-	using longlong4 = ::longlong4;
-	using longlong4_16a = ::longlong4;
-	using longlong4_32a = Vec4<long long, 32>;
+	using longlong4 = ::longlong4;							static_assert(BinaryCompatible<Vec4<long long, 16>, longlong4>::value);
+	using longlong4_16a = ::longlong4;						static_assert(BinaryCompatible<Vec4<long long, 16>, longlong4_16a>::value);
+	using longlong4_32a = Vec4<long long, 32>;				static_assert(BinaryCompatible<Vec4<long long, 32>, longlong4_32a>::value);
 #endif
 
 	using ulonglong = unsigned long long;
-	using ulonglong2 = ::ulonglong2;
-	using ulonglong3 = ::ulonglong3;
+	using ulonglong2 = ::ulonglong2;						static_assert(BinaryCompatible<Vec2<unsigned long long, 16>, ulonglong2>::value);
+	using ulonglong3 = ::ulonglong3;						static_assert(BinaryCompatible<Vec3<unsigned long long,  8>, ulonglong3>::value);
 #if __CUDACC_VER_MAJOR__ >= 13
-	using ulonglong4 = ::ulonglong4_16a;
-	using ulonglong4_16a = ::ulonglong4_16a;
-	using ulonglong4_32a = ::ulonglong4_32a;
+	using ulonglong4 = ::ulonglong4_16a;					static_assert(BinaryCompatible<Vec4<unsigned long long, 16>, ulonglong4>::value);
+	using ulonglong4_16a = ::ulonglong4_16a;				static_assert(BinaryCompatible<Vec4<unsigned long long, 16>, ulonglong4_16a>::value);
+	using ulonglong4_32a = ::ulonglong4_32a;				static_assert(BinaryCompatible<Vec4<unsigned long long, 32>, ulonglong4_32a>::value);
 #else
-	using ulonglong4 = ::ulonglong4;
-	using ulonglong4_16a = ::ulonglong4;
-	using ulonglong4_32a = Vec4<unsigned long long, 32>;
+	using ulonglong4 = ::ulonglong4;						static_assert(BinaryCompatible<Vec4<unsigned long long, 16>, ulonglong4>::value);
+	using ulonglong4_16a = ::ulonglong4;					static_assert(BinaryCompatible<Vec4<unsigned long long, 16>, ulonglong4_16a>::value);
+	using ulonglong4_32a = Vec4<unsigned long long, 32>;	static_assert(BinaryCompatible<Vec4<unsigned long long, 32>, ulonglong4_32a>::value);
 #endif
 #endif
 }
