@@ -23,6 +23,9 @@
 
 #include "macros.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4324)		// structure was padded due to alignment specifier
+
 namespace NS_NAMESPACE
 {
 	/*****************************************************************************
@@ -40,13 +43,14 @@ namespace NS_NAMESPACE
 	 *	This approach avoids exposing CUDA headers in the interface, allowing the
 	 *	header to be included in non-CUDA projects.
 	 */
-	template<typename Type, int Align> struct Vec2 { Type x, y; };
-	template<typename Type, int Align> struct Vec3 { Type x, y, z; };
-	template<typename Type, int Align> struct Vec4 { Type x, y, z, w; };
+	template<typename Type, int Align> struct NS_ALIGN(Align) Vec2 { Type x, y; };
+	template<typename Type, int Align> struct NS_ALIGN(Align) Vec3 { Type x, y, z; };
+	template<typename Type, int Align> struct NS_ALIGN(Align) Vec4 { Type x, y, z, w; };
 #ifndef __CUDACC__
 	using int2 = Vec2<int, 8>;
 	using int3 = Vec3<int, 4>;
 	using int4 = Vec4<int, 16>;
+	using int3_16a = Vec3<int, 16>;
 
 	using char2 = Vec2<char, 2>;
 	using char3 = Vec3<char, 1>;
@@ -59,6 +63,7 @@ namespace NS_NAMESPACE
 	using float2 = Vec2<float, 8>;
 	using float3 = Vec3<float, 4>;
 	using float4 = Vec4<float, 16>;
+	using float3_16a = Vec3<float, 16>;
 
 	using double2 = Vec2<double, 16>;
 	using double3 = Vec3<double,  8>;
@@ -70,6 +75,7 @@ namespace NS_NAMESPACE
 	using uint2 = Vec2<unsigned int, 8>;
 	using uint3 = Vec3<unsigned int, 4>;
 	using uint4 = Vec4<unsigned int, 16>;
+	using uint3_16a = Vec3<unsigned int, 16>;
 
 	using longlong = long long;
 	using longlong2 = Vec2<long long, 16>;
@@ -98,11 +104,13 @@ namespace NS_NAMESPACE
 	using int2 = ::int2;
 	using int3 = ::int3;
 	using int4 = ::int4;
+	using int3_16a = Vec3<int, 16>;
 
 	using uint = unsigned int;
 	using uint2 = ::uint2;
 	using uint3 = ::uint3;
 	using uint4 = ::uint4;
+	using uint3_16a = Vec3<unsigned int, 16>;
 	
 	using char2 = ::char2;
 	using char3 = ::char3;
@@ -120,6 +128,7 @@ namespace NS_NAMESPACE
 	using float2 = ::float2;
 	using float3 = ::float3;
 	using float4 = ::float4;
+	using float3_16a = Vec3<float, 16>;
 
 	using double2 = ::double2;
 	using double3 = ::double3;
@@ -165,3 +174,5 @@ namespace NS_NAMESPACE
 #endif
 #endif
 }
+
+#pragma warning(pop)	// warning: 4324
