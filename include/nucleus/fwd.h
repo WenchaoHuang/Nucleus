@@ -149,6 +149,30 @@ namespace NS_NAMESPACE
 	using AllocPtr			= std::shared_ptr<Allocator>;
 	using HostAllocPtr		= std::shared_ptr<HostAllocator>;
 	using DevAllocPtr		= std::shared_ptr<DeviceAllocator>;
+
+	//	Trait to check if two types are binary compatible in terms of size and alignment.
+	template<typename Type1, typename Type2> struct BinaryCompatible
+	{
+		static constexpr bool value = (sizeof(Type1) == sizeof(Type2)) && (alignof(Type1) == alignof(Type2));
+	};
+
+	//	Utility functions to reinterpret buffer views as another compatible element type.
+	template<typename DstType, typename SrcType> BufferView1D<DstType> view_cast(BufferView1D<SrcType> view);
+	template<typename DstType, typename SrcType> BufferView2D<DstType> view_cast(BufferView2D<SrcType> view);
+	template<typename DstType, typename SrcType> BufferView3D<DstType> view_cast(BufferView3D<SrcType> view);
+
+	template<typename DstType, typename SrcType> BufferView1D<const DstType> view_cast(BufferView1D<const SrcType> view);
+	template<typename DstType, typename SrcType> BufferView2D<const DstType> view_cast(BufferView2D<const SrcType> view);
+	template<typename DstType, typename SrcType> BufferView3D<const DstType> view_cast(BufferView3D<const SrcType> view);
+
+	// Utility functions to reinterpret device pointers as another compatible element type.
+	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr<const DstType> ptr_cast(dev::Ptr<const SrcType> ptr);
+	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr2<const DstType> ptr_cast(dev::Ptr2<const SrcType> ptr);
+	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr3<const DstType> ptr_cast(dev::Ptr3<const SrcType> ptr);
+
+	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr<DstType> ptr_cast(dev::Ptr<SrcType> ptr);
+	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr2<DstType> ptr_cast(dev::Ptr2<SrcType> ptr);
+	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr3<DstType> ptr_cast(dev::Ptr3<SrcType> ptr);
 }
 
 /*********************************************************************************

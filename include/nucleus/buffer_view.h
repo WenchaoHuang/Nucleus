@@ -66,7 +66,7 @@ namespace NS_NAMESPACE
 	public:
 
 		//	Returns pointer to the associated Buffer.
-		std::shared_ptr<class Buffer> buffer() const { return m_buffer; }
+		std::shared_ptr<Buffer> buffer() const { return m_buffer; }
 
 		//	Returns device pointer to the underlying array, explicitly.
 		const dev::Ptr<Type> & ptr() const { return *this; }
@@ -191,4 +191,56 @@ namespace NS_NAMESPACE
 		size_t						m_offset;
 		std::shared_ptr<Buffer>		m_buffer;
 	};
+
+	/*****************************************************************************
+	**************************    view_cast<T1, T2>    ***************************
+	*****************************************************************************/
+
+	//	Reinterpret a 1D buffer view as another element type, enforcing binary compatibility at compile time.
+	template<typename DstType, typename SrcType> BufferView1D<DstType> view_cast(BufferView1D<SrcType> view)
+	{
+		static_assert(BinaryCompatible<DstType, SrcType>::value, "view_cast requires DstType and SrcType to be binary compatible");
+
+		return BufferView1D<DstType>(view.buffer(), view.offset(), view.width());
+	}
+
+	//	Reinterpret a 2D buffer view as another element type, enforcing binary compatibility at compile time.
+	template<typename DstType, typename SrcType> BufferView2D<DstType> view_cast(BufferView2D<SrcType> view)
+	{
+		static_assert(BinaryCompatible<DstType, SrcType>::value, "view_cast requires DstType and SrcType to be binary compatible");
+
+		return BufferView2D<DstType>(view.buffer(), view.offset(), view.width(), view.height());
+	}
+
+	//	Reinterpret a 3D buffer view as another element type, enforcing binary compatibility at compile time.
+	template<typename DstType, typename SrcType> BufferView3D<DstType> view_cast(BufferView3D<SrcType> view)
+	{
+		static_assert(BinaryCompatible<DstType, SrcType>::value, "view_cast requires DstType and SrcType to be binary compatible");
+
+		return BufferView3D<DstType>(view.buffer(), view.offset(), view.width(), view.height(), view.depth());
+	}
+
+	//	Reinterpret a 1D buffer view as another element type, enforcing binary compatibility at compile time.
+	template<typename DstType, typename SrcType> BufferView1D<const DstType> view_cast(BufferView1D<const SrcType> view)
+	{
+		static_assert(BinaryCompatible<DstType, SrcType>::value, "view_cast requires DstType and SrcType to be binary compatible");
+
+		return BufferView1D<const DstType>(view.buffer(), view.offset(), view.width());
+	}
+
+	//	Reinterpret a 2D buffer view as another element type, enforcing binary compatibility at compile time.
+	template<typename DstType, typename SrcType> BufferView2D<const DstType> view_cast(BufferView2D<const SrcType> view)
+	{
+		static_assert(BinaryCompatible<DstType, SrcType>::value, "view_cast requires DstType and SrcType to be binary compatible");
+
+		return BufferView2D<const DstType>(view.buffer(), view.offset(), view.width(), view.height());
+	}
+
+	//	Reinterpret a 3D buffer view as another element type, enforcing binary compatibility at compile time.
+	template<typename DstType, typename SrcType> BufferView3D<const DstType> view_cast(BufferView3D<const SrcType> view)
+	{
+		static_assert(BinaryCompatible<DstType, SrcType>::value, "view_cast requires DstType and SrcType to be binary compatible");
+
+		return BufferView3D<const DstType>(view.buffer(), view.offset(), view.width(), view.height(), view.depth());
+	}
 }

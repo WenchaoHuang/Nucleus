@@ -133,14 +133,17 @@ void dev_ptr_test()
 	dev::Ptr<int> devPtr0;
 	dev::Ptr<int> devPtr1 = nullptr;
 	dev::Ptr<int> devPtr2(nullptr, 1024);
+	ns::ptr_cast<float>(devPtr0);
 
 	dev::Ptr2<short> devPtr3;
 	dev::Ptr2<short> devPtr4 = nullptr;
 	dev::Ptr2<short> devPtr5(nullptr, 100, 200);
+	ns::ptr_cast<short>(devPtr3);
 
 	dev::Ptr3<float> devPtr6;
 	dev::Ptr3<float> devPtr7 = nullptr;
 	dev::Ptr3<float> devPtr8(nullptr, 100, 200, 300);
+	ns::ptr_cast<float>(devPtr6);
 
 	if (devPtr2.empty())
 	{

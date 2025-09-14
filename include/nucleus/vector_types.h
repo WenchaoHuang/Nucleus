@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "macros.h"
+#include "fwd.h"
 #include <type_traits>
 
 #pragma warning(push)
@@ -29,16 +29,6 @@
 
 namespace NS_NAMESPACE
 {
-	/*****************************************************************************
-	**************************    BinaryCompatible     ***************************
-	*****************************************************************************/
-
-	//	Trait to check if two types are binary compatible in terms of size and alignment.
-	template<typename Type1, typename Type2> struct BinaryCompatible
-	{
-		static constexpr bool value = (sizeof(Type1) == sizeof(Type2)) && (alignof(Type1) == alignof(Type2));
-	};
-
 	/*****************************************************************************
 	****************************    Vector Types     *****************************
 	*****************************************************************************/

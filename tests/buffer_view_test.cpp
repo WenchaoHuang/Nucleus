@@ -44,4 +44,8 @@ void buffer_view_test()
 
 	ns::BufferView3D<int> bufferView6;
 	ns::BufferView3D<int> bufferView7 = nullptr;
+
+	ns::view_cast<int>(bufferView0);
+	ns::view_cast<float>(bufferView4);
+	ns::view_cast<unsigned int>(bufferView6);
 }

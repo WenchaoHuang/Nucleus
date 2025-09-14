@@ -285,3 +285,58 @@ namespace NS_NAMESPACE::dev
 		uint32_t		m_depth;
 	};
 }
+
+namespace NS_NAMESPACE
+{
+	/*****************************************************************************
+	***************************    ptr_cast<T1, T2>    ***************************
+	*****************************************************************************/
+
+	//	Reinterpret a 1D device pointer as another element type, enforcing binary compatibility at compile time.
+	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr<DstType> ptr_cast(dev::Ptr<SrcType> ptr)
+	{
+		static_assert(BinaryCompatible<DstType, SrcType>::value, "ptr_cast requires DstType and SrcType to be binary compatible");
+
+		return dev::Ptr<DstType>(reinterpret_cast<DstType*>(ptr.data()), ptr.width());
+	}
+
+	//	Reinterpret a 2D device pointer as another element type, enforcing binary compatibility at compile time.
+	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr2<DstType> ptr_cast(dev::Ptr2<SrcType> ptr)
+	{
+		static_assert(BinaryCompatible<DstType, SrcType>::value, "ptr_cast requires DstType and SrcType to be binary compatible");
+
+		return dev::Ptr2<DstType>(reinterpret_cast<DstType*>(ptr.data()), ptr.width(), ptr.height());
+	}
+
+	//	Reinterpret a 3D device pointer as another element type, enforcing binary compatibility at compile time.
+	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr3<DstType> ptr_cast(dev::Ptr3<SrcType> ptr)
+	{
+		static_assert(BinaryCompatible<DstType, SrcType>::value, "ptr_cast requires DstType and SrcType to be binary compatible");
+
+		return dev::Ptr3<DstType>(reinterpret_cast<DstType*>(ptr.data()), ptr.width(), ptr.height(), ptr.depth());
+	}
+
+	//	Reinterpret a 1D device pointer as another element type, enforcing binary compatibility at compile time.
+	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr<const DstType> ptr_cast(dev::Ptr<const SrcType> ptr)
+	{
+		static_assert(BinaryCompatible<DstType, SrcType>::value, "ptr_cast requires DstType and SrcType to be binary compatible");
+
+		return dev::Ptr<const DstType>(reinterpret_cast<const DstType*>(ptr.data()), ptr.width());
+	}
+
+	//	Reinterpret a 2D device pointer as another element type, enforcing binary compatibility at compile time.
+	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr2<const DstType> ptr_cast(dev::Ptr2<const SrcType> ptr)
+	{
+		static_assert(BinaryCompatible<DstType, SrcType>::value, "ptr_cast requires DstType and SrcType to be binary compatible");
+
+		return dev::Ptr2<const DstType>(reinterpret_cast<const DstType*>(ptr.data()), ptr.width(), ptr.height());
+	}
+
+	//	Reinterpret a 3D device pointer as another element type, enforcing binary compatibility at compile time.
+	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr3<const DstType> ptr_cast(dev::Ptr3<const SrcType> ptr)
+	{
+		static_assert(BinaryCompatible<DstType, SrcType>::value, "ptr_cast requires DstType and SrcType to be binary compatible");
+
+		return dev::Ptr3<const DstType>(reinterpret_cast<const DstType*>(ptr.data()), ptr.width(), ptr.height(), ptr.depth());
+	}
+}
