@@ -20,12 +20,6 @@
 
 cmake_minimum_required(VERSION 3.18)
 
-# Project name
-project(Nucleus-Examples)
-
-# Organize targets into folders
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
 # Add samples
 add_subdirectory(random_access)
 add_subdirectory(pinned_memory)

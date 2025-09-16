@@ -22,7 +22,6 @@ cmake_minimum_required(VERSION 3.18)
 
 # Target name
 set(TARGET_NAME nucleus-tests)
-project(${TARGET_NAME} LANGUAGES CXX CUDA)
 
 # Source files
 file(GLOB TEST_CPP_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")

@@ -22,7 +22,6 @@ cmake_minimum_required(VERSION 3.18)
 
 # Target name
 set(TARGET_NAME dynamic_texture)
-project(${TARGET_NAME} LANGUAGES CXX CUDA)
 
 # Create the executable target
 add_executable(${TARGET_NAME} main.cu)
