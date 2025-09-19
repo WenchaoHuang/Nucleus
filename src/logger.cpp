@@ -49,11 +49,13 @@ void Logger::log(const char * fileName, int line, const char * funcName, Level l
 
 	//	ANSI color codes
 	constexpr const char * COLOR_RED = "\033[31m";
-	constexpr const char * COLOR_CYAN = "\033[36m";
 	constexpr const char * COLOR_RESET = "\033[0m";
 	constexpr const char * COLOR_GREEN = "\033[32m";
 	constexpr const char * COLOR_MAGENTA = "\033[35m";
 	constexpr const char * COLOR_ORANGE = "\033[38;2;255;165;0m";
+#ifdef NS_DEBUG
+	constexpr const char * COLOR_CYAN = "\033[36m";
+#endif
 
 	if (m_pfnCallback != nullptr)
 	{
