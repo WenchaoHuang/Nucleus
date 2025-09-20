@@ -201,7 +201,7 @@ namespace NS_NAMESPACE
 	{
 		static_assert(BinaryCompatible<DstType, SrcType>::value, "view_cast requires DstType and SrcType to be binary compatible");
 
-		return BufferView1D<DstType>(view.buffer(), view.offset(), view.width());
+		return view.empty() ? BufferView1D<DstType>() : BufferView1D<DstType>(view.buffer(), view.offset(), view.width());
 	}
 
 	//	Reinterpret a 2D buffer view as another element type, enforcing binary compatibility at compile time.
@@ -209,7 +209,7 @@ namespace NS_NAMESPACE
 	{
 		static_assert(BinaryCompatible<DstType, SrcType>::value, "view_cast requires DstType and SrcType to be binary compatible");
 
-		return BufferView2D<DstType>(view.buffer(), view.offset(), view.width(), view.height());
+		return view.empty() ? BufferView2D<DstType>() : BufferView2D<DstType>(view.buffer(), view.offset(), view.width(), view.height());
 	}
 
 	//	Reinterpret a 3D buffer view as another element type, enforcing binary compatibility at compile time.
@@ -217,7 +217,7 @@ namespace NS_NAMESPACE
 	{
 		static_assert(BinaryCompatible<DstType, SrcType>::value, "view_cast requires DstType and SrcType to be binary compatible");
 
-		return BufferView3D<DstType>(view.buffer(), view.offset(), view.width(), view.height(), view.depth());
+		return view.empty() ? BufferView3D<DstType>() : BufferView3D<DstType>(view.buffer(), view.offset(), view.width(), view.height(), view.depth());
 	}
 
 	//	Reinterpret a 1D buffer view as another element type, enforcing binary compatibility at compile time.
@@ -225,7 +225,7 @@ namespace NS_NAMESPACE
 	{
 		static_assert(BinaryCompatible<DstType, SrcType>::value, "view_cast requires DstType and SrcType to be binary compatible");
 
-		return BufferView1D<const DstType>(view.buffer(), view.offset(), view.width());
+		return view.empty() ? BufferView1D<const DstType>() : BufferView1D<const DstType>(view.buffer(), view.offset(), view.width());
 	}
 
 	//	Reinterpret a 2D buffer view as another element type, enforcing binary compatibility at compile time.
@@ -233,7 +233,7 @@ namespace NS_NAMESPACE
 	{
 		static_assert(BinaryCompatible<DstType, SrcType>::value, "view_cast requires DstType and SrcType to be binary compatible");
 
-		return BufferView2D<const DstType>(view.buffer(), view.offset(), view.width(), view.height());
+		return view.empty() ? BufferView2D<const DstType>() : BufferView2D<const DstType>(view.buffer(), view.offset(), view.width(), view.height());
 	}
 
 	//	Reinterpret a 3D buffer view as another element type, enforcing binary compatibility at compile time.
@@ -241,6 +241,6 @@ namespace NS_NAMESPACE
 	{
 		static_assert(BinaryCompatible<DstType, SrcType>::value, "view_cast requires DstType and SrcType to be binary compatible");
 
-		return BufferView3D<const DstType>(view.buffer(), view.offset(), view.width(), view.height(), view.depth());
+		return view.empty() ? BufferView3D<const DstType>() : BufferView3D<const DstType>(view.buffer(), view.offset(), view.width(), view.height(), view.depth());
 	}
 }
