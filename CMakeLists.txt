@@ -53,7 +53,7 @@ file(GLOB NUCLEUS_SOURCES CONFIGURE_DEPENDS
 )
 
 # Build library
-if (NUCLEUS_BUILD_SHARED_LIB)
+if(NUCLEUS_BUILD_SHARED_LIB)
     # Create the shared library
     add_library(${TARGET_NAME} SHARED ${NUCLEUS_SOURCES})
 
@@ -89,6 +89,12 @@ target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/in
 # MSVC settings
 if(MSVC)
     target_compile_options(${TARGET_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:/MP /W4 /WX /utf-8>)
+endif()
+
+# Load the custom helper that adds a dummy.cpp source file
+# if a target has no C++ sources (useful for Visual Studio projects)
+if(MSVC AND NUCLEUS_BUILD_SHARED_LIB)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/AddDummyCpp.cmake)
 endif()
 
 # Optional: Add tests if enabled
