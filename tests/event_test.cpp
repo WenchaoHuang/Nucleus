@@ -38,7 +38,7 @@ void event_test()
 	ns::Event		event0(device);
 	ns::TimedEvent	event1(device);
 	ns::TimedEvent	event2(device);
-	ns::ScopedTimer	timer(stream, [](float us) { printf("ScopedTime: %fus\n", us); });
+	ns::ScopedTimer	timer(stream, [](std::chrono::nanoseconds ns) { printf("ScopedTime: %fus\n", ns.count() * 1e-3); });
 
 	stream.recordEvent(event0);
 	stream.recordEvent(event1);

@@ -46,7 +46,7 @@ namespace NS_NAMESPACE
 	public:
 
 		//	Callback type that receives the measured duration in microseconds.
-		using CallbackFunc = std::function<void(float us)>;
+		using CallbackFunc = std::function<void(std::chrono::nanoseconds ns)>;
 
 
 		/**
@@ -86,9 +86,7 @@ namespace NS_NAMESPACE
 		{
 			m_stream.recordEvent(m_endEvent).sync();
 
-			auto time = TimedEvent::elapsedTime(m_startEvent, m_endEvent);
-
-			m_callback(static_cast<float>(time.count() * 1e-3f));
+			m_callback(TimedEvent::elapsedTime(m_startEvent, m_endEvent));
 		}
 
 	private:

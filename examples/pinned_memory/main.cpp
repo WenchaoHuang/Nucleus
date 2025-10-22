@@ -78,7 +78,7 @@ int main()
 		constexpr size_t ratio = 1000000000;
 
 		{
-			ns::ScopedTimer timer(stream, [=](float time) { printf("    %s us |", to_string_aligned(size_t(time * ratio) / (2 * ratio * samples), 14).c_str()); });
+			ns::ScopedTimer timer(stream, [=](std::chrono::nanoseconds ns) { printf("    %s us |", to_string_aligned(size_t(ns.count() * 1e-3 * ratio) / (2 * ratio * samples), 14).c_str()); });
 
 			for (int i = 0; i < samples; i++)
 			{
@@ -87,7 +87,7 @@ int main()
 			}
 		}
 		{
-			ns::ScopedTimer timer(stream, [=](float time) { printf("    %s us |", to_string_aligned(size_t(time * ratio) / (2 * ratio * samples), 12).c_str()); });
+			ns::ScopedTimer timer(stream, [=](std::chrono::nanoseconds ns) { printf("    %s us |", to_string_aligned(size_t(ns.count() * 1e-3 * ratio) / (2 * ratio * samples), 12).c_str()); });
 
 			for (int i = 0; i < samples; i++)
 			{
@@ -96,7 +96,7 @@ int main()
 			}
 		}
 		{
-			ns::ScopedTimer timer(stream, [=](float time) { printf("    %s us |\n", to_string_aligned(size_t(time * ratio) / (2 * ratio * samples), 14).c_str()); });
+			ns::ScopedTimer timer(stream, [=](std::chrono::nanoseconds ns) { printf("    %s us |\n", to_string_aligned(size_t(ns.count() * 1e-3 * ratio) / (2 * ratio * samples), 14).c_str()); });
 
 			for (int i = 0; i < samples; i++)
 			{
