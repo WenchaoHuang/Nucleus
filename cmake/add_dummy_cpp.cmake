@@ -1,4 +1,4 @@
-# AddDummyCpp.cmake
+# add_dummy_cpp.cmake
 #
 # Provides a function add_dummy_if_no_cpp(target)
 # This will automatically add a dummy.cpp file to the given target
@@ -27,9 +27,7 @@ function(add_dummy_if_no_cpp target)
 	# If no .cpp exists, create a dummy.cpp in the build dir
 	if(NOT has_cpp)
 		set(DUMMY_CPP ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp)
-		file(WRITE ${DUMMY_CPP}
-			"//	Required to enable C/C++ property pages in Visual Studio.\n"
-		)
+		file(WRITE ${DUMMY_CPP} "//	Required to enable C/C++ property pages in Visual Studio.\n")
 		target_sources(${target} PRIVATE ${DUMMY_CPP})
 	endif()
 endfunction()
