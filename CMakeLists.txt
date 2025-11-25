@@ -92,9 +92,8 @@ if(MSVC)
 endif()
 
 # Load the custom helper that adds a dummy.cpp source file
-# if a target has no C++ sources (useful for Visual Studio projects)
-if(MSVC AND NUCLEUS_BUILD_SHARED_LIB)
-    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/AddDummyCpp.cmake)
+if(MSVC)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/add_dummy_cpp.cmake)
 endif()
 
 # Optional: Add tests if enabled

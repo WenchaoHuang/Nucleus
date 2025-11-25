@@ -28,7 +28,7 @@ add_executable(${TARGET_NAME} main.cu)
 
 # Ensure the target has at least one C++ source file.
 if(MSVC AND NUCLEUS_BUILD_SHARED_LIB)
-    add_dummy_if_no_cpp(${TARGET_NAME})
+    add_dummy_cpp(${TARGET_NAME})
 endif()
 
 # Link directories
