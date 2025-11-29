@@ -41,6 +41,7 @@ extern void texture_test();
 extern void allocator_test();
 extern void array_proxy_test();
 extern void buffer_view_test();
+extern void shared_handle_test();
 
 int main()
 {
@@ -58,6 +59,7 @@ int main()
 	texture_test();
 	buffer_view_test();
 	array_proxy_test();
+	shared_handle_test();
 	logger_test();
 
 	system("pause");

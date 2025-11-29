@@ -25,24 +25,32 @@
 #include <nucleus/context.h>
 
 /*********************************************************************************
-*******************************    buffer_test    ********************************
+****************************    shared_handle_test    ****************************
 *********************************************************************************/
 
-void buffer_test()
+void shared_handle_test()
 {
 	auto device = ns::Context::getInstance()->device(0);
 	auto allocator = device->defaultAllocator();
 
-	ns::Buffer buffer0;
-	ns::Buffer buffer1(allocator, 1024);
-	ns::SharedBuffer sharedBuffer(allocator, 1024);
-	std::unique_ptr<ns::Buffer> uniqueBuffer = std::make_unique<ns::Buffer>(allocator, 1024);
+	ns::SharedBuffer sharedBuffer0;
+	ns::SharedBuffer sharedBuffer1 = nullptr;
+	ns::SharedBuffer sharedBuffer2(allocator, 100);
 
-	uniqueBuffer = nullptr;
-	sharedBuffer = nullptr;
+	assert(sharedBuffer2->capacity() == 100);
+	ns::SharedBuffer sharedBuffer3 = std::move(sharedBuffer2);
+	assert(sharedBuffer3->capacity() == 100);
 
-	buffer1.allocator();
-	buffer1.capacity();
-	buffer1.empty();
-	buffer1.data();
+	ns::SharedBuffer sharedBuffer4 = ns::SharedBuffer{ allocator, 200 };
+	assert(sharedBuffer4->capacity() == 200);
+
+	ns::SharedBuffer sharedBuffer5 = std::make_unique<ns::Buffer>(allocator, 300);
+	assert(sharedBuffer5->capacity() == 300);
+
+	ns::SharedBuffer sharedBuffer6 = std::make_shared<ns::Buffer>(allocator, 400);
+	assert(sharedBuffer6->capacity() == 400);
+	assert(sharedBuffer6);
+
+	sharedBuffer6.reset();
+	assert(sharedBuffer6 == nullptr);
 }

@@ -116,71 +116,71 @@ void texture_test()
 
 	//	1D
 	ns::Texture1D<int>	texture0;
-	texture0.bind(std::make_shared<ns::Image1D<int>>(allocator, 10));
+	texture0.bind(ns::SharedImage1D<int>(allocator, 10));
 	assert(texture0.image() != nullptr);
 	
 	ns::Texture1DLod<int>	texture1;
-	texture1.bind(std::make_shared<ns::Image1DLod<int>>(allocator, 10, 2));
+	texture1.bind(ns::SharedImage1DLod<int>(allocator, 10, 2));
 	assert(texture1.image() != nullptr);
 
 	ns::Texture1DLayered<int>	texture2;
-	texture2.bind(std::make_shared<ns::Image1DLayered<int>>(allocator, 10, 2));
+	texture2.bind(ns::SharedImage1DLayered<int>(allocator, 10, 2));
 	assert(texture2.image() != nullptr);
 
 	ns::Texture1DLayeredLod<int>	texture3;
-	texture3.bind(std::make_shared<ns::Image1DLayeredLod<int>>(allocator, 10, 2, 2));
+	texture3.bind(ns::SharedImage1DLayeredLod<int>(allocator, 10, 2, 2));
 	assert(texture3.image() != nullptr);
 
 	//	2D
 	ns::Texture2D<float>	texture4;
-	texture4.bind(std::make_shared<ns::Image2D<char>>(allocator, 10, 10));
-	texture4.bind(std::make_shared<ns::Image2D<float>>(allocator, 10, 10));
+	texture4.bind(ns::SharedImage2D<char>(allocator, 10, 10));
+	texture4.bind(ns::SharedImage2D<float>(allocator, 10, 10));
 	assert(texture4.image() != nullptr);
 
 	ns::Texture2DLod<int>	texture5;
-	texture5.bind(std::make_shared<ns::Image2DLod<int>>(allocator, 10, 10, 2));
+	texture5.bind(ns::SharedImage2DLod<int>(allocator, 10, 10, 2));
 	assert(texture5.image() != nullptr);
 
 	ns::Texture2DLayered<int>	texture6;
-	texture6.bind(std::make_shared<ns::Image2DLayered<int>>(allocator, 10, 10, 2));
+	texture6.bind(ns::SharedImage2DLayered<int>(allocator, 10, 10, 2));
 	assert(texture6.image() != nullptr);
 
 	ns::Texture2DLayeredLod<int>	texture7;
-	texture7.bind(std::make_shared<ns::Image2DLayeredLod<int>>(allocator, 10, 10, 2, 2));
+	texture7.bind(ns::SharedImage2DLayeredLod<int>(allocator, 10, 10, 2, 2));
 	assert(texture7.image() != nullptr);
 
 	//	3D
 	ns::Texture3D<int>	texture8;
-	texture8.bind(std::make_shared<ns::Image3D<int>>(allocator, 10, 10, 10));
+	texture8.bind(ns::SharedImage3D<int>(allocator, 10, 10, 10));
 	assert(texture8.image() != nullptr);
 
 	ns::Texture3DLod<int>	texture9;
-	texture9.bind(std::make_shared<ns::Image3DLod<int>>(allocator, 10, 10, 10, 2));
+	texture9.bind(ns::SharedImage3DLod<int>(allocator, 10, 10, 10, 2));
 	assert(texture9.image() != nullptr);
 
 	//	Cube
 	ns::TextureCube<int>	texture10;
-	texture10.bind(std::make_shared<ns::ImageCube<int>>(allocator, 10));
+	texture10.bind(ns::SharedImageCube<int>(allocator, 10));
 	assert(texture10.image() != nullptr);
 
 	ns::TextureCubeLod<int>	texture11;
-	texture11.bind(std::make_shared<ns::ImageCubeLod<int>>(allocator, 10, 2));
+	texture11.bind(ns::SharedImageCubeLod<int>(allocator, 10, 2));
 	assert(texture11.image() != nullptr);
 
 	ns::TextureCubeLayered<int>	texture12;
-	texture12.bind(std::make_shared<ns::ImageCubeLayered<int>>(allocator, 10, 2));
+	texture12.bind(ns::SharedImageCubeLayered<int>(allocator, 10, 2));
 	assert(texture12.image() != nullptr);
 
 	ns::TextureCubeLayeredLod<int>	texture13;
-	texture13.bind(std::make_shared<ns::ImageCubeLayeredLod<int>>(allocator, 10, 2, 2));
+	texture13.bind(ns::SharedImageCubeLayeredLod<int>(allocator, 10, 2, 2));
 	assert(texture13.image() != nullptr);
 
 	// Read mode: normalized float
 	ns::Texture2D<float>	texture14;
-	texture14.bind(std::make_shared<ns::Image2D<char>>(allocator, 10, 10));
-	texture14.bind(std::make_shared<ns::Image2D<short>>(allocator, 10, 10));
-	texture14.bind(std::make_shared<ns::Image2D<unsigned char>>(allocator, 10, 10));
-	texture14.bind(std::make_shared<ns::Image2D<unsigned short>>(allocator, 10, 10));
+	texture14.bind(ns::SharedImage2D<char>(allocator, 10, 10));
+	texture14.bind(ns::SharedImage2D<short>(allocator, 10, 10));
+	texture14.bind(ns::SharedImage2D<unsigned char>(allocator, 10, 10));
+	texture14.bind(ns::SharedImage2D<unsigned short>(allocator, 10, 10));
 
 	stream.launch(test_device_texture, 1, 1)(texture0, texture1, texture2, texture3,
 											 texture4, texture5, texture6, texture7,

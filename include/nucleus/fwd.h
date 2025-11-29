@@ -150,13 +150,13 @@ namespace NS_NAMESPACE
 	using HostAllocPtr		= std::shared_ptr<HostAllocator>;
 	using DevAllocPtr		= std::shared_ptr<DeviceAllocator>;
 
-	//	Trait to check if two types are binary compatible in terms of size and alignment.
+	//!	Trait to check if two types are binary compatible in terms of size and alignment.
 	template<typename Type1, typename Type2> struct BinaryCompatible
 	{
 		static constexpr bool value = (sizeof(Type1) == sizeof(Type2)) && (alignof(Type1) == alignof(Type2));
 	};
 
-	//	Utility functions to reinterpret buffer views as another compatible element type.
+	//!	Utility functions to reinterpret buffer views as another compatible element type.
 	template<typename DstType, typename SrcType> BufferView1D<DstType> view_cast(BufferView1D<SrcType> view);
 	template<typename DstType, typename SrcType> BufferView2D<DstType> view_cast(BufferView2D<SrcType> view);
 	template<typename DstType, typename SrcType> BufferView3D<DstType> view_cast(BufferView3D<SrcType> view);
@@ -165,7 +165,7 @@ namespace NS_NAMESPACE
 	template<typename DstType, typename SrcType> BufferView2D<const DstType> view_cast(BufferView2D<const SrcType> view);
 	template<typename DstType, typename SrcType> BufferView3D<const DstType> view_cast(BufferView3D<const SrcType> view);
 
-	// Utility functions to reinterpret device pointers as another compatible element type.
+	//! Utility functions to reinterpret device pointers as another compatible element type.
 	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr<const DstType> ptr_cast(dev::Ptr<const SrcType> ptr);
 	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr2<const DstType> ptr_cast(dev::Ptr2<const SrcType> ptr);
 	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr3<const DstType> ptr_cast(dev::Ptr3<const SrcType> ptr);
@@ -173,4 +173,67 @@ namespace NS_NAMESPACE
 	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr<DstType> ptr_cast(dev::Ptr<SrcType> ptr);
 	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr2<DstType> ptr_cast(dev::Ptr2<SrcType> ptr);
 	template<typename DstType, typename SrcType> NS_CUDA_CALLABLE dev::Ptr3<DstType> ptr_cast(dev::Ptr3<SrcType> ptr);
+
+	/*****************************************************************************
+	*****************************    SharedHandle    *****************************
+	*****************************************************************************/
+
+	/**
+	 *	@brief		A thin wrapper around `std::shared_ptr<T>` that simplifies construction,
+	 *				supports automatic shared ownership, and allows promotion from `std::unique_ptr<T>`.
+	 *	@example	SharedHandle<Type> sharedHandle = std::make_unique<Type>(...);
+	 *	@example	SharedHandle<Type> sharedHandle = std::make_shared<Type>(...);
+	 *	@example	SharedHandle<Type> sharedHandle = std::move(uniqueObject);
+	 *	@example	SharedHandle<Type> sharedHandle = std::move(sharedObject);
+	 *	@example	SharedHandle<Type> sharedHandle = sharedObject;
+	 * 	@example	SharedHandle<Type> sharedHandle = nullptr;
+	 *	@example	SharedHandle<Type> sharedHandle(...);
+	 */
+	template<typename Type> struct SharedHandle : public std::shared_ptr<Type>
+	{
+		//!	@brief	Empty constructor.
+		SharedHandle() = default;
+
+		//!	@brief	Empty constructor.
+		SharedHandle(std::nullptr_t) : std::shared_ptr<Type>(nullptr) {}
+
+		//!	@brief	Constructs from an existing shared ownership reference.
+		SharedHandle(const std::shared_ptr<Type> & object) : std::shared_ptr<Type>(object) {}
+
+		//!	@brief	Constructs by moving from another `std::shared_ptr<T>`.
+		SharedHandle(std::shared_ptr<Type> && object) : std::shared_ptr<Type>(std::move(object)) {}
+
+		//!	@brief	Promotes a `std::unique_ptr<T>` to a shared object.
+		SharedHandle(std::unique_ptr<Type> && object) : std::shared_ptr<Type>(std::move(object)) {}
+
+		//!	@brief	Constructs a new shared object using forwarded arguments.
+		template<typename... Args> explicit SharedHandle(Args... args) : std::shared_ptr<Type>(std::make_shared<Type>(std::forward<Args>(args)...)) {}
+	};
+
+	/*****************************************************************************
+	******************************    Type alias    ******************************
+	*****************************************************************************/
+
+	//!	Type aliases for commonly shared image objects.
+	using SharedEvent											= SharedHandle<Event>;
+	using SharedStream											= SharedHandle<Stream>;
+	using SharedBuffer											= SharedHandle<Buffer>;
+	using SharedAlloctor										= SharedHandle<Allocator>;
+	using SharedHostAlloctor									= SharedHandle<HostAllocator>;
+	using SharedDeviceAlloctor									= SharedHandle<DeviceAllocator>;
+
+	template<typename Type> using SharedImage1D					= SharedHandle<Image1D<Type>>;
+	template<typename Type> using SharedImage2D					= SharedHandle<Image2D<Type>>;
+	template<typename Type> using SharedImage3D					= SharedHandle<Image3D<Type>>;
+	template<typename Type> using SharedImageCube				= SharedHandle<ImageCube<Type>>;
+	template<typename Type> using SharedImage1DLayered			= SharedHandle<Image1DLayered<Type>>;
+	template<typename Type> using SharedImage2DLayered			= SharedHandle<Image2DLayered<Type>>;
+	template<typename Type> using SharedImageCubeLayered		= SharedHandle<ImageCubeLayered<Type>>;
+	template<typename Type> using SharedImage1DLod				= SharedHandle<Image1DLod<Type>>;
+	template<typename Type> using SharedImage2DLod				= SharedHandle<Image2DLod<Type>>;
+	template<typename Type> using SharedImage3DLod				= SharedHandle<Image3DLod<Type>>;
+	template<typename Type> using SharedImageCubeLod			= SharedHandle<ImageCubeLod<Type>>;
+	template<typename Type> using SharedImage1DLayeredLod		= SharedHandle<Image1DLayeredLod<Type>>;
+	template<typename Type> using SharedImage2DLayeredLod		= SharedHandle<Image2DLayeredLod<Type>>;
+	template<typename Type> using SharedImageCubeLayeredLod		= SharedHandle<ImageCubeLayeredLod<Type>>;
 }
