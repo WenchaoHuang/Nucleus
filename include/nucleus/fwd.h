@@ -51,7 +51,6 @@ namespace NS_NAMESPACE
 	class Stream;
 	class Device;
 	class Context;
-	class Texture;
 	class Allocator;
 	class TimedEvent;
 	class ScopedTimer;
@@ -127,20 +126,22 @@ namespace NS_NAMESPACE
 	template<typename Type> class Surface2DLayered;
 	template<typename Type> class SurfaceCubeLayered;
 
-	template<typename Type> class Texture1D;
-	template<typename Type> class Texture2D;
-	template<typename Type> class Texture3D;
-	template<typename Type> class TextureCube;
-	template<typename Type> class Texture1DLod;
-	template<typename Type> class Texture2DLod;
-	template<typename Type> class Texture3DLod;
-	template<typename Type> class TextureCubeLod;
-	template<typename Type> class Texture1DLayered;
-	template<typename Type> class Texture2DLayered;
-	template<typename Type> class TextureCubeLayered;
-	template<typename Type> class Texture1DLayeredLod;
-	template<typename Type> class Texture2DLayeredLod;
-	template<typename Type> class TextureCubeLayeredLod;
+	template<template<typename> class Image, template<typename> class devTex, typename Type> class Texture;
+
+	template<typename Type> using Texture1D					= Texture<Image1D, dev::Tex1D, Type>;
+	template<typename Type> using Texture2D					= Texture<Image2D, dev::Tex2D, Type>;
+	template<typename Type> using Texture3D					= Texture<Image3D, dev::Tex3D, Type>;
+	template<typename Type> using TextureCube				= Texture<ImageCube, dev::TexCube, Type>;
+	template<typename Type> using Texture1DLod				= Texture<Image1DLod, dev::Tex1DLod, Type>;
+	template<typename Type> using Texture2DLod				= Texture<Image2DLod, dev::Tex2DLod, Type>;
+	template<typename Type> using Texture3DLod				= Texture<Image3DLod, dev::Tex3DLod, Type>;
+	template<typename Type> using TextureCubeLod			= Texture<ImageCubeLod, dev::TexCubeLod, Type>;
+	template<typename Type> using Texture1DLayered			= Texture<Image1DLayered, dev::Tex1DLayered, Type>;
+	template<typename Type> using Texture2DLayered			= Texture<Image2DLayered, dev::Tex2DLayered, Type>;
+	template<typename Type> using TextureCubeLayered		= Texture<ImageCubeLayered, dev::TexCubeLayered, Type>;
+	template<typename Type> using Texture1DLayeredLod		= Texture<Image1DLayeredLod, dev::Tex1DLayeredLod, Type>;
+	template<typename Type> using Texture2DLayeredLod		= Texture<Image2DLayeredLod, dev::Tex2DLayeredLod, Type>;
+	template<typename Type> using TextureCubeLayeredLod		= Texture<ImageCubeLayeredLod, dev::TexCubeLayeredLod, Type>;
 
 	template<typename Type> struct ImageAccessor;
 	template<typename... Args> using KernelFunc = void(*)(Args...);
@@ -236,4 +237,19 @@ namespace NS_NAMESPACE
 	template<typename Type> using SharedImage1DLayeredLod		= SharedHandle<Image1DLayeredLod<Type>>;
 	template<typename Type> using SharedImage2DLayeredLod		= SharedHandle<Image2DLayeredLod<Type>>;
 	template<typename Type> using SharedImageCubeLayeredLod		= SharedHandle<ImageCubeLayeredLod<Type>>;
+
+	template<typename Type> using SharedTexture1D				= SharedHandle<Texture1D<Type>>;
+	template<typename Type> using SharedTexture2D				= SharedHandle<Texture2D<Type>>;
+	template<typename Type> using SharedTexture3D				= SharedHandle<Texture3D<Type>>;
+	template<typename Type> using SharedTextureCube				= SharedHandle<TextureCube<Type>>;
+	template<typename Type> using SharedTexture1DLod			= SharedHandle<Texture1DLod<Type>>;
+	template<typename Type> using SharedTexture2DLod			= SharedHandle<Texture2DLod<Type>>;
+	template<typename Type> using SharedTexture3DLod			= SharedHandle<Texture3DLod<Type>>;
+	template<typename Type> using SharedTextureCubeLod			= SharedHandle<TextureCubeLod<Type>>;
+	template<typename Type> using SharedTexture1DLayered		= SharedHandle<Texture1DLayered<Type>>;
+	template<typename Type> using SharedTexture2DLayered		= SharedHandle<Texture2DLayered<Type>>;
+	template<typename Type> using SharedTextureCubeLayered		= SharedHandle<TextureCubeLayered<Type>>;
+	template<typename Type> using SharedTexture1DLayeredLod		= SharedHandle<Texture1DLayeredLod<Type>>;
+	template<typename Type> using SharedTexture2DLayeredLod		= SharedHandle<Texture2DLayeredLod<Type>>;
+	template<typename Type> using SharedTextureCubeLayeredLod	= SharedHandle<TextureCubeLayeredLod<Type>>;
 }
