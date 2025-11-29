@@ -41,19 +41,11 @@ static_assert(static_cast<int>(AddressMode::Mirror) == cudaAddressModeMirror);
 static_assert(static_cast<int>(AddressMode::Border) == cudaAddressModeBorder);
 
 /*********************************************************************************
-*********************************    Texture    **********************************
+*******************************    TextureBase    ********************************
 *********************************************************************************/
 
-Texture::Texture() : m_hTexture(0)
+TextureBase::TextureBase(std::shared_ptr<ImageBase> image, Sampler sampler, Format viewFormat) : m_hTexture(0)
 {
-
-}
-
-
-void Texture::bindImage(std::shared_ptr<ImageBase> image, Sampler sampler, Format viewFormat)
-{
-	this->unbind();
-
 	auto pImage = std::dynamic_pointer_cast<Image>(image);
 	auto pImageLod = std::dynamic_pointer_cast<ImageLod>(image);
 
@@ -137,7 +129,7 @@ void Texture::bindImage(std::shared_ptr<ImageBase> image, Sampler sampler, Forma
 }
 
 
-void Texture::unbind() noexcept
+TextureBase::~TextureBase()
 {
 	if (m_hTexture != 0)
 	{
@@ -149,15 +141,5 @@ void Texture::unbind() noexcept
 
 			cudaGetLastError();
 		}
-
-		m_image = nullptr;
-
-		m_hTexture = 0;
 	}
-}
-
-
-Texture::~Texture()
-{
-	this->unbind();
 }

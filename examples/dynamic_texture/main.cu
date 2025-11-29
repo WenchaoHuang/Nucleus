@@ -207,9 +207,7 @@ int main()
 	std::vector<ColorRGB>			h_pixels(width * height);
 	ns::Array2D<ColorRGB>			d_pixels(allocator, width, height);
 	ns::Surface2D<unsigned char>	surface(image);
-	ns::Texture2D<float>			texture;
-
-	texture.bind(image);
+	ns::Texture2D<float>			texture(image);
 
 	/////////////////////////////////////////////////////////////////
 
