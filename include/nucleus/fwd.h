@@ -208,7 +208,14 @@ namespace NS_NAMESPACE
 		SharedHandle(std::unique_ptr<Type> && object) : std::shared_ptr<Type>(std::move(object)) {}
 
 		//!	@brief	Constructs a new shared object using forwarded arguments.
-		template<typename... Args> explicit SharedHandle(Args... args) : std::shared_ptr<Type>(std::make_shared<Type>(std::forward<Args>(args)...)) {}
+	#if NS_HAS_CXX_20
+		template<typename... Args> requires std::constructible_from<Type, Args...> explicit SharedHandle(Args &&... args) : std::shared_ptr<Type>(std::make_shared<Type>(std::forward<Args>(args)...)) {}
+	#else
+		template<typename... Args> explicit SharedHandle(Args... args) : std::shared_ptr<Type>(std::make_shared<Type>(std::forward<Args>(args)...))
+		{
+			static_assert(std::is_constructible_v<Type, Args...>, "Cannot be constructed by given parameters!");
+		}
+	#endif
 	};
 
 	/*****************************************************************************
