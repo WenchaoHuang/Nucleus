@@ -46,6 +46,7 @@
 #include "context.h"
 #include "allocator.h"
 #include "scoped_timer.h"
+#include "scoped_device.h"
 
 #include "buffer.h"
 #include "buffer_view.h"

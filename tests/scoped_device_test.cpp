@@ -20,51 +20,37 @@
  *	SOFTWARE.
  */
 
-#include <stdlib.h>
+#include <nucleus/event.h>
+#include <nucleus/stream.h>
+#include <nucleus/context.h>
+#include <nucleus/allocator.h>
+#include <nucleus/scoped_device.h>
 
 /*********************************************************************************
-***********************************    main    ***********************************
+****************************    shared_handle_test    ****************************
 *********************************************************************************/
 
-extern void event_test();
-extern void array_test();
-extern void image_test();
-extern void graph_test();
-extern void logger_test();
-extern void device_test();
-extern void buffer_test();
-extern void stream_test();
-extern void context_test();
-extern void dev_ptr_test();
-extern void surface_test();
-extern void texture_test();
-extern void allocator_test();
-extern void array_proxy_test();
-extern void buffer_view_test();
-extern void shared_handle_test();
-extern void scoped_device_test();
-
-int main()
+void scoped_device_test()
 {
-	context_test();
-	device_test();
-	event_test();
-	graph_test();
-	allocator_test();
-	buffer_test();
-	dev_ptr_test();
-	array_test();
-	image_test();
-	stream_test();
-	surface_test();
-	texture_test();
-	buffer_view_test();
-	array_proxy_test();
-	shared_handle_test();
-	scoped_device_test();
-	logger_test();
+	auto & devices = ns::Context::getInstance()->getDevices();
+	auto device0 = *devices.begin();
+	auto device1 = *devices.rbegin();
 
-	system("pause");
+	assert(ns::ScopedDevice::getCurrent() == device0);
+	{
+		ns::ScopedDevice	scope(device1);
 
-	return 0;
+		assert(ns::ScopedDevice::getCurrent() == device1);
+
+		ns::Event				event;
+		ns::Stream				stream;
+		ns::DeviceAllocator		allocator;
+
+		ns::SharedEvent		xxx;
+
+		assert(event.device() == device1);
+		assert(stream.device() == device1);
+		assert(allocator.device() == device1);
+	}
+	assert(ns::ScopedDevice::getCurrent() == device0);
 }

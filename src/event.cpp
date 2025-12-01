@@ -23,6 +23,7 @@
 #include "event.h"
 #include "device.h"
 #include "logger.h"
+#include "scoped_device.h"
 #include <cuda_runtime_api.h>
 
 NS_USING_NAMESPACE
@@ -31,8 +32,7 @@ NS_USING_NAMESPACE
 **********************************    Event    ***********************************
 *********************************************************************************/
 
-Event::Event(Device * device, bool isBlockingSync, bool isDisableTiming)
-	: m_device(device), m_hEvent(nullptr), m_isBlockingSync(isBlockingSync)
+Event::Event(Device * device, bool isBlockingSync, bool isDisableTiming) : m_device(device), m_hEvent(nullptr), m_isBlockingSync(isBlockingSync)
 {
 	NS_ASSERT(device != nullptr);
 
@@ -53,6 +53,12 @@ Event::Event(Device * device, bool isBlockingSync, bool isDisableTiming)
 
 		throw err;
 	}
+}
+
+
+Event::Event(bool isBlockingSync, bool isDisableTiming) : Event(ScopedDevice::getCurrent(), isBlockingSync, isDisableTiming)
+{
+
 }
 
 

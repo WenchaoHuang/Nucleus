@@ -119,6 +119,9 @@ namespace NS_NAMESPACE
 
 	public:
 
+		//!	@brief		Constructs allocator on scoped device.
+		explicit DeviceAllocator();
+
 		//!	@brief		Constructs device memory allocator.
 		explicit DeviceAllocator(Device * pDevice);
 

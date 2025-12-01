@@ -24,6 +24,7 @@
 #include "logger.h"
 #include "device.h"
 #include "allocator.h"
+#include "scoped_device.h"
 #include <cuda_runtime.h>
 
 NS_USING_NAMESPACE
@@ -74,6 +75,12 @@ void HostAllocator::doDeallocateMemory(void * ptr)
 DeviceAllocator::DeviceAllocator(class Device * pDevice) : m_device(pDevice)
 {
 	NS_ASSERT(pDevice != nullptr);
+}
+
+
+DeviceAllocator::DeviceAllocator() : DeviceAllocator(ScopedDevice::getCurrent())
+{
+
 }
 
 

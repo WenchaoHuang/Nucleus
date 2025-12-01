@@ -59,6 +59,7 @@ namespace NS_NAMESPACE
 		 */
 		NS_API explicit Stream(Device * device, int priority = 0);
 
+		NS_API explicit Stream(int priority = 0);
 
 		/**
 		 *	@brief		Destroy CUDA stream object.

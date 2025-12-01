@@ -193,7 +193,7 @@ namespace NS_NAMESPACE
 	template<typename Type> struct SharedHandle : public std::shared_ptr<Type>
 	{
 		//!	@brief	Empty constructor.
-		SharedHandle() = default;
+	//	SharedHandle() = default;
 
 		//!	@brief	Empty constructor.
 		SharedHandle(std::nullptr_t) : std::shared_ptr<Type>(nullptr) {}

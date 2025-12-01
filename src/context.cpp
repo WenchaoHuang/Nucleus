@@ -23,6 +23,7 @@
 #include "logger.h"
 #include "device.h"
 #include "context.h"
+#include "scoped_device.h"
 #include <cuda_runtime_api.h>
 
 NS_USING_NAMESPACE
@@ -112,4 +113,29 @@ Context::~Context()
 	}
 
 	m_pNvidiaDevices.clear();
+}
+
+/*********************************************************************************
+*******************************    ScopedDevice    *******************************
+*********************************************************************************/
+
+ScopedDevice::DevicePtr & ScopedDevice::getInstance()
+{
+	thread_local DevicePtr currDevice = nullptr;
+
+	if (currDevice == nullptr)
+	{
+		auto & devices = Context::getInstance()->getDevices();
+
+		if (devices.empty())
+		{
+			NS_ERROR_LOG("No CUDA-capable devices!");
+		}
+		else
+		{
+			currDevice = devices[0];	// Default device: always the first one.
+		}
+	}
+
+	return currDevice;
 }

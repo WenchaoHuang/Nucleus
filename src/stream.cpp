@@ -25,6 +25,7 @@
 #include "logger.h"
 #include "device.h"
 #include "stream.h"
+#include "scoped_device.h"
 #include <cuda_runtime.h>
 
 NS_USING_NAMESPACE
@@ -55,6 +56,12 @@ Stream::Stream(Device * device, int priority) : m_device(device), m_hStream(null
 
 
 Stream::Stream(Device * device, std::nullptr_t) : m_device(device), m_hStream(nullptr), m_forceSync(false), m_priority(0)
+{
+
+}
+
+
+Stream::Stream(int priority) : Stream(ScopedDevice::getCurrent(), priority)
 {
 
 }

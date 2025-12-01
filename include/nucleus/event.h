@@ -52,6 +52,7 @@ namespace NS_NAMESPACE
 		 *	@note		Designed for class `TimedEvent`.
 		 */
 		explicit Event(Device * device, bool isBlockingSync, bool isDisableTiming);
+		explicit Event(bool isBlockingSync, bool isDisableTiming);
 
 	public:
 
@@ -64,6 +65,7 @@ namespace NS_NAMESPACE
 		 *	@throw		cudaError_t - In case of failure.
 		 */
 		explicit Event(Device * device, bool isBlockingSync = false) : Event(device, isBlockingSync, true) {}
+		explicit Event(bool isBlockingSync = false) : Event(isBlockingSync, true) {}
 
 
 		/**
@@ -127,6 +129,7 @@ namespace NS_NAMESPACE
 		 *	@throw		cudaError_t - In case of failure.
 		 */
 		explicit TimedEvent(Device * device, bool isBlockingSync = false) : Event(device, isBlockingSync, false) {}
+		explicit TimedEvent(bool isBlockingSync = false) : Event(isBlockingSync, false) {}
 
 	public:
 
