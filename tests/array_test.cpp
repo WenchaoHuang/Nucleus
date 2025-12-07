@@ -20,6 +20,7 @@
  *	SOFTWARE.
  */
 
+#include <vector>
 #include <nucleus/device.h>
 #include <nucleus/context.h>
 #include <nucleus/array_1d.h>
@@ -53,9 +54,16 @@ void array_test()
 	ns::Array3D<float>	array5(allocator, 100, 100, 100);
 	ns::Array3D<float>	array55 = std::move(array5);
 
+	std::vector<ns::Array<int>>		arrArray0;
+	std::vector<ns::Array<int>>		arrArray1(200);
+
+	arrArray1[0].resize(allocator, 10);
+	arrArray1.resize(20);
+
 	assert(array0.empty());
 	assert(array1.empty());
 	assert(!array11.empty());
+	assert(arrArray1[0].size() == 10);
 
 	if (!array11.empty())
 	{
