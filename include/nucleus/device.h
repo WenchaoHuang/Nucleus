@@ -56,7 +56,7 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Return CUDA device ID.
 		 */
-		int id() const { return m_deviceID; }
+		int id() const { return m_id; }
 
 
 		/**
@@ -114,7 +114,7 @@ namespace NS_NAMESPACE
 
 	private:
 
-		const int									m_deviceID;
+		const int									m_id;
 		const std::unique_ptr<cudaDeviceProp>		m_devProp;
 		const std::shared_ptr<DeviceAllocator>		m_defaultAlloc;
 		const std::shared_ptr<Stream>				m_defaultStream;

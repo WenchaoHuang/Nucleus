@@ -51,7 +51,7 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Return a raw pointer to the CUDA context wrapper (singleton).
 		 */
-		NS_API static Context * getInstance()
+		static Context * getInstance()
 		{
 			static Context s_instance;
 
@@ -98,18 +98,18 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Return pointer to physical device.
 		 */
-		Device * device(size_t index) const { return m_pNvidiaDevices[index]; }
+		Device * device(size_t index) const { return m_cudaDevices[index]; }
 
 
 		/**
 		 *	@brief		Return physical device array.
 		 */
-		const std::vector<Device*> & getDevices() const { return m_pNvidiaDevices; }
+		const std::vector<Device*> & getDevices() const { return m_cudaDevices; }
 
 	private:
 
 		Version						m_driverVersion;
 		Version						m_runtimeVersion;
-		std::vector<Device*>		m_pNvidiaDevices;
+		std::vector<Device*>		m_cudaDevices;
 	};
 }

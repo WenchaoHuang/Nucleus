@@ -65,7 +65,7 @@ Context::Context()
 
 	auto err = cudaGetDeviceCount(&deviceCount);
 
-	m_pNvidiaDevices.resize(deviceCount, nullptr);
+	m_cudaDevices.resize(deviceCount, nullptr);
 
 	NS_INFO_LOG_IF(err == cudaErrorNoDevice, "No CUDA-capable devices were detected.");
 
@@ -79,7 +79,7 @@ Context::Context()
 
 		NS_INFO_LOG("CUDA device(%d): %s, compute capability: %d.%d", i, devProp.name, devProp.major, devProp.minor);
 
-		m_pNvidiaDevices[i] = new Device(i, devProp);
+		m_cudaDevices[i] = new Device(i, devProp);
 	}
 
 	cudaGetLastError();
@@ -106,10 +106,10 @@ cudaError_t Context::getLastError() noexcept
 
 Context::~Context()
 {
-	for (size_t i = 0; i < m_pNvidiaDevices.size(); i++)
+	for (size_t i = 0; i < m_cudaDevices.size(); i++)
 	{
-		delete m_pNvidiaDevices[i];
+		delete m_cudaDevices[i];
 	}
 
-	m_pNvidiaDevices.clear();
+	m_cudaDevices.clear();
 }
