@@ -4,7 +4,7 @@
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/WenchaoHuang/Nucleus/main)](https://github.com/WenchaoHuang/Nucleus/commits/main)
 
 > [!WARNING]
-> **This project is under active development.** The API is unstable; features may be added or removed and breaking changes may occur without notice as the design is refined. It is not yet recommended for production use.
+> **This project is under active development.** The API is unstable; features may be added or removed and breaking changes may occur without notice as the design is refined. It is currently not recommended for production use.
 
 ## Overview
 
@@ -40,7 +40,7 @@ For OptiX ray-tracing functionality, see the companion [Photon](https://github.c
 | CMake | 3.18 |
 | C++ compiler | C++17 (C++20 recommended) |
 
-Nucleus is developed and tested on Linux and Windows (MSVC). Other platforms are not officially supported.
+Nucleus is currently developed and tested on Linux and Windows (MSVC). Other platforms are not officially supported.
 
 ## Installation
 
@@ -139,8 +139,7 @@ int main()
 
     // Launch the kernel — grid size is computed with ceil_div.
     constexpr int blockSize = 256;
-    stream.launch(add_kernel, ns::ceil_div(count, blockSize), blockSize)
-          (C, A, B, count);
+    stream.launch(add_kernel, ns::ceil_div(count, blockSize), blockSize)(C, A, B, count);
 
     // Copy result back to host and synchronize.
     std::vector<int> host_result(count);
@@ -282,6 +281,66 @@ auto dep = graph.launch(my_kernel, {}, grid, block)(args…);
 graph.execute(stream);
 ```
 
+### Images, Textures, and Surfaces
+
+Nucleus separates texture memory (the backing storage) from the sampling/access objects:
+
+- **Image** — allocates CUDA array memory on the device (analogous to a GPU texture buffer). Created once and shared across texture/surface objects.
+- **Texture** — a read-only, hardware-sampled view of an Image. Passed to kernels as a `dev::Tex*<T>` handle.
+- **Surface** — a read-write view of an Image (requires `bSurfaceLoadStore = true` at image creation). Passed to kernels as a `dev::Surf*<T>` handle.
+
+The table below lists all available Image, Texture, and Surface type combinations:
+
+| Dimensionality | Image (host) | Texture (host → device) | Surface (host → device) |
+|---|---|---|---|
+| 1-D | `Image1D<T>` | `Texture1D<T>` → `dev::Tex1D<T>` | `Surface1D<T>` → `dev::Surf1D<T>` |
+| 2-D | `Image2D<T>` | `Texture2D<T>` → `dev::Tex2D<T>` | `Surface2D<T>` → `dev::Surf2D<T>` |
+| 3-D | `Image3D<T>` | `Texture3D<T>` → `dev::Tex3D<T>` | `Surface3D<T>` → `dev::Surf3D<T>` |
+| Cubemap | `ImageCube<T>` | `TextureCube<T>` → `dev::TexCube<T>` | `SurfaceCube<T>` → `dev::SurfCube<T>` |
+| 1-D layered | `Image1DLayered<T>` | `Texture1DLayered<T>` → `dev::Tex1DLayered<T>` | `Surface1DLayered<T>` → `dev::Surf1DLayered<T>` |
+| 2-D layered | `Image2DLayered<T>` | `Texture2DLayered<T>` → `dev::Tex2DLayered<T>` | `Surface2DLayered<T>` → `dev::Surf2DLayered<T>` |
+| Cubemap layered | `ImageCubeLayered<T>` | `TextureCubeLayered<T>` → `dev::TexCubeLayered<T>` | `SurfaceCubeLayered<T>` → `dev::SurfCubeLayered<T>` |
+| 1-D mipmapped | `Image1DLod<T>` | `Texture1DLod<T>` → `dev::Tex1DLod<T>` | — |
+| 2-D mipmapped | `Image2DLod<T>` | `Texture2DLod<T>` → `dev::Tex2DLod<T>` | — |
+| 3-D mipmapped | `Image3DLod<T>` | `Texture3DLod<T>` → `dev::Tex3DLod<T>` | — |
+| Cubemap mipmapped | `ImageCubeLod<T>` | `TextureCubeLod<T>` → `dev::TexCubeLod<T>` | — |
+| 1-D layered mipmapped | `Image1DLayeredLod<T>` | `Texture1DLayeredLod<T>` → `dev::Tex1DLayeredLod<T>` | — |
+| 2-D layered mipmapped | `Image2DLayeredLod<T>` | `Texture2DLayeredLod<T>` → `dev::Tex2DLayeredLod<T>` | — |
+| Cubemap layered mipmapped | `ImageCubeLayeredLod<T>` | `TextureCubeLayeredLod<T>` → `dev::TexCubeLayeredLod<T>` | — |
+
+**Typical usage pattern:**
+
+```cpp
+#include <nucleus/image_2d.h>
+#include <nucleus/texture.h>
+#include <nucleus/sampler.h>
+
+// 1. Allocate image memory (CUDA array on the device).
+auto image = std::make_shared<ns::Image2D<float4>>(device->defaultAllocator(), width, height);
+
+// 2. Upload data via stream.memcpy (host → image).
+stream.memcpy(image->data(), host_pixels.data(), width, height);
+
+// 3. Create a texture bound to the image.
+ns::Sampler sampler;                           // default: linear filter, clamp
+ns::Texture2D<float4> tex(image, sampler);
+
+// 4. Pass the device-side handle to a kernel.
+stream.launch(my_kernel, grid, block)(tex.handle(), width, height);
+```
+
+```cu
+// Device side (in .cu):
+__global__ void my_kernel(dev::Tex2D<float4> tex, int width, int height)
+{
+    CUDA_for(tid, width * height);
+    float u = (tid % width + 0.5f) / width;
+    float v = (tid / width + 0.5f) / height;
+    float4 color = tex(u, v);   // hardware-interpolated sample
+    // ...
+}
+```
+
 ## Project Structure
 
 ```
@@ -344,9 +403,11 @@ Test source files are in `tests/`. CPU-only tests use `.cpp` and CUDA tests use 
 ```bash
 cmake -B build -DNUCLEUS_BUILD_EXAMPLES=ON
 cmake --build build
-# Run an example (Linux):
-./build/examples/julia_set/julia_set
+# Run a cross-platform example:
+./build/examples/customized_allocator/customized_allocator
 ```
+
+> **Note:** Some examples (`julia_set`, `multi_gpu`, `dynamic_texture`) open a graphical window and are currently supported on **Windows only**.
 
 ## License
 
