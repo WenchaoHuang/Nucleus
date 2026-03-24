@@ -336,7 +336,7 @@ __global__ void my_kernel(dev::Tex2D<float4> tex, int width, int height)
     CUDA_for(tid, width * height);
     float u = (tid % width + 0.5f) / width;
     float v = (tid / width + 0.5f) / height;
-    float4 color = tex(u, v);   // hardware-interpolated sample
+    float4 color = tex.fetch(u, v);   // hardware-interpolated sample
     // ...
 }
 ```
