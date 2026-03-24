@@ -142,7 +142,7 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Move assignment operator.
 		 */
-		void operator=(Array2D && rhs) noexcept
+		Array2D & operator=(Array2D && rhs) noexcept
 		{
 			dev::Ptr2<Type>::m_data = std::exchange(rhs.m_data, nullptr);
 
@@ -151,6 +151,8 @@ namespace NS_NAMESPACE
 			dev::Ptr2<Type>::m_width = std::exchange(rhs.m_width, 0);
 
 			m_buffer = std::exchange(rhs.m_buffer, nullptr);
+
+			return *this;
 		}
 
 

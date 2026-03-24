@@ -20,6 +20,8 @@
  *	SOFTWARE.
  */
 
+#include <type_traits>
+#include <utility>
 #include <vector>
 #include <nucleus/device.h>
 #include <nucleus/context.h>
@@ -35,6 +37,10 @@ static void test(dev::Ptr<int> a, dev::Ptr2<const float> b, dev::Ptr3<float> c)
 {
 
 }
+
+static_assert(std::is_same_v<decltype(std::declval<ns::Array<int> &>() = std::declval<ns::Array<int> &&>()), ns::Array<int> &>);
+static_assert(std::is_same_v<decltype(std::declval<ns::Array2D<float> &>() = std::declval<ns::Array2D<float> &&>()), ns::Array2D<float> &>);
+static_assert(std::is_same_v<decltype(std::declval<ns::Array3D<float> &>() = std::declval<ns::Array3D<float> &&>()), ns::Array3D<float> &>);
 
 
 void array_test()
@@ -53,6 +59,8 @@ void array_test()
 	ns::Array3D<float>	array4;
 	ns::Array3D<float>	array5(allocator, 100, 100, 100);
 	ns::Array3D<float>	array55 = std::move(array5);
+	ns::Array3D<float>	array6(allocator, 17, 23, 29);
+	ns::Array3D<float>	array66 = std::move(array6);
 
 	std::vector<ns::Array<int>>		arrArray0;
 	std::vector<ns::Array<int>>		arrArray1(200);
@@ -63,7 +71,12 @@ void array_test()
 	assert(array0.empty());
 	assert(array1.empty());
 	assert(!array11.empty());
+	assert(array5.empty());
+	assert(array6.empty());
 	assert(arrArray1[0].size() == 10);
+	assert(array66.width() == 17);
+	assert(array66.height() == 23);
+	assert(array66.depth() == 29);
 
 	if (!array11.empty())
 	{
@@ -117,7 +130,7 @@ void array_test()
 		array55.clear();
 		array55.data();
 		array55.ptr();
-		assert(array5.data() == nullptr);
+		assert(array55.data() == nullptr);
 	}
 
 	test(array11, array33, array55);

@@ -48,8 +48,8 @@ namespace NS_NAMESPACE
 		explicit Array3D(std::shared_ptr<Allocator> allocator, size_t width, size_t height, size_t depth) : Array3D() { this->resize(allocator, width, height, depth); }
 
 		//!	@brief		Move constructor. Transfers ownership from another array.
-		Array3D(Array3D && rhs) : m_buffer(std::exchange(rhs.m_buffer, nullptr)),
-			dev::Ptr3<Type>(std::exchange(rhs.m_data, nullptr), std::exchange(rhs.m_height, 0), std::exchange(rhs.m_width, 0), std::exchange(rhs.m_depth, 0)) {}
+		Array3D(Array3D && rhs) : dev::Ptr3<Type>(std::exchange(rhs.m_data, nullptr), std::exchange(rhs.m_width, 0), std::exchange(rhs.m_height, 0), std::exchange(rhs.m_depth, 0)),
+			m_buffer(std::exchange(rhs.m_buffer, nullptr)) {}
 
 	public:
 
@@ -153,7 +153,7 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Move assignment operator.
 		 */
-		void operator=(Array3D && rhs) noexcept
+		Array3D & operator=(Array3D && rhs) noexcept
 		{
 			dev::Ptr3<Type>::m_data = std::exchange(rhs.m_data, nullptr);
 
@@ -164,6 +164,8 @@ namespace NS_NAMESPACE
 			dev::Ptr3<Type>::m_depth = std::exchange(rhs.m_depth, 0);
 
 			m_buffer = std::exchange(rhs.m_buffer, nullptr);
+
+			return *this;
 		}
 
 

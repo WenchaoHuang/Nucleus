@@ -113,13 +113,15 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Move assignment operator.
 		 */
-		void operator=(Array && rhs) noexcept
+		Array & operator=(Array && rhs) noexcept
 		{
 			m_buffer = std::exchange(rhs.m_buffer, nullptr);
 
 			dev::Ptr<Type>::m_width = std::exchange(rhs.m_width, 0);
 
 			dev::Ptr<Type>::m_data = std::exchange(rhs.m_data, nullptr);
+
+			return *this;
 		}
 
 
