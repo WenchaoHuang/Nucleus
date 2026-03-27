@@ -24,6 +24,7 @@
 #include "fwd.h"
 #include "buffer.h"
 #include "logger.h"
+#include "buffer_view.h"
 #include "device_pointer.h"
 
 namespace NS_NAMESPACE
@@ -185,6 +186,18 @@ namespace NS_NAMESPACE
 				m_buffer = nullptr;
 			}
 		}
+
+
+		/**
+		 *	@brief		Returns a non-owning 2D view of the entire array.
+		 */
+		BufferView2D<const Type> view() const { return m_buffer ? BufferView2D<const Type>(m_buffer, 0, this->width(), this->height()) : BufferView2D<const Type>(); }
+
+
+		/**
+		 *	@brief		Returns a non-owning 2D view of the entire array.
+		 */
+		BufferView2D<Type> view() { return m_buffer ? BufferView2D<Type>(m_buffer, 0, this->width(), this->height()) : BufferView2D<Type>(); }
 
 
 		/**

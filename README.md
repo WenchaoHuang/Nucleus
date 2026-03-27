@@ -354,7 +354,7 @@ Nucleus/
 │   ├── graph.h             # ns::Graph    (CUDA graph with auto-caching)
 │   ├── allocator.h         # ns::Allocator, DeviceAllocator, HostAllocator
 │   ├── buffer.h            # ns::Buffer   (raw RAII memory block)
-│   ├── buffer_view.h       # ns::BufferView1D/2D/3D (non-owning views)
+│   ├── buffer_view.h       # ns::BufferView/BufferView2D/BufferView3D (non-owning views)
 │   ├── array_1d.h          # ns::Array<T>
 │   ├── array_2d.h          # ns::Array2D<T>
 │   ├── array_3d.h          # ns::Array3D<T>

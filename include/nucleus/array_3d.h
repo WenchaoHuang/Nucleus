@@ -24,6 +24,7 @@
 #include "fwd.h"
 #include "buffer.h"
 #include "logger.h"
+#include "buffer_view.h"
 #include "device_pointer.h"
 
 namespace NS_NAMESPACE
@@ -203,6 +204,18 @@ namespace NS_NAMESPACE
 				m_buffer = nullptr;
 			}
 		}
+
+
+		/**
+		 *	@brief		Returns a non-owning 3D view of the entire array.
+		 */
+		BufferView3D<const Type> view() const { return m_buffer ? BufferView3D<const Type>(m_buffer, 0, this->width(), this->height(), this->depth()) : BufferView3D<const Type>(); }
+
+
+		/**
+		 *	@brief		Returns a non-owning 3D view of the entire array.
+		 */
+		BufferView3D<Type> view() { return m_buffer ? BufferView3D<Type>(m_buffer, 0, this->width(), this->height(), this->depth()) : BufferView3D<Type>(); }
 
 
 		/**

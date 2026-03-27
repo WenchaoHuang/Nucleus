@@ -99,7 +99,7 @@ namespace NS_NAMESPACE
 	template<typename Type> class Array2D;
 	template<typename Type> class Array3D;
 
-	template<typename Type> class BufferView1D;
+	template<typename Type> class BufferView;
 	template<typename Type> class BufferView2D;
 	template<typename Type> class BufferView3D;
 
@@ -158,11 +158,11 @@ namespace NS_NAMESPACE
 	};
 
 	//!	Utility functions to reinterpret buffer views as another compatible element type.
-	template<typename DstType, typename SrcType> BufferView1D<DstType> view_cast(BufferView1D<SrcType> view);
+	template<typename DstType, typename SrcType> BufferView<DstType> view_cast(BufferView<SrcType> view);
 	template<typename DstType, typename SrcType> BufferView2D<DstType> view_cast(BufferView2D<SrcType> view);
 	template<typename DstType, typename SrcType> BufferView3D<DstType> view_cast(BufferView3D<SrcType> view);
 
-	template<typename DstType, typename SrcType> BufferView1D<const DstType> view_cast(BufferView1D<const SrcType> view);
+	template<typename DstType, typename SrcType> BufferView<const DstType> view_cast(BufferView<const SrcType> view);
 	template<typename DstType, typename SrcType> BufferView2D<const DstType> view_cast(BufferView2D<const SrcType> view);
 	template<typename DstType, typename SrcType> BufferView3D<const DstType> view_cast(BufferView3D<const SrcType> view);
 
