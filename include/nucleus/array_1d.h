@@ -25,6 +25,7 @@
 #include "buffer.h"
 #include "logger.h"
 #include "device_pointer.h"
+#include "buffer_view.h"
 
 namespace NS_NAMESPACE
 {
@@ -164,6 +165,18 @@ namespace NS_NAMESPACE
 		 *	@note		Provides an explicit method to get device pointer. 
 		 */
 		dev::Ptr<Type> ptr() { return *this; }
+
+
+		/**
+		 *	@brief		Returns a non-owning 1D view of the entire array.
+		 */
+		BufferView<const Type> view() const { return m_buffer ? BufferView<const Type>(m_buffer) : BufferView<const Type>(); }
+
+
+		/**
+		 *	@brief		Returns a non-owning 1D view of the entire array.
+		 */
+		BufferView<Type> view() { return m_buffer ? BufferView<Type>(m_buffer) : BufferView<Type>(); }
 
 	private:
 

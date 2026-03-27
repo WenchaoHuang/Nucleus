@@ -34,10 +34,11 @@ void buffer_view_test()
 	auto allocator = device->defaultAllocator();
 	auto buffer = std::make_shared<ns::Buffer>(allocator, sizeof(int) * 1024);
 
-	ns::BufferView1D<int> bufferView0;
-	ns::BufferView1D<int> bufferView1 = nullptr;
-	ns::BufferView1D<int> bufferView2(buffer);
-	ns::BufferView1D<int> bufferView3(buffer, 0, sizeof(int) * 10);
+	ns::BufferView<int> bufferView0;
+	ns::BufferView<int> bufferView1 = nullptr;
+	ns::BufferView<int> bufferView2(buffer);
+	ns::BufferView<int> bufferView3(buffer, 0, sizeof(int) * 10);
+	ns::BufferView<int> bufferView3b = bufferView3.subview(0, 5);
 
 	ns::BufferView2D<int> bufferView4;
 	ns::BufferView2D<int> bufferView5 = nullptr;
