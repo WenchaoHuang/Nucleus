@@ -57,7 +57,7 @@ namespace NS_NAMESPACE
 		explicit ScopedTimer(Stream & stream, const CallbackFunc & callback) : m_stream(stream),
 			m_callback(callback), m_startEvent(stream.device()), m_endEvent(stream.device())
 		{
-			m_stream.recordEvent(m_startEvent);
+			m_stream.record(m_startEvent);
 		}
 
 
@@ -84,7 +84,7 @@ namespace NS_NAMESPACE
 		 */
 		~ScopedTimer()
 		{
-			m_stream.recordEvent(m_endEvent).sync();
+			m_stream.record(m_endEvent).sync();
 
 			m_callback(TimedEvent::elapsedTime(m_startEvent, m_endEvent));
 		}

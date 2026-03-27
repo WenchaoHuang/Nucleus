@@ -75,10 +75,10 @@ namespace NS_NAMESPACE
 
 
 		/**
-		 *	@brief		query an asynchronous stream for completion status.
+		 *	@brief		Query an asynchronous stream for completion status.
 		 *	@retval		True - If all operations in this stream have completed.
 		 */
-		NS_API bool query() const;
+		NS_API bool isComplete() const;
 
 
 		/**
@@ -88,7 +88,7 @@ namespace NS_NAMESPACE
 		 *	@note		This interface is intended for debugging and troubleshooting during development only.
 		 *	@warning	It should NOT be used in production code.
 		 */
-		NS_API void forceSync(bool enable);
+		NS_API void setForceSync(bool enable);
 
 
 		/**
@@ -100,7 +100,7 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Return stream priority.
 		 */
-		int getPriority() const { return m_priority; }
+		int priority() const { return m_priority; }
 
 
 		/**
@@ -114,11 +114,11 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Record an event.
 		 *	@param[in]	event - Valid event to record.
-		 *	@note		Call such as Event::query() or Stream::waitEvent() will then examine or wait for completion of the work that was captured.
+		 *	@note		Call such as Event::query() or Stream::waitFor() will then examine or wait for completion of the work that was captured.
 		 *	@note		Can be called multiple times on the same event and will overwrite the previously captured state.
 		 *	@warning	Event and stream must be on the same device.
 		 */
-		NS_API Stream & recordEvent(Event & event);
+		NS_API Stream & record(Event & event);
 
 
 		/**
@@ -128,7 +128,7 @@ namespace NS_NAMESPACE
 		 *	@note		Make all future work submitted to this stream wait for all work captured in event.
 		 *	@note		Event may be from a different device than this stream.
 		 */
-		NS_API Stream & waitEvent(Event & event);
+		NS_API Stream & waitFor(Event & event);
 
 	public:
 
@@ -394,16 +394,16 @@ namespace NS_NAMESPACE
 		template<typename Type> Stream & memcpyToSymbol(Type * symbol, size_t offset, const Type * src, size_t count)
 		{
 			if constexpr (!std::is_same_v<Type, void>)
-				return this->memcpyToSymbol_void(symbol, offset * sizeof(Type), src, count * sizeof(Type));
+				return this->memcpyToSymbolImpl(symbol, offset * sizeof(Type), src, count * sizeof(Type));
 			else
-				return this->memcpyToSymbol_void(symbol, offset, src, count);
+				return this->memcpyToSymbolImpl(symbol, offset, src, count);
 		}
 		template<typename Type> Stream & memcpyToSymbol(Type * symbol, const Type * src, size_t count)
 		{
 			if constexpr (!std::is_same_v<Type, void>)
-				return this->memcpyToSymbol_void(symbol, 0, src, count * sizeof(Type));
+				return this->memcpyToSymbolImpl(symbol, 0, src, count * sizeof(Type));
 			else
-				return this->memcpyToSymbol_void(symbol, 0, src, count);
+				return this->memcpyToSymbolImpl(symbol, 0, src, count);
 		}
 
 
@@ -418,16 +418,16 @@ namespace NS_NAMESPACE
 		template<typename Type> Stream & memcpyFromSymbol(Type * dst, const Type * symbol, size_t offset, size_t count)
 		{
 			if (!std::is_same_v<Type, void>)
-				return this->memcpyFromSymbol_void(dst, symbol, offset * sizeof(Type), count * sizeof(Type));
+				return this->memcpyFromSymbolImpl(dst, symbol, offset * sizeof(Type), count * sizeof(Type));
 			else
-				return this->memcpyFromSymbol_void(dst, symbol, offset, count);
+				return this->memcpyFromSymbolImpl(dst, symbol, offset, count);
 		}
 		template<typename Type> Stream & memcpyFromSymbol(Type * dst, const Type * symbol, size_t count)
 		{
 			if (!std::is_same_v<Type, void>)
-				return this->memcpyFromSymbol_void(dst, symbol, 0, count * sizeof(Type));
+				return this->memcpyFromSymbolImpl(dst, symbol, 0, count * sizeof(Type));
 			else
-				return this->memcpyFromSymbol_void(dst, symbol, 0, count);
+				return this->memcpyFromSymbolImpl(dst, symbol, 0, count);
 		}
 
 	public:
@@ -441,7 +441,7 @@ namespace NS_NAMESPACE
 		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 *	@warning	Only available in *.cu files (CUDA compilation required).
 		 */
-		template<typename Type> Stream & memset(Type * pValues, Type value, size_t count, int blockSize = 256);
+		template<typename Type> Stream & fill(Type * pValues, Type value, size_t count, int blockSize = 256);
 
 
 		/**
@@ -450,7 +450,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	bytes - Size in bytes to set.
 		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 */
-		NS_API Stream & memsetZero(void * address, size_t bytes);
+		NS_API Stream & zeroMemory(void * address, size_t bytes);
 		
 	private:
 
@@ -518,7 +518,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	count - Element count to copy in bytes.
 		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 */
-		NS_API Stream & memcpyFromSymbol_void(void * dst, const void * symbol, size_t offset, size_t count);
+		NS_API Stream & memcpyFromSymbolImpl(void * dst, const void * symbol, size_t offset, size_t count);
 
 
 		/**
@@ -529,7 +529,7 @@ namespace NS_NAMESPACE
 		 *	@param[in]	count - Element count to copy in bytes.
 		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 */
-		NS_API Stream & memcpyToSymbol_void(void * symbol, size_t offset, const void * src, size_t count);
+		NS_API Stream & memcpyToSymbolImpl(void * symbol, size_t offset, const void * src, size_t count);
 
 
 		/**
@@ -542,7 +542,7 @@ namespace NS_NAMESPACE
 		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 *	@warning	Only available in *.cu files.
 		 */
-		Stream & launchKernel(const void * func, const dim3 & gridDim, const dim3 & blockDim, size_t sharedMem, void ** args);
+		Stream & launchKernelImpl(const void * func, const dim3 & gridDim, const dim3 & blockDim, size_t sharedMem, void ** args);
 
 
 		/**
