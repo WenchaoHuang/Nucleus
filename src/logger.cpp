@@ -27,25 +27,57 @@
 #include <thread>
 #include <string>
 
+#ifdef _WIN32
+#	include <windows.h>
+#endif
+
 NS_USING_NAMESPACE
 
 /*********************************************************************************
 **********************************    Logger    **********************************
 *********************************************************************************/
 
+#ifdef _WIN32
+static bool enableAnsiColors()
+{
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (hOut == INVALID_HANDLE_VALUE)
+		return false;
+
+	DWORD dwMode = 0;
+	if (!GetConsoleMode(hOut, &dwMode))
+		return false;
+
+	return SetConsoleMode(hOut, dwMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING) != 0;
+}
+[[maybe_unused]] static const bool s_ansiEnabled = enableAnsiColors();
+#endif
+
 void Logger::log(const char * fileName, int line, const char * funcName, Level level, const char * format, ...)
 {
 	va_list argPtr;
+	va_list argPtrCopy;
 
 	va_start(argPtr, format);
+	va_copy(argPtrCopy, argPtr);
 
 	thread_local std::string logString;
 
-	logString.resize(static_cast<size_t>(_vscprintf(format, argPtr)) + 1);
-
-	vsprintf_s(const_cast<char*>(logString.data()), logString.size(), format, argPtr);
+	int size = vsnprintf(nullptr, 0, format, argPtr);
 
 	va_end(argPtr);
+
+	if (size < 0)
+	{
+		va_end(argPtrCopy);
+		return;
+	}
+
+	logString.resize(static_cast<size_t>(size) + 1);
+
+	vsnprintf(const_cast<char*>(logString.data()), logString.size(), format, argPtrCopy);
+
+	va_end(argPtrCopy);
 
 	//	ANSI color codes
 	constexpr const char * COLOR_RED = "\033[31m";
