@@ -84,7 +84,7 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Force synchronization of the CUDA stream for debugging purposes.
 		 *	@param[in]	enable - If true, every subsequent launch and memcpy operation will automatically synchronize
-		 *				(blocking until completion) until this option is disabled. If false, do not forced synchronization.
+		 *				(blocking until completion) until this option is disabled. If false, do not force synchronization.
 		 *	@note		This interface is intended for debugging and troubleshooting during development only.
 		 *	@warning	It should NOT be used in production code.
 		 */
