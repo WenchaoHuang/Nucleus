@@ -30,7 +30,7 @@
 #include <string>
 
 #ifdef _WIN32
-#include <windows.h>
+#	include <windows.h>
 #endif
 
 NS_USING_NAMESPACE
@@ -42,11 +42,13 @@ NS_USING_NAMESPACE
 #ifdef _WIN32
 static void enableAnsiColors()
 {
+
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (hOut == INVALID_HANDLE_VALUE)
 		return;
 
 	DWORD dwMode = 0;
+
 	if (!GetConsoleMode(hOut, &dwMode))
 		return;
 
@@ -57,6 +59,7 @@ static void enableAnsiColors()
 void Logger::log(const char * fileName, int line, const char * funcName, Level level, const char * format, ...)
 {
 #ifdef _WIN32
+
 	static std::once_flag s_ansiFlag;
 	std::call_once(s_ansiFlag, enableAnsiColors);
 #endif
@@ -67,8 +70,6 @@ void Logger::log(const char * fileName, int line, const char * funcName, Level l
 	va_start(argPtr, format);
 	va_copy(argPtrCopy, argPtr);
 
-	thread_local std::string logString;
-
 	int size = std::vsnprintf(nullptr, 0, format, argPtr);
 
 	va_end(argPtr);
@@ -78,6 +79,8 @@ void Logger::log(const char * fileName, int line, const char * funcName, Level l
 		va_end(argPtrCopy);
 		return;
 	}
+
+	thread_local std::string logString;
 
 	logString.resize(static_cast<size_t>(size) + 1);
 
