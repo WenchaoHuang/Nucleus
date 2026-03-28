@@ -447,11 +447,11 @@ namespace NS_NAMESPACE
 		/**
 		 *	@brief		Fills device memory with a constant byte value.
 		 *	@param[in]	address - Pointer to device memory.
-		 *	@param[in]	value - Byte value to fill with.
+		 *	@param[in]	value - Value to fill with (only the least significant byte is used).
 		 *	@param[in]	bytes - Size in bytes to set.
 		 *	@retval		Stream - Reference to this stream (enables method chaining).
 		 */
-		NS_API Stream & memset(void * address, unsigned char value, size_t bytes);
+		NS_API Stream & memset(void * address, int value, size_t bytes);
 		
 	private:
 

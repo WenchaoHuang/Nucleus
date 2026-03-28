@@ -290,7 +290,7 @@ Stream & Stream::memcpyFromSymbolImpl(void * dst, const void * symbol, size_t of
 }
 
 
-Stream & Stream::memset(void * address, unsigned char value, size_t bytes)
+Stream & Stream::memset(void * address, int value, size_t bytes)
 {
 	this->acquireDeviceContext();
 
