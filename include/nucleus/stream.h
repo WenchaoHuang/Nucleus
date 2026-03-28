@@ -417,14 +417,14 @@ namespace NS_NAMESPACE
 		 */
 		template<typename Type> Stream & memcpyFromSymbol(Type * dst, const Type * symbol, size_t offset, size_t count)
 		{
-			if (!std::is_same_v<Type, void>)
+			if constexpr (!std::is_same_v<Type, void>)
 				return this->memcpyFromSymbolImpl(dst, symbol, offset * sizeof(Type), count * sizeof(Type));
 			else
 				return this->memcpyFromSymbolImpl(dst, symbol, offset, count);
 		}
 		template<typename Type> Stream & memcpyFromSymbol(Type * dst, const Type * symbol, size_t count)
 		{
-			if (!std::is_same_v<Type, void>)
+			if constexpr (!std::is_same_v<Type, void>)
 				return this->memcpyFromSymbolImpl(dst, symbol, 0, count * sizeof(Type));
 			else
 				return this->memcpyFromSymbolImpl(dst, symbol, 0, count);
