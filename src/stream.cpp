@@ -290,11 +290,11 @@ Stream & Stream::memcpyFromSymbolImpl(void * dst, const void * symbol, size_t of
 }
 
 
-Stream & Stream::zeroMemory(void * address, size_t bytes)
+Stream & Stream::memset(void * address, unsigned char value, size_t bytes)
 {
 	this->acquireDeviceContext();
 
-	cudaError_t err = cudaMemsetAsync(address, 0, bytes, m_hStream);
+	cudaError_t err = cudaMemsetAsync(address, value, bytes, m_hStream);
 
 	if (err != cudaSuccess)
 	{
