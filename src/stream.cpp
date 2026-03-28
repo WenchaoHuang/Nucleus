@@ -60,7 +60,7 @@ Stream::Stream(Device * device, std::nullptr_t) : m_device(device), m_hStream(nu
 }
 
 
-Stream & Stream::recordEvent(Event & event)
+Stream & Stream::record(Event & event)
 {
 	this->acquireDeviceContext();
 
@@ -77,7 +77,7 @@ Stream & Stream::recordEvent(Event & event)
 }
 
 
-Stream & Stream::waitEvent(Event & event)
+Stream & Stream::waitFor(Event & event)
 {
 	this->acquireDeviceContext();
 
@@ -248,7 +248,7 @@ Stream & Stream::memcpyImage(ImageAccessor<void> dstImg, ImageAccessor<void> src
 }
 
 
-Stream & Stream::memcpyToSymbol_void(void * symbol, size_t offset, const void * src, size_t count)
+Stream & Stream::memcpyToSymbolImpl(void * symbol, size_t offset, const void * src, size_t count)
 {
 	this->acquireDeviceContext();
 
@@ -269,7 +269,7 @@ Stream & Stream::memcpyToSymbol_void(void * symbol, size_t offset, const void * 
 }
 
 
-Stream & Stream::memcpyFromSymbol_void(void * dst, const void * symbol, size_t offset, size_t count)
+Stream & Stream::memcpyFromSymbolImpl(void * dst, const void * symbol, size_t offset, size_t count)
 {
 	this->acquireDeviceContext();
 
@@ -290,11 +290,11 @@ Stream & Stream::memcpyFromSymbol_void(void * dst, const void * symbol, size_t o
 }
 
 
-Stream & Stream::memsetZero(void * address, size_t bytes)
+Stream & Stream::memset(void * address, int value, size_t bytes)
 {
 	this->acquireDeviceContext();
 
-	cudaError_t err = cudaMemsetAsync(address, 0, bytes, m_hStream);
+	cudaError_t err = cudaMemsetAsync(address, value, bytes, m_hStream);
 
 	if (err != cudaSuccess)
 	{
@@ -326,7 +326,7 @@ void Stream::sync() const
 }
 
 
-void Stream::forceSync(bool enable)
+void Stream::setForceSync(bool enable)
 {
 	if (m_forceSync != enable)
 	{
@@ -344,7 +344,7 @@ void Stream::forceSync(bool enable)
 }
 
 
-bool Stream::query() const
+bool Stream::isComplete() const
 {
 	this->acquireDeviceContext();
 

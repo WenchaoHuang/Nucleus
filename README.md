@@ -133,9 +133,9 @@ int main()
     ns::Array<int> B(allocator, count);
     ns::Array<int> C(allocator, count);
 
-    // Initialize device memory (type-safe typed memset).
-    stream.memset(A.data(), 1, A.size());
-    stream.memset(B.data(), 2, B.size());
+    // Initialize device memory (type-safe typed fill).
+    stream.fill(A.data(), 1, A.size());
+    stream.fill(B.data(), 2, B.size());
 
     // Launch the kernel — grid size is computed with ceil_div.
     constexpr int blockSize = 256;
@@ -176,7 +176,7 @@ ns::Array<float> buf(myAlloc, 1024);
 ns::Stream stream(device);
 
 // Force synchronization after every operation (debug mode)
-stream.forceSync(true);
+stream.setForceSync(true);
 ```
 
 ## Core Concepts
@@ -218,7 +218,7 @@ stream.memcpy(dst_host, src_device, count);
 stream.sync();
 
 // Non-blocking completion query
-bool done = stream.query();
+bool done = stream.isComplete();
 ```
 
 ### `ns::Array<T>` / `ns::Array2D<T>` / `ns::Array3D<T>`
@@ -272,7 +272,7 @@ Include `<nucleus/launch_utils.cuh>` in `.cu` files to access:
 ```cpp
 // Event-based synchronization and timing
 ns::Event event(device);
-stream.recordEvent(event);
+stream.record(event);
 event.sync();
 
 // CUDA graph — automatically caches topology and updates parameters

@@ -129,7 +129,7 @@ namespace NS_NAMESPACE
 	 *	@retval		Stream - Reference to this stream (enables method chaining).
 	 *	@warning	Only available in *.cu files.
 	 */
-	inline Stream & Stream::launchKernel(const void * func, const dim3 & gridDim, const dim3 & blockDim, size_t sharedMem, void ** args)
+	inline Stream & Stream::launchKernelImpl(const void * func, const dim3 & gridDim, const dim3 & blockDim, size_t sharedMem, void ** args)
 	{
 		if (gridDim.x * gridDim.y * gridDim.z * blockDim.x * blockDim.y * blockDim.z != 0)
 		{
@@ -169,9 +169,9 @@ namespace NS_NAMESPACE
 	template<typename... Args> auto Stream::launch(KernelFunc<Args...> func, const dim3 & gridDim, const dim3 & blockDim, size_t sharedMem)
 	{
 	#if NS_HAS_CXX_20
-		return [=, this](Args... args) -> Stream& { void * params[] = { &args... };		return this->launchKernel(func, gridDim, blockDim, sharedMem, params); };
+		return [=, this](Args... args) -> Stream& { void * params[] = { &args... };		return this->launchKernelImpl(func, gridDim, blockDim, sharedMem, params); };
 	#else
-		return [=](Args... args) -> Stream& { void * params[] = { &args... };	return this->launchKernel(func, gridDim, blockDim, sharedMem, params); };
+		return [=](Args... args) -> Stream& { void * params[] = { &args... };	return this->launchKernelImpl(func, gridDim, blockDim, sharedMem, params); };
 	#endif
 	}
 
@@ -179,9 +179,9 @@ namespace NS_NAMESPACE
 	template<> inline auto Stream::launch(KernelFunc<> func, const dim3 & gridDim, const dim3 & blockDim, size_t sharedMem)
 	{
 	#if NS_HAS_CXX_20
-		return [=, this]() -> Stream& { return this->launchKernel(func, gridDim, blockDim, sharedMem, nullptr); };
+		return [=, this]() -> Stream& { return this->launchKernelImpl(func, gridDim, blockDim, sharedMem, nullptr); };
 	#else
-		return [=]() -> Stream& { return this->launchKernel(func, gridDim, blockDim, sharedMem, nullptr); };
+		return [=]() -> Stream& { return this->launchKernelImpl(func, gridDim, blockDim, sharedMem, nullptr); };
 	#endif
 	}
 
@@ -195,7 +195,7 @@ namespace NS_NAMESPACE
 	 *	@retval		Stream - Reference to this stream (enables method chaining).
 	 *	@warning	Only available in *.cu files (CUDA compilation required).
 	 */
-	template<typename Type> Stream & Stream::memset(Type * pValues, Type value, size_t count, int blockSize)
+	template<typename Type> Stream & Stream::fill(Type * pValues, Type value, size_t count, int blockSize)
 	{
 		return this->launch(kernel::memset<Type>, ns::ceil_div(count, blockSize), blockSize)(pValues, value, count);
 	}

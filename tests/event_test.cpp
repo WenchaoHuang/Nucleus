@@ -40,10 +40,10 @@ void event_test()
 	ns::TimedEvent	event2(device);
 	ns::ScopedTimer	timer(stream, [](std::chrono::nanoseconds ns) { printf("ScopedTime: %fus\n", ns.count() * 1e-3); });
 
-	stream.recordEvent(event0);
-	stream.recordEvent(event1);
-	stream.recordEvent(event2);
-	stream.waitEvent(event1).sync();
+	stream.record(event0);
+	stream.record(event1);
+	stream.record(event2);
+	stream.waitFor(event1).sync();
 
 	auto time = ns::TimedEvent::elapsedTime(event1, event2);
 
