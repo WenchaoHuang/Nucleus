@@ -56,6 +56,7 @@ ExecDep Graph::barrier(ArrayProxy<ExecDep> dependencies)
 			if ((m_nodes[m_indicator].func != IsEmptyNode) || (m_nodes[m_indicator].depHash != depHash))	//	dependencies changes
 			{
 				m_nodes.resize(m_indicator);
+				m_paramBinaries.resize(m_paramOffset);
 			}
 		}
 
@@ -100,19 +101,26 @@ ExecDep Graph::memcpy_void(void * dst, const void * src, size_t bytes, ArrayProx
 
 		if (m_indicator < m_nodes.size())	//	in validating state
 		{
-			if ((m_nodes[m_indicator].func != IsMemcpyNode) || (m_nodes[m_indicator].depHash != depHash))	//	dependencies changes
+			if ((m_nodes[m_indicator].func != IsMemcpyNode) || (m_nodes[m_indicator].depHash != depHash) || (m_nodes[m_indicator].paramBytes != paramBytes))	//	node type, dependency, or parameter-size mismatch; rebuild from here
 			{
 				m_nodes.resize(m_indicator);
+				m_paramBinaries.resize(m_paramOffset);
 			}
-			else if (std::memcmp(m_paramBinaries.data() + m_paramOffset, paramCache, paramBytes) != 0)	//	parameters changes
+			else
 			{
-				cudaError_t err = cudaGraphMemcpyNodeSetParams1D(m_nodes[m_indicator].hGraphNode, dst, src, bytes, cudaMemcpyDefault);
+				NS_ASSERT_LOG_IF(m_paramOffset + paramBytes > m_paramBinaries.size(), "Parameter cache out of bounds!");
 
-				NS_ERROR_LOG_IF(err != cudaSuccess, "%s.", cudaGetErrorString(cudaGetLastError()));
+				if ((m_paramOffset + paramBytes <= m_paramBinaries.size()) &&
+					(std::memcmp(m_paramBinaries.data() + m_paramOffset, paramCache, paramBytes) != 0))	//	parameters changed
+				{
+					cudaError_t err = cudaGraphMemcpyNodeSetParams1D(m_nodes[m_indicator].hGraphNode, dst, src, bytes, cudaMemcpyDefault);
 
-				std::memcpy(m_paramBinaries.data() + m_paramOffset, paramCache, paramBytes);
+					NS_ERROR_LOG_IF(err != cudaSuccess, "%s.", cudaGetErrorString(cudaGetLastError()));
 
-				m_isParamChg = true;
+					std::memcpy(m_paramBinaries.data() + m_paramOffset, paramCache, paramBytes);
+
+					m_isParamChg = true;
+				}
 			}
 		}
 
@@ -184,6 +192,8 @@ void Graph::execute(Stream * pStream)
 {
 	if (m_pImmediateLaunchStream != nullptr)	return;
 
+	NS_ASSERT_LOG_IF(pStream == nullptr, "Invalid stream!");
+
 	if (m_isTopoChg || (m_indicator != m_nodes.size()))
 	{
 		if (m_hGraph != nullptr)
@@ -224,6 +234,8 @@ void Graph::execute(Stream * pStream)
 
 	if (m_isTopoChg || m_isParamChg)
 	{
+		//	Note: cudaGraphExecUpdate is intentionally not used here.
+		//	Any change to node parameters or topology always triggers a full re-instantiation.
 		if (m_hGraphExec != nullptr)
 		{
 			cudaError_t err = cudaGraphExecDestroy(m_hGraphExec);
@@ -262,6 +274,7 @@ void Graph::restart(Stream * pImmediateLaunchStream)
 	if (m_hGraphExec == nullptr)
 	{
 		m_nodes.clear();
+		m_paramBinaries.clear();
 	}
 
 	m_isParamChg = false;
