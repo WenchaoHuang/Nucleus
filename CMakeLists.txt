@@ -89,8 +89,12 @@ target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/in
 # MSVC settings
 if(MSVC)
     target_compile_options(${TARGET_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:/MP /W4 /WX /utf-8>)
+
     # CUDA 13.2+ (CCCL) requires the conforming preprocessor; propagate to all consumers via PUBLIC
     target_compile_options(${TARGET_NAME} PUBLIC $<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=/Zc:preprocessor>)
+
+    # Ensure UTF-8 encoding for CUDA compilation as well; propagate to all consumers via PUBLIC
+    target_compile_options(${TARGET_NAME} PUBLIC $<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=/utf-8>)
 endif()
 
 # Load the custom helper that adds a dummy.cpp source file
