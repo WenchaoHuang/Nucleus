@@ -323,6 +323,9 @@ namespace NS_NAMESPACE::dev
 
 	public: //!	Iterators.
 
+		using _ConstBase::end;
+		using _ConstBase::begin;
+
 		//!	@brief		Returns an iterator to the beginning.
 		NS_CUDA_CALLABLE constexpr iterator begin() noexcept { return data(); }
 
@@ -331,8 +334,15 @@ namespace NS_NAMESPACE::dev
 
 	public: // Element access.
 
+		using _ConstBase::data;
+		using _ConstBase::back;
+		using _ConstBase::front;
+
 		//!	@brief		Returns a pointer to the underlying data.
-		NS_CUDA_CALLABLE constexpr pointer data() noexcept { return const_cast<pointer>(_ConstBase::data()); }
+		NS_CUDA_CALLABLE constexpr pointer data() noexcept
+		{
+			return const_cast<pointer>(_ConstBase::data());
+		}
 
 		//!	@brief		Returns a reference to the element at the given index.
 		NS_CUDA_CALLABLE constexpr reference operator[](size_t index) noexcept
@@ -359,6 +369,10 @@ namespace NS_NAMESPACE::dev
 		}
 
 	public: //!	Subviews.
+
+		using _ConstBase::last;
+		using _ConstBase::first;
+		using _ConstBase::subspan;
 
 		/**
 		 *	@brief		Returns a subspan of the first \p count elements.
