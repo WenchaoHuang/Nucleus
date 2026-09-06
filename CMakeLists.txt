@@ -98,8 +98,9 @@ add_library(Nucleus::nucleus ALIAS ${TARGET_NAME})
 target_link_libraries(${TARGET_NAME} PUBLIC CUDA::cudart)
 
 # Include directories
-target_include_directories(${TARGET_NAME} PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
-target_include_directories(${TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(${TARGET_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
+target_include_directories(${TARGET_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+target_include_directories(${TARGET_NAME} PUBLIC $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/nucleus)
 
 # MSVC settings
@@ -117,6 +118,10 @@ endif()
 if(MSVC)
 	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/add_dummy_cpp.cmake)
 endif()
+
+# Install the library and its public headers.
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/install_target.cmake)
+install_target(${TARGET_NAME})
 
 # Optional: Add examples if enabled
 if(NUCLEUS_BUILD_EXAMPLES)

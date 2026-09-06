@@ -54,8 +54,33 @@ Nucleus is currently developed and tested on Linux and Windows (MSVC). Other pla
 ```bash
 git clone https://github.com/WenchaoHuang/Nucleus.git
 cd Nucleus
-cmake -B build -DNUCLEUS_BUILD_SHARED_LIB=ON
-cmake --build build
+cmake -S . -B build
+cmake --build build --config Release
+cmake --install build --config Release --prefix /path/to/nucleus/install
+```
+
+Use the installed package from another CMake project. The conditional check keeps this usage compatible with both an installed package and a source checkout added with `add_subdirectory`:
+
+```cmake
+if(NOT TARGET Nucleus::nucleus)
+	find_package(Nucleus CONFIG REQUIRED)
+endif()
+
+add_executable(my_app main.cpp)
+
+target_link_libraries(my_app PRIVATE Nucleus::nucleus)
+```
+
+When Nucleus is installed to a custom prefix, pass that prefix when configuring the consumer project:
+
+```bash
+cmake -S . -B build -DCMAKE_PREFIX_PATH=/path/to/nucleus/install
+```
+
+Alternatively, point directly to the package configuration directory:
+
+```bash
+cmake -S . -B build -DNucleus_DIR=/path/to/nucleus/install/lib/cmake/Nucleus
 ```
 
 ### Option 2 — Embed as a Git submodule
@@ -69,7 +94,8 @@ Then in your project's `CMakeLists.txt`:
 
 ```cmake
 add_subdirectory(third_party/nucleus)
-target_link_libraries(my_app PRIVATE nucleus)
+add_executable(my_app main.cpp)
+target_link_libraries(my_app PRIVATE Nucleus::nucleus)
 ```
 
 ### CMake Options
