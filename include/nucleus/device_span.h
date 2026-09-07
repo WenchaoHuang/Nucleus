@@ -133,18 +133,13 @@ namespace NS_NAMESPACE::dev
 		constexpr Span() noexcept requires(is_dynamic_extent || Extent == 0) = default;
 
 		//!	@brief		Constructor for a span with a pointer and size.
-		NS_CUDA_CALLABLE explicit Span(const Type * data, size_t size) noexcept requires(is_dynamic_extent) : _Base(data, size) {}
+		NS_CUDA_CALLABLE explicit Span(const Type * data, size_t size) noexcept : _Base(data, size) { NS_ASSERT(is_dynamic_extent || Extent == size); }
 
 		//!	@brief		Constructor for a span with a fixed array.
-		template<size_t N> NS_CUDA_CALLABLE Span(const Type (&data)[N]) noexcept requires(is_dynamic_extent || Extent == N) : _Base(data, N) {}
+		template<size_t N> NS_CUDA_CALLABLE constexpr Span(const Type (&data)[N]) noexcept requires(is_dynamic_extent || Extent == N) : _Base(data, N) {}
 
 		//!	@brief		Constructor for a span from another span.
 		template<size_t N> NS_CUDA_CALLABLE constexpr Span(const Span<const Type, N> & rhs) noexcept requires(is_dynamic_extent) : _Base(rhs.data(), rhs.size()) {}
-
-	protected:
-
-		//!	@brief		Constructor for a span with fixed extent from a pointer (for `_as_bytes()`).
-		NS_CUDA_CALLABLE explicit Span(const Type * data) noexcept requires(!is_dynamic_extent && std::is_same_v<Type, byte>) : _Base(data) {}
 
 	public:
 
@@ -155,7 +150,7 @@ namespace NS_NAMESPACE::dev
 			if constexpr (is_dynamic_extent)
 				return Span<const byte, dynamic_extent>(reinterpret_cast<const byte*>(data()), size_bytes());
 			else
-				return Span<const byte, size_bytes()>(reinterpret_cast<const byte*>(data()));
+				return Span<const byte, size_bytes()>(reinterpret_cast<const byte*>(data()), size_bytes());
 		}
 
 	public: // Observers.
@@ -296,18 +291,13 @@ namespace NS_NAMESPACE::dev
 		constexpr Span() noexcept requires(is_dynamic_extent || Extent == 0) = default;
 
 		//!	@brief		Constructor for a span with a pointer and size.
-		NS_CUDA_CALLABLE explicit Span(Type * data, size_t size) noexcept requires(is_dynamic_extent) : _ConstBase(data, size) {}
-
-		//!	@brief		Constructor for a span with a fixed array.
-		template<size_t N> NS_CUDA_CALLABLE Span(Type (&data)[N]) noexcept requires(is_dynamic_extent || Extent == N) : _ConstBase(data) {}
+		NS_CUDA_CALLABLE explicit Span(Type * data, size_t size) noexcept : _ConstBase(data, size) { NS_ASSERT(is_dynamic_extent || Extent == size); }
 
 		//!	@brief		Constructor for a span from another span.
 		template<size_t N> NS_CUDA_CALLABLE constexpr Span(const Span<Type, N> & rhs) noexcept requires(is_dynamic_extent) : _ConstBase(rhs) {}
 
-	private:
-
-		//!	@brief		Constructor for a span with fixed extent from a pointer (for `_as_writable_bytes()`).
-		NS_CUDA_CALLABLE explicit Span(Type * data) noexcept requires(!is_dynamic_extent && std::is_same_v<Type, byte>) : _ConstBase(data) {}
+		//!	@brief		Constructor for a span with a fixed array.
+		template<size_t N> NS_CUDA_CALLABLE Span(Type (&data)[N]) noexcept requires(is_dynamic_extent || Extent == N) : _ConstBase(data) {}
 
 	public:
 
@@ -315,10 +305,10 @@ namespace NS_NAMESPACE::dev
 		//! @note		This is a protected member function, and should be called through the `as_writable_bytes()` free function.
 		NS_CUDA_CALLABLE constexpr auto _as_writable_bytes() noexcept requires (!std::is_volatile_v<Type>)
 		{
-			if constexpr (is_dynamic_extent)
-				return Span<byte, dynamic_extent>(reinterpret_cast<byte*>(data()), _ConstBase::size_bytes());
+			if constexpr (!is_dynamic_extent)
+				return Span<byte, _ConstBase::size_bytes()>(reinterpret_cast<byte*>(data()), _ConstBase::size_bytes());
 			else
-				return Span<byte, _ConstBase::size_bytes()>(reinterpret_cast<byte*>(data()));
+				return Span<byte, dynamic_extent>(reinterpret_cast<byte*>(data()), _ConstBase::size_bytes());
 		}
 
 	public: //!	Iterators.

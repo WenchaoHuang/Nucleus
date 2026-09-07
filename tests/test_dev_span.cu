@@ -73,6 +73,7 @@ NS_CUDA_CALLABLE void test_dev_span_func()
 	dev::Span<int>							construct_form_pointer_size_0(data, 0);
 	dev::Span<const int>					construct_form_pointer_size_1(data, 0);
 	dev::Span<const int>					construct_form_pointer_size_2(const_data, 0);
+	dev::Span<const int, 2>					construct_from_pointer_size_4(const_data, 2);
 
 	// Construct from array
 	dev::Span<int>							construct_form_array_0(arr, 3);
