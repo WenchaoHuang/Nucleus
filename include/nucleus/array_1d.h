@@ -153,16 +153,28 @@ namespace NS_NAMESPACE
 
 		/**
 		 *	@brief		Return constant version of device pointer.
+		 *	@tparam		_Extent - The number of elements to view (default is `dynamic_extent`).
 		 *	@note		Provides an explicit method to get device pointer. 
 		 */
-		const dev::Span<const Type> & span() const { return *this; }
+		template<size_t _Extent = dynamic_extent> dev::Span<const Type, _Extent> span() const
+		{
+			NS_ASSERT(_Extent == dynamic_extent || _Extent <= _Base::size());
+
+			return dev::Span<const Type, _Extent>(_Base::data(), _Extent);
+		}
 
 
 		/**
 		 *	@brief		Returns device pointer.
+		 *	@tparam		_Extent - The number of elements to view (default is `dynamic_extent`).
 		 *	@note		Provides an explicit method to get device pointer. 
 		 */
-		const dev::Span<Type> & span() { return *this; }
+		template<size_t _Extent = dynamic_extent> dev::Span<Type, _Extent> span()
+		{
+			NS_ASSERT(_Extent == dynamic_extent || _Extent <= _Base::size());
+
+			return dev::Span<Type, _Extent>(_Base::data(), _Extent);
+		}
 
 	private:
 

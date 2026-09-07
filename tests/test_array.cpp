@@ -42,21 +42,23 @@ void test_array()
 	auto device = ns::Runtime::device(0);
 	auto allocator = device->defaultAllocator();
 
-	ns::Array<int>		array0;
-	ns::Array<int>		array1(allocator, 100);
-	ns::Array<int>		array11 = std::move(array1);
+	ns::Array<int>					array0;
+	ns::Array<int>					array1(allocator, 100);
+	ns::Array<int>					array11 = std::move(array1);
+	dev::Span<int, 5>				span0 = array11.span<5>();
+	dev::Span<const int, 5>			span1 = array11.span<5>();
 
-	ns::Array2D<float>	array2;
-	ns::Array2D<float>	array3(allocator, 100, 100);
-	ns::Array2D<float>	array33 = std::move(array3);
+	ns::Array2D<float>				array2;
+	ns::Array2D<float>				array3(allocator, 100, 100);
+	ns::Array2D<float>				array33 = std::move(array3);
 
-	ns::Array3D<float>	array4;
-	ns::Array3D<float>	array5(allocator, 100, 100, 100);
-	ns::Array3D<float>	array55 = std::move(array5);
+	ns::Array3D<float>				array4;
+	ns::Array3D<float>				array5(allocator, 100, 100, 100);
+	ns::Array3D<float>				array55 = std::move(array5);
 
-	ns::Array<int>		array1Default(100);
-	ns::Array2D<int>	array2Default(100, 100);
-	ns::Array3D<int>	array3Default(100, 100, 100);
+	ns::Array<int>					array1Default(100);
+	ns::Array2D<int>				array2Default(100, 100);
+	ns::Array3D<int>				array3Default(100, 100, 100);
 
 	std::vector<ns::Array<int>>		arrArray0;
 	std::vector<ns::Array<int>>		arrArray1(200);
